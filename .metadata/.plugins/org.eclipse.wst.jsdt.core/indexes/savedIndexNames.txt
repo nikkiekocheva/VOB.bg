@@ -1,0 +1,7 @@
+INDEX VERSION 1.4+/home/nikikocheva/Documents/gitRepos/Spring/.metadata/.plugins/org.eclipse.wst.jsdt.core/indexes
+1326651654.index
+932880358.index
+456471150.index
+1936619652.index
+364794473.index
+591312123.index
