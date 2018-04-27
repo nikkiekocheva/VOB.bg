@@ -5,20 +5,14 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBManager {
-	private static final String DB_PASS = "nikik0cheva";//"awsedr073";
+	private static final String DB_PASS = "awsedr073";//"nikik0cheva";
 	private static final String DB_USER = "root";
 	private static final String DB_PORT = "3306";
 	private static final String DB_IP = "localhost";
-	private static final String DB_NAME = "mydb";//"youtube";
+	private static final String DB_NAME = "vob";//"mydb";
+	
 	private static Connection connection;
 	private static DBManager instance;
-	
-	public static synchronized DBManager getInstance() {
-		if(instance == null) {
-			instance = new DBManager();
-		}
-		return instance;
-	}
 	
 	private DBManager() {
 		try {
@@ -36,6 +30,14 @@ public class DBManager {
 			System.out.println("Wrong credentials!!");
 			System.out.println(e.getMessage());
 		}
+	}
+	
+	
+	public static synchronized DBManager getInstance() {
+		if(instance == null) {
+			instance = new DBManager();
+		}
+		return instance;
 	}
 	
 	public Connection getConnection() {

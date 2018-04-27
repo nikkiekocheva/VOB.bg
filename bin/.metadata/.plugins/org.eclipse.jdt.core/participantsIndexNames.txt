@@ -1,0 +1,5 @@
+INDEX VERSION 1.130
+/home/nikikocheva/Documents/gitRepos/Spring/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/968138834.index
+/MyProject/src/main/java
+/home/nikikocheva/Documents/gitRepos/Spring/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/2369809047.index
+/VOB.bg/src/main/java

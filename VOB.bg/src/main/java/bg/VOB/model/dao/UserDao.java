@@ -29,8 +29,7 @@ public class UserDao implements IUserDao{
 
 	@Override
 	public boolean checkForUser(String username, String password) throws InvalidUserDataException{
-		try (PreparedStatement ps = connection
-				.prepareStatement("SELECT user_name, password FROM users WHERE user_name = ?;");) {
+		try (PreparedStatement ps = connection.prepareStatement("SELECT user_name, password FROM users WHERE user_name = ?;");) {
 		ps.setString(1, username);
 		ResultSet rs = ps.executeQuery();
 		
