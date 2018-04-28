@@ -11,7 +11,7 @@
 		<h1 align="center">VOB --Video out of the Box--</h1>
 	</div>
 	
-	<form action="Login" method="post" align="center">
+	<form action="login" method="post" align="center">
 		<table align="center">
 			<tr>
 				<td>Username </td>
@@ -19,13 +19,13 @@
 			</tr>
 			<tr>
 				<td>Password </td>
-				<td><input type="password" name="password"placeholder="Enter Password"></td>
+				<td><input type="password" name="password" placeholder="Enter Password"></td>
 			</tr>
 			<tr>
 				<td colspan="2"><input type="submit" value="Login"></td>
 			</tr>
 		</table>
-		For register click <a href="register.jsp">here</a>!
+		If u don't have an account click <a href="register"> here</a>!
 			
 	</form>
 	

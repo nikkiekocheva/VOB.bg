@@ -9,6 +9,9 @@
 		<form action="main" method="get">
 			<button>Videos</button>
 		</form>
+		<form action="uploadVideo" method="post">
+			<button>Upload video</button>
+		</form>
 		<form action="profile" method="get">
 			<button>Profile</button>
 		</form>

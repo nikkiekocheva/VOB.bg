@@ -1,0 +1,22 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+
+<table>
+	<tr>
+		<li action="main" method="get">
+			<button>Home</button>
+		</li>
+		<li action="main" method="get">
+			<button>Videos</button>
+		</li>
+		<li action="profile" method="get">
+			<button>Profile</button>
+		</li>
+		<li action="main" method="get">
+			<button>Playlists</button>
+		</li>
+		<li action="logout" method="post">
+			<button type="submit">Logout</button>
+		</li>
+	</tr>
+</table>
