@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -18,6 +19,11 @@ public class UserController {
 		return "index";
 	}
 	
+	@RequestMapping(value = "/main", method = RequestMethod.GET)
+	public String showMainPage() {
+		return "main";
+	}
+	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String loginUser(HttpServletRequest req) {
 		// get the username and password
@@ -26,10 +32,11 @@ public class UserController {
 
 		// check for if the input values are in the db
 		try {
-			if (UserManager.getInstance().signIn(username, password) != null) {
+			User user = UserManager.getInstance().signIn(username, password);
+			if (user != null) {
 				// make a session
 				HttpSession session = req.getSession();
-				session.setAttribute("username", username);
+				session.setAttribute("user", user);
 			}
 			return "main";
 		} catch (InvalidUserDataException e) {
@@ -63,4 +70,11 @@ public class UserController {
 		//Return to the index page
 		return "index";
 	}
+	
+	@RequestMapping(value = "/profile", method = RequestMethod.GET)
+	public String showUserProfile() {
+		return "profile";
+	}
+	
+	
 }

@@ -59,7 +59,8 @@ public class UserDao implements IUserDao{
 		ResultSet rs = ps.executeQuery();
 	
 		while(rs.next()) {
-			u = new User(rs.getInt(1),rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5));
+			u = new User(rs.getInt("id"),rs.getString("user_name"), rs.getString("password"), rs.getString("email"),
+						rs.getString("phone_number"), rs.getInt("age"));
 		}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());

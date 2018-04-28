@@ -3,13 +3,13 @@
 	
 	<table>
 		<tr>
-			<form>
+			<form action="main" method="get">
 				<button>Home</button>
 			</form>
 			<form>
 				<button>Videos</button>
 			</form>
-			<form>
+			<form action="profile" method="get">
 				<button>Profile</button>
 			</form>
 			<form>

@@ -16,7 +16,7 @@
 	</div>
 	
 	<h1>
-		Wellcome, <%= session.getAttribute("username") %>!
+		Wellcome, ${ user.username }!
 	</h1>
 	
 </body>
