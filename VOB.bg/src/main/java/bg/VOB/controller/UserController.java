@@ -3,12 +3,14 @@ package bg.VOB.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import bg.VOB.model.User;
+import bg.VOB.model.dao.UserDao;
 import util.exceptions.InvalidUserDataException;
 
 @Controller
@@ -76,5 +78,41 @@ public class UserController {
 		return "profile";
 	}
 	
+	@RequestMapping(value = "/profile", method = RequestMethod.POST)
+	public String showUpdateUserProfile() {
+		return "updateProfile";
+	}
+	
+	@RequestMapping(value = "/updateprofile", method = RequestMethod.POST)
+	public String updateUserProfile(HttpServletRequest request,HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		
+		String email = request.getParameter("email");
+		String phoneNumber = request.getParameter("phone");
+		String newPassword = request.getParameter("newpassword");
+		String newPassword1 = request.getParameter("newpassword1");
+		String currentPassword = request.getParameter("currentpassword");
+		
+		if(user.getPassword() != null && BCrypt.checkpw(currentPassword, user.getPassword())) {
+			if(!(newPassword.isEmpty() && newPassword1.isEmpty())) {
+				if(!newPassword.equals(newPassword1)) {
+					request.setAttribute("error", "The new passwords dont match!!! ");
+					return "error";
+				}
+				user.setPassword(newPassword);
+			}
+			if(!email.isEmpty()) {
+				user.setEmail(email);
+			}
+			if(!phoneNumber.isEmpty()) {
+				user.setPhoneNumber(phoneNumber);
+			}
+			UserDao.getInstance().updateUserInDB(user);
+		}else {
+			request.setAttribute("error", "Wrong password!!");
+			return "error";
+		}
+		return "profile";
+	}
 	
 }

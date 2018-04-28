@@ -14,23 +14,31 @@
 		<%@ include file="menu.jsp" %>
 	</div>
 	
-	<form action="profile" method="post" align="center">
+	<form action="updateprofile" method="post" align="center">
 		<table align="center" border="12px">
 			<tr>
-				<td>Username: </td>
-				<td><input type="text" name="username" placeholder="Enter your username" required></td>
-			</tr>
-			<tr>
-				<td>Password: </td>
-				<td><input type="password" name="password" placeholder="Enter your password" required></td>
-			</tr>		
-			<tr>
 				<td>E-mail: </td>
-				<td><input type="text" name="email" placeholder="Enter your e-mail" required></td>
+				<td><input type="text" name="email" placeholder="Enter your new e-mail!"></td>
 			</tr>
 			<tr>
 				<td>PhoneNumber: </td>
-				<td><input type="text" name="phone" placeholder="Enter your phone number" required maxlength="10"></td>
+				<td><input type="text" name="phone" placeholder="Enter your new phone number!" maxlength="10"></td>
+			</tr>
+			<tr></tr>
+			<tr>
+				<td>New Password: </td>
+				<td><input type="password" name="newpassword" placeholder="Enter your new password!"></td>
+			</tr>
+			<tr>
+				<td>New Password Again: </td>
+				<td><input type="password" name="newpassword1" placeholder="Enter your new password again!"></td>
+			</tr>
+			<tr>
+				<td>Current Password: </td>
+				<td><input type="password" name="currentpassword" placeholder="Enter your password to submit" required></td>
+			</tr>
+			<tr>
+				<td colspan="2"><input type="submit" value="Submit">  </td>
 			</tr>
 		</table>
 	</form>

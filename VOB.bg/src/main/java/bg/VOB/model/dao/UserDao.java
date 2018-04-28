@@ -98,6 +98,19 @@ public class UserDao implements IUserDao{
 		
 	}
 
-	
+	@Override
+	public void updateUserInDB(User u) {
+		String sql = "UPDATE users SET user_name = ? ,password = ?, email = ?,phone_number = ? WHERE id = ?";
+		try(PreparedStatement ps = connection.prepareStatement(sql)){
+			ps.setString(1, u.getUsername());
+			ps.setString(2, u.getPassword());
+			ps.setString(3, u.getEmail());
+			ps.setString(4, u.getPhoneNumber());
+			ps.setInt(5, u.getId());
+			ps.executeUpdate();
+		}catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+	}
 	
 }

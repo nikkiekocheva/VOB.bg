@@ -19,25 +19,21 @@
 			<tr>
 				<td>Username: </td>
 				<td>${ sessionScope.user.username }</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>Password: </td>
-				<td></td>
-			</tr>		
+			</tr>	
 			<tr>
 				<td>E-mail: </td>
 				<td>${ sessionScope.user.email }</td>
-				<td></td>
 			</tr>
 			<tr>
 				<td>PhoneNumber: </td>
 				<td>${ sessionScope.user.phoneNumber }</td>
-				<td></td>
 			</tr>
 			<tr>
 				<td>Age: </td>
 				<td>${ sessionScope.user.age }</td>
+			</tr>
+			<tr>
+				<td colspan="2"><input type="submit" value="Update profile">  </td>
 			</tr>
 		</table>
 	</form>

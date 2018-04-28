@@ -19,7 +19,7 @@
 			</tr>
 			<tr>
 				<td>Password </td>
-				<td><input type="password" name="password"placeholder="Enter Password"></td>
+				<td><input type="password" name="password" placeholder="Enter Password"></td>
 			</tr>
 			<tr>
 				<td colspan="2"><input type="submit" value="Login"></td>

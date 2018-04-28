@@ -13,4 +13,6 @@ public interface IUserDao {
 	User generateUser(String username);
 	
 	void followUser(User follower,User following);
+	
+	void updateUserInDB(User u);
 }

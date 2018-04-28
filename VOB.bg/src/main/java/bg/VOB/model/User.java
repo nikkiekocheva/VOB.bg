@@ -39,6 +39,9 @@ public class User {
 	
 	public User(int id, String username, String password, String email,String phoneNumber, int age) {
 		this(username, password, email, phoneNumber, age);
+		if(this.password == null) {
+			this.password = password;
+		}
 		this.id = id;
 	}
 
@@ -68,6 +71,24 @@ public class User {
 
 	public int getAge() {
 		return age;
+	}
+
+	public void setPassword(String password) {
+		if(Validator.verifyPassword(password)) {
+			this.password = BCrypt.hashpw(password,BCrypt.gensalt(5));
+		}
+	}
+
+	public void setEmail(String email) {
+		if(Validator.verifyEmail(email)) {
+			this.email = email;
+		}
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		if(Validator.verifyPhoneNumber(phoneNumber)) {
+			this.phoneNumber = phoneNumber;
+		}
 	}
 	
 }
