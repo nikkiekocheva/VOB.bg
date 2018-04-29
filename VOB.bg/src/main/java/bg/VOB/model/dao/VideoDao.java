@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -37,8 +39,8 @@ public class VideoDao implements IVideoDao {
 	
 	public void saveVideoInDB(User u, Video v, String path) {
 		String sql = "INSERT INTO video(name, date, views, user_id, description, path) VALUES(?,?,0,?,?,?)";
-		java.util.Date date = new Date();
-		Object param = new java.sql.Timestamp(date.getTime());
+		Date date = new Date();
+		Object param = new Timestamp(date.getTime());
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setString(1, v.getName());
 			ps.setObject(2, param);
@@ -210,5 +212,23 @@ public class VideoDao implements IVideoDao {
 			System.out.println("DB error: " + e.getMessage());
 		}
 		return exists;
+	}
+	
+	@Override
+	public ArrayList<Video> getAllVideos() {
+		ArrayList<Video> allVideos = new ArrayList<>();
+		String sql = "SELECT id,name,date,views,user_id,description,path FROM video";
+		
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				allVideos.add(new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(), rs.getInt("views"), 0, 0, rs.getString("description"),rs.getString("path")));
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("DB error: " + e.getMessage());
+		}
+		
+		return allVideos;
 	}
 }

@@ -25,4 +25,6 @@ public interface IVideoDao{
 	public boolean isVideoLikedDislikedInDB(User u, String videoName);
 	
 	ArrayList<Video> getAllVideosByUser(User u);
+	
+	ArrayList<Video> getAllVideos();
 }

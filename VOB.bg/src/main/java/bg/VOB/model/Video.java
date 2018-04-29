@@ -15,6 +15,7 @@ public class Video {
 	private int likes;
 	private int dislikes;
 	private String description;
+	private String path;
 	
 	public Video(String name, String description) throws InvalidUserDataException {
 		this.name = name;
@@ -24,6 +25,17 @@ public class Video {
 		else {
 			throw new InvalidUserDataException("Empty video description.");
 		}
+	}
+	
+	public Video(int id, String name, LocalDateTime date, int views, int likes, int dislikes, String description,String path) {
+		this.id = id;
+		this.name = name;
+		this.date = date;
+		this.views = views;
+		this.likes = likes;
+		this.dislikes = dislikes;
+		this.description = description;
+		this.path = path;
 	}
 
 	public Video(int id, String name) {
@@ -61,6 +73,10 @@ public class Video {
 
 	public String getDescription() {
 		return description;
+	}
+
+	public String getPath() {
+		return path;
 	}
 	
 	
