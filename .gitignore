@@ -19,7 +19,7 @@
 *.rar
 
 # eclipse metadatas
-
+.metadata
 .mylyn/.taskListIndex/
 *.log
 .plugins/org.eclipse.m2e.core/nexus/
