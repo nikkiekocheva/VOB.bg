@@ -7,8 +7,11 @@
 <title>Upload video</title>
 </head>
 <body>
-	<form action="upload" method="post" enctype="multipart/form-data">
-		<input type="file"  name="videoFile" accept="video/*"/>  <!-- Only videos are accepted -->
+<h1> Upload video</h1>
+	<form action="uploadVideo" method="post" enctype="multipart/form-data">
+		File name: <input type="text" name="name" required/> <br>
+		Description: <textarea name="description" rows="4" cols="50" required></textarea><br>
+		<input type="file"  name="videoFile" accept="video/*" required/>  <!-- Only videos are accepted --><br>
 		<input type="submit"/>
 		
 	</form>

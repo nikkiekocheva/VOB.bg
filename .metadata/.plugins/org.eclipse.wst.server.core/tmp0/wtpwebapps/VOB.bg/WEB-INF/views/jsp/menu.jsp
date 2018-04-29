@@ -9,7 +9,7 @@
 		<form action="main" method="get">
 			<button>Videos</button>
 		</form>
-		<form action="uploadVideo" method="post">
+		<form action="uploadVideo" method="get">
 			<button>Upload video</button>
 		</form>
 		<form action="profile" method="get">

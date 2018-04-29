@@ -30,7 +30,7 @@
 				<td><input type="text" name="age" placeholder="Enter your age" required maxlength="3"></td>
 			</tr>
 		</table> <br>
-		<a href="http://localhost:8080/VOB.bg/main"><button>Registur</button> </a>
+		<a href="http://localhost:8080/VOB.bg/main"><button>Register</button> </a>
 	</form>
 </body>
 </html>

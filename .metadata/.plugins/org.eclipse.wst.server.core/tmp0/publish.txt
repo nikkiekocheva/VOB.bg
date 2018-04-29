@@ -1,4 +1,4 @@
 #Tomcat publish data
-#Sat Apr 28 23:42:44 EEST 2018
+#Sun Apr 29 20:16:56 EEST 2018
 org.eclipse.jst.jee.server\:/binary\:/home/nikikocheva/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/8.0.32/tomcat-embed-websocket-8.0.32.jar=WEB-INF/lib/tomcat-embed-websocket-8.0.32.jar
 org.eclipse.jst.jee.server\:/binary\:/home/nikikocheva/.m2/repository/org/springframework/spring-web/4.2.5.RELEASE/spring-web-4.2.5.RELEASE.jar=WEB-INF/lib/spring-web-4.2.5.RELEASE.jar

@@ -39,8 +39,8 @@ public class UserManager {
 			}
 	}
 
-	public synchronized void addVideo(User u, String name, String description) throws InvalidUserDataException {
-		Video v = VideoDao.getInstance().uploadVideo(u, name, description);
+	public synchronized void addVideo(User u, String name, String description, String path) throws InvalidUserDataException {
+		Video v = VideoDao.getInstance().uploadVideo(u, name, description, path);
 	}
 	
 	public synchronized void addPlaylist(User u, String name) {

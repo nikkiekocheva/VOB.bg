@@ -1,5 +1,6 @@
 package bg.VOB;
 
+import java.io.IOException;
 import java.util.Locale;
 
 import org.springframework.context.MessageSource;
@@ -7,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -61,5 +64,16 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 		changeInterceptor.setParamName("language");
 		registry.addInterceptor(changeInterceptor);
 	}
+
+	  @Bean(name = "multipartResolver") 
+	  public CommonsMultipartResolver multipartResolver() throws IOException { 
+	    CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+	    resolver.setDefaultEncoding("utf-8");
+	    resolver.setMaxUploadSize(MAX_FILE_SIZE);
+	    resolver.setMaxInMemorySize(524288);
+	    return resolver;
+	   }
 	
+	    public static final String LOCATION = "/home/nikikocheva/Desktop/videos";
+	    public static final long MAX_FILE_SIZE = 52_428_800; //50 MB - max file size
 }

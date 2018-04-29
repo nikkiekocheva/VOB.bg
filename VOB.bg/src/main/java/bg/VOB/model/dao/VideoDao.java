@@ -29,15 +29,14 @@ public class VideoDao implements IVideoDao {
 		return instance;
 	}
 
-	public Video uploadVideo(User u, String name, String description) throws InvalidUserDataException {
+	public Video uploadVideo(User u, String name, String description, String path) throws InvalidUserDataException {
 		Video v = new Video(name,description);
-		saveVideoInDB(u, v);
+		saveVideoInDB(u, v, path);
 		return v;
 	}
-
 	
-	public void saveVideoInDB(User u, Video v) {
-		String sql = "INSERT INTO video(name, date, views, user_id, description) VALUES(?,?,0,?,?)";
+	public void saveVideoInDB(User u, Video v, String path) {
+		String sql = "INSERT INTO video(name, date, views, user_id, description, path) VALUES(?,?,0,?,?,?)";
 		java.util.Date date = new Date();
 		Object param = new java.sql.Timestamp(date.getTime());
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
@@ -45,6 +44,7 @@ public class VideoDao implements IVideoDao {
 			ps.setObject(2, param);
 			ps.setInt(3, u.getId());
 			ps.setString(4, v.getDescription());
+			ps.setString(5, path);
 			ps.executeUpdate();
 		} catch (SQLException e) { // TODO: UploadingVideoException - no name, wrong path
 			System.out.println("DB error: " + e.getMessage());

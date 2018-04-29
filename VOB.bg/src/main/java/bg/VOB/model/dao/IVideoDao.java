@@ -8,9 +8,9 @@ import util.exceptions.InvalidUserDataException;
 
 public interface IVideoDao{
 	
-	Video uploadVideo(User u, String name, String description) throws InvalidUserDataException;
+	Video uploadVideo(User u, String name, String description, String path) throws InvalidUserDataException;
 	
-	void saveVideoInDB(User u, Video v);
+	void saveVideoInDB(User u, Video v, String path);
 	
 	public Video getVideoByUserAndName(User u, String name);
 	
