@@ -54,8 +54,11 @@ public class VideoController {
 	
 	@RequestMapping(value = "/videos", method = RequestMethod.GET)
 	public String showVideos(Model model) {
+		//get all the videos in the DB
 		ArrayList<Video> allVideosList = VideoDao.getInstance().getAllVideos();
 		System.out.println(allVideosList.get(0).getPath());
+		
+		//save the list of videos in the model
 		model.addAttribute("allVideos",allVideosList);
 		
 		return "allvideos";

@@ -9,6 +9,6 @@ public interface IPlaylistDao {
 	public void savePlaylistInDB(User u, Playlist p);
 	public void addVideoToPlaylist(User u, String videoName, String playlistName);
 	public Playlist getPLaylistByUserAndName(User u, String name);
-	public void saveVideoInPlaylistInDB(Playlist p, Video v);
+	public void saveVideoInPlaylistInDB(Playlist p, int videoId);
 	
 }

@@ -15,7 +15,7 @@
 		<form action="profile" method="get">
 			<button>Profile</button>
 		</form>
-		<form action="main" method="get">
+		<form action="playlist" method="get">
 			<button>Playlists</button>
 		</form>
 		<form action="logout" method="post">

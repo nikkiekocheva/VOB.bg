@@ -222,7 +222,7 @@ public class VideoDao implements IVideoDao {
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				allVideos.add(new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(), rs.getInt("views"), 0, 0, rs.getString("description"),rs.getString("path")));
+				allVideos.add(new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(), rs.getInt("views"), 0, rs.getString("description"),rs.getString("path")));
 			}
 			
 		} catch (SQLException e) {
