@@ -6,7 +6,7 @@ import util.exceptions.InvalidUserDataException;
 import util.validation.Validator;
 
 public class Comment {
-	
+
 	private int id;
 	private LocalDateTime date;
 	private int likes;
@@ -14,7 +14,7 @@ public class Comment {
 	private String content;
 	private final static int DEFAULT_LIKES = 0;
 	private final static int DEFAULT_DISLIKES = 0;
-	
+
 	public Comment(String content) throws InvalidUserDataException {
 		setContent(content);
 		this.likes = DEFAULT_LIKES;
@@ -25,7 +25,7 @@ public class Comment {
 		this(content);
 		this.id = id;
 	}
-	
+
 	public int getId() {
 		return id;
 	}
@@ -41,19 +41,17 @@ public class Comment {
 	public int getDislikes() {
 		return dislikes;
 	}
-	
-	private void setContent(String content) throws InvalidUserDataException{
-		if(Validator.verifyCommentContent(content)) {
+
+	private void setContent(String content) throws InvalidUserDataException {
+		if (Validator.verifyCommentContent(content)) {
 			this.content = content;
-		}
-		else {
+		} else {
 			throw new InvalidUserDataException("Empty comment!");
 		}
 	}
-	
+
 	public String getContent() {
 		return content;
 	}
-	
-	
+
 }

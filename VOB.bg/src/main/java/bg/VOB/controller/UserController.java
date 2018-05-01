@@ -25,12 +25,12 @@ public class UserController {
 	public String showHomePage() {
 		return "index";
 	}
-	
+
 	@RequestMapping(value = "/main", method = RequestMethod.GET)
 	public String showMainPage() {
 		return "main";
 	}
-	
+
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String loginUser(HttpServletRequest req) {
 		// get the username and password
@@ -50,15 +50,15 @@ public class UserController {
 			return "InvalidLogin";
 		}
 	}
-	
+
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String showRegisterUserPage() {
 		return "register";
 	}
-	
+
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String registerUser(HttpServletRequest request) {
-		
+
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String email = request.getParameter("email");
@@ -69,59 +69,59 @@ public class UserController {
 
 		return "index";
 	}
-	
+
 	@RequestMapping(value = "/logout", method = RequestMethod.POST)
-	public String userLogout(HttpSession session){
-		//Invalidate the session
+	public String userLogout(HttpSession session) {
+		// Invalidate the session
 		session.invalidate();
-		//Return to the index page
+		// Return to the index page
 		return "index";
 	}
-	
+
 	@RequestMapping(value = "/profile/{username}", method = RequestMethod.GET)
-	public String showUserProfile(@PathVariable("username") String username,Model model) {
+	public String showUserProfile(@PathVariable("username") String username, Model model) {
 		User user = UserDao.getInstance().generateUser(username);
 		ArrayList<Video> userVideos = VideoDao.getInstance().getAllVideosByUser(user);
 		model.addAttribute("userVideos", userVideos);
-		
+
 		return "profile";
 	}
-	
+
 	@RequestMapping(value = "/profile", method = RequestMethod.POST)
 	public String showUpdateUserProfile() {
 		return "updateProfile";
 	}
-	
+
 	@RequestMapping(value = "/updateprofile", method = RequestMethod.POST)
-	public String updateUserProfile(HttpServletRequest request,HttpSession session) {
+	public String updateUserProfile(HttpServletRequest request, HttpSession session) {
 		User user = (User) session.getAttribute("user");
-		
+
 		String email = request.getParameter("email");
 		String phoneNumber = request.getParameter("phone");
 		String newPassword = request.getParameter("newpassword");
 		String newPassword1 = request.getParameter("newpassword1");
 		String currentPassword = request.getParameter("currentpassword");
-		
-		if(user.getPassword() != null && BCrypt.checkpw(currentPassword, user.getPassword())) {
-			if(!(newPassword.isEmpty() && newPassword1.isEmpty())) {
-				if(!newPassword.equals(newPassword1)) {
+
+		if (user.getPassword() != null && BCrypt.checkpw(currentPassword, user.getPassword())) {
+			if (!(newPassword.isEmpty() && newPassword1.isEmpty())) {
+				if (!newPassword.equals(newPassword1)) {
 					request.setAttribute("error", "The new passwords dont match!!! ");
 					return "error";
 				}
 				user.setPassword(newPassword);
 			}
-			if(!email.isEmpty()) {
+			if (!email.isEmpty()) {
 				user.setEmail(email);
 			}
-			if(!phoneNumber.isEmpty()) {
+			if (!phoneNumber.isEmpty()) {
 				user.setPhoneNumber(phoneNumber);
 			}
 			UserDao.getInstance().updateUserInDB(user);
-		}else {
+		} else {
 			request.setAttribute("error", "Wrong password!!");
 			return "error";
 		}
 		return "profile";
 	}
-	
+
 }

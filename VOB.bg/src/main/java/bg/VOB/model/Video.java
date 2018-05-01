@@ -5,9 +5,8 @@ import java.time.LocalDateTime;
 import util.exceptions.InvalidUserDataException;
 import util.validation.Validator;
 
-
 public class Video {
-	
+
 	private int id;
 	private String name;
 	private LocalDateTime date;
@@ -17,18 +16,17 @@ public class Video {
 	private String description;
 	private String path;
 	private int userId;
-	
+
 	public Video(String name, String description) throws InvalidUserDataException {
 		this.name = name;
-		if(Validator.verifyVideoDescription(description)) {
+		if (Validator.verifyVideoDescription(description)) {
 			this.description = description;
-		}
-		else {
+		} else {
 			throw new InvalidUserDataException("Empty video description.");
 		}
 	}
-	
-	public Video(int id, String name, LocalDateTime date,int userId, int views,String description,String path) {
+
+	public Video(int id, String name, LocalDateTime date, int userId, int views, String description, String path) {
 		this.id = id;
 		this.name = name;
 		this.date = date;
@@ -42,11 +40,12 @@ public class Video {
 		this.name = name;
 		this.id = id;
 	}
+
 	public String getName() {
 		return name;
 	}
 
-	//can be edited
+	// can be edited
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -78,10 +77,9 @@ public class Video {
 	public String getPath() {
 		return path;
 	}
-	
+
 	public int getUserId() {
 		return userId;
 	}
-	
 
 }

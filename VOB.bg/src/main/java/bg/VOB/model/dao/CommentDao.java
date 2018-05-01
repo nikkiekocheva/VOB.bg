@@ -29,6 +29,7 @@ public class CommentDao implements ICommentDao {
 		return instance;
 	}
 
+	@Override
 	public void addComment(User u, String videoName, String content) throws InvalidUserDataException {
 		Video v = VideoDao.getInstance().getVideoByName(videoName);
 		if (Validator.verifyCommentContent(content)) {
@@ -52,6 +53,7 @@ public class CommentDao implements ICommentDao {
 
 	}
 
+	@Override
 	public void editComment(User u, String videoName, int commentId, String content) throws InvalidUserDataException {
 		Video v = VideoDao.getInstance().getVideoByName(videoName);
 		String sql = "UPDATE comments SET content = ? WHERE video_id = ? AND id = ?";
@@ -68,7 +70,8 @@ public class CommentDao implements ICommentDao {
 			throw new InvalidUserDataException("Can't edit with an empty text.");
 		}
 	}
-	
+
+	@Override
 	public void deleteComment(User u, String videoName, int commentId) {
 		Video v = VideoDao.getInstance().getVideoByName(videoName);
 		String sql = "DELETE FROM comments WHERE video_id = ? AND id = ?";
@@ -80,10 +83,11 @@ public class CommentDao implements ICommentDao {
 			System.out.println("DB error: " + e.getMessage());
 		}
 	}
-	
+
+	@Override
 	public void likeComment(User u, Comment comment) {
 		String sql;
-		//see if the comment is all ready liked or disliked by the user
+		// see if the comment is all ready liked or disliked by the user
 		if (!isCommentLikedByUser(u, comment)) {
 			sql = "INSERT INTO comment_like_dislike(user_id, comments_id, liked) VALUES (?,?,?)";
 			try (PreparedStatement ps = connection.prepareStatement(sql);) {
@@ -95,7 +99,7 @@ public class CommentDao implements ICommentDao {
 			} catch (SQLException e) {
 				System.out.println("DB error: " + e.getMessage());
 			}
-		//if it is allready liked unlike it	
+			// if it is allready liked unlike it
 		} else {
 			sql = "UPDATE video_like_dislike SET liked_disliked = 0 WHERE user_id = ? AND video_id = ?";
 			try (PreparedStatement ps = connection.prepareStatement(sql);) {
@@ -107,8 +111,8 @@ public class CommentDao implements ICommentDao {
 			}
 		}
 	}
-	
-	//Check if the user has allready liked the comment
+
+	// Check if the user has allready liked the comment
 	private boolean isCommentLikedByUser(User u, Comment c) {
 		String sql = "SELECT like FROM comment_like_dislike WHERE user_id = ? AND comment_id = ?";
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
