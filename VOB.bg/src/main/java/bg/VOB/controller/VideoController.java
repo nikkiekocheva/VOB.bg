@@ -79,8 +79,22 @@ public class VideoController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-	
 	}
+
+		@RequestMapping(value = "/view/{video.id}", method = RequestMethod.GET)
+		public String view(Model model,@PathVariable("video.id") int id,HttpServletResponse response) {
+			Video v = UserManager.getInstance().getVideo(id);
+			UserManager.getInstance().updateVideoViews(id);
+			User u = UserManager.getInstance().getUserById(v.getUserId());
+			int likes = UserManager.getInstance().getVideoLikes(v.getId());
+			int dislikes = UserManager.getInstance().getVideoDislikes(v.getId());
+			int views = UserManager.getInstance().getVideoViews(v.getId());
+			model.addAttribute("video", v);
+			model.addAttribute("user",u);
+			model.addAttribute("likes",likes);
+			model.addAttribute("dislikes",dislikes);
+			model.addAttribute("views",views);
+			return "viewVideo";
+		}
 	
 }

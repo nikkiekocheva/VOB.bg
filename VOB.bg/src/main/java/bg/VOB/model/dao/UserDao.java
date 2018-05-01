@@ -68,6 +68,24 @@ public class UserDao implements IUserDao{
 		return u;
 	}
 
+	public User generateUserById(int id) {
+		User u = null;
+		String sql = "SELECT id, user_name, password, email, phone_number, age FROM users WHERE id = ?";
+		try (PreparedStatement ps = connection
+				.prepareStatement(sql)) {
+		ps.setInt(1, id);
+		ResultSet rs = ps.executeQuery();
+	
+		while(rs.next()) {
+			u = new User(rs.getInt("id"),rs.getString("user_name"), rs.getString("password"), rs.getString("email"),
+						rs.getString("phone_number"), rs.getInt("age"));
+		}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return u;
+	}
+	
 	@Override
 	public void saveUserInDB(User u) {
 		System.out.println("going to save db");
