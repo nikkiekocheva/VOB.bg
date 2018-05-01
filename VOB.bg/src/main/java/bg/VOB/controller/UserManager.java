@@ -70,4 +70,28 @@ public class UserManager {
 	public synchronized void deleteComment(User u, String videoName, int commentId) {
 		CommentDao.getInstance().deleteComment(u, videoName, commentId);
 	}
+
+	public Video getVideo(int id) {
+		return VideoDao.getInstance().getVideoById(id);
+	}
+	
+	public User getUserById(int id) {
+		return UserDao.getInstance().generateUserById(id);
+	}
+	
+	public int getVideoLikes(int videoId) {
+		return VideoDao.getInstance().getVideoLikes(videoId);
+	}
+	
+	public int getVideoDislikes(int videoId) {
+		return VideoDao.getInstance().getVideoDislikes(videoId);
+	}
+	
+	public void updateVideoViews(int videoId) {
+		VideoDao.getInstance().updateVideoViews(videoId);
+	}
+	
+	public int getVideoViews(int videoId) {
+		return VideoDao.getInstance().getVideoViews(videoId);
+	}
 }

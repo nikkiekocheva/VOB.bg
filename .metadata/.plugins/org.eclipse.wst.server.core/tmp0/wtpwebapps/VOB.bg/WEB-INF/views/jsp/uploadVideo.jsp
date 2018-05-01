@@ -7,7 +7,16 @@
 <title>Upload video</title>
 </head>
 <body>
-<h1> Upload video</h1>
+
+	<div id="top">  
+		<%@ include file="logo.jsp" %>
+	</div>
+	<div id="menu">  
+		<%@ include file="menu.jsp" %>
+	</div>
+	
+	<h1> Upload video</h1>
+	
 	<form action="uploadVideo" method="post" enctype="multipart/form-data">
 		File name: <input type="text" name="name" required/> <br>
 		Description: <textarea name="description" rows="4" cols="50" required></textarea><br>

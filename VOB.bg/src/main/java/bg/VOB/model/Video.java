@@ -16,6 +16,7 @@ public class Video {
 	private int dislikes;
 	private String description;
 	private String path;
+	private int userId;
 	
 	public Video(String name, String description) throws InvalidUserDataException {
 		this.name = name;
@@ -27,17 +28,15 @@ public class Video {
 		}
 	}
 	
-	public Video(int id, String name, LocalDateTime date, int views, int likes,String description,String path) {
+	public Video(int id, String name, LocalDateTime date,int userId, int views,String description,String path) {
 		this.id = id;
 		this.name = name;
 		this.date = date;
 		this.views = views;
-		this.likes = likes;
+		this.userId = userId;
 		this.description = description;
 		this.path = path;
 	}
-	
-	
 
 	public Video(int id, String name) {
 		this.name = name;
@@ -80,6 +79,9 @@ public class Video {
 		return path;
 	}
 	
+	public int getUserId() {
+		return userId;
+	}
 	
 
 }

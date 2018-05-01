@@ -20,12 +20,12 @@
 		<div>
 			<div>
 				<h3>
-						${video.name}
+		<a href = "view/${video.id}">${video.name}</a>
 				</h3>	
 			</div>
 			<div>
 				<video width="220" height="200" controls>
-					 <source src= "videos/${video.path }" type="video/mp4">
+					 <source src= "videos/${video.path}" type="video/mp4">
 					 Your browser does not support the videotag. 
 				</video>
 				<form action="videotoplaylist" method="post">

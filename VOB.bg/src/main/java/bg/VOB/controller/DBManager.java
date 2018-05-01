@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBManager {
-	private static final String DB_PASS = "awsedr073";//"nikik0cheva";
+	private static final String DB_PASS = "awsedr073"; //"nikik0cheva";
 	private static final String DB_USER = "root";
 	private static final String DB_PORT = "3306";
 	private static final String DB_IP = "localhost";

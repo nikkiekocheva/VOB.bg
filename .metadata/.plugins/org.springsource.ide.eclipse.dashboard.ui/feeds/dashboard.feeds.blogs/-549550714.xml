@@ -5,7 +5,45 @@
   <link rel="self" href="https://spring.io/blog.atom" />
   <id>http://spring.io/blog.atom</id>
   <icon>https://spring.io/favicon.ico</icon>
-  <updated>2018-04-25T11:46:13Z</updated>
+  <updated>2018-05-01T11:44:33Z</updated>
+  <entry>
+    <title>This Week in Spring - May 1st, 2018</title>
+    <link rel="alternate" href="https://spring.io/blog/2018/05/01/this-week-in-spring-may-1st-2018" />
+    <category term="engineering" label="Engineering" />
+    <author>
+      <name>Josh Long</name>
+    </author>
+    <id>tag:spring.io,2018-05-01:3261</id>
+    <updated>2018-05-01T11:44:33Z</updated>
+    <content type="html">&lt;p&gt;Hi Spring fans! Welcome to another installment of &lt;em&gt;This Week in Spring&lt;/em&gt;! In the last week I went from Germany (for JAXON) to Linz, Austria (for DevOne) and Vienna, Austria (for a meetup) and now I&amp;rsquo;m in Melbourne, Australia (after a 10 hour stopover in Bangkok, Thailand), for the VOXXED Melbourne event. As usual, if you&amp;rsquo;re around &lt;a href="http://twitter.com/starbuxman"&gt;I&amp;rsquo;d love to hear from you&lt;/a&gt;! &lt;/p&gt;
+&lt;p&gt;Without further ado, we&amp;rsquo;ve got a lot to cover so let&amp;rsquo;s get to it! &lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="https://content.pivotal.io/blog/5-lessons-on-pivotal-s-fifth-birthday"&gt;Pivotal just turned 5!&lt;/a&gt; Happy birthday to us!&lt;/li&gt;
+  &lt;li&gt;Spring Cloud contributor Ryan Baxter has just announced Spring Cloud Finchley RC1. The new release is &lt;em&gt;packed&lt;/em&gt; with all sorts of new stuff and represents one of hopefully the &lt;a href="https://spring.io/blog/2018/04/25/spring-cloud-finchley-rc1-has-been-released"&gt;final releases before Spring Cloud Finchley before it&amp;rsquo;s GA&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Hi Spring fans! In last week&amp;rsquo;s installment of Spring Tips I looked at how to extricate process state - valuable for coordinating long running or mutli-actor processes - from business logic &lt;a href="https://spring.io/blog/2018/04/25/spring-tips-spring-statemachine"&gt;with Spring Statemachine&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;the &lt;a href="https://github.com/rabbitmq/rabbitmq-server/releases/tag/v3.7.5-beta.2"&gt;RabbitMQ 3.7.5-beta2 is now available&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;I really like this Chinese-language post on whether Spring Boot and Spring Cloud &lt;a href="https://www.cnblogs.com/ityouknow/p/7508306.html"&gt;can be used by small and medium-sized companies&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;The RabbitMQ blog has a nice post on using the &lt;a href="http://www.rabbitmq.com/blog/2018/04/10/rabbitmq-java-client-metrics-with-micrometer-and-datadog/"&gt;Micrometer integration in the RabbitMQ Java client to integrate with Datadog&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Jeroen Reijn gave a nice &lt;a href="https://www.youtube.com/watch?v=3NT_Wql8wMg&amp;feature=youtu.be"&gt;presentation on test-driven Spring REST Docs-based documentation&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;The Ordina blog has a nice post on using &lt;a href="https://ordina-jworks.github.io/spring/2018/04/28/Spring-Cloud-Contract-meet-Pact.html"&gt;Spring Cloud Contract to support consumer-driven contracts&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;I love this post by Gaurav Gupta &lt;a href="https://dzone.com/articles/synchronous-kafka-using-spring-request-reply-1?oid=twitter"&gt;on synchronous request/reply with Apache Kafka and Spring&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;The Baeldung has another interesting post (related to Servlets) that &lt;a href="http://www.baeldung.com/spring-servletcomponentscan"&gt;looks at the &lt;code&gt;@ServletComponentScan&lt;/code&gt; in Spring Boot&lt;/a&gt;: it detects all Servlet API &lt;code&gt;WebFilter&lt;/code&gt;, &lt;code&gt;WebListener&lt;/code&gt;, and &lt;code&gt;WebServlet&lt;/code&gt; annotations on servlet components.&lt;/li&gt;
+  &lt;li&gt;This is an oldie-but-a-goodie from the Baeldung blog: &lt;a href="http://www.baeldung.com/spring-boot-servlet-initializer"&gt;a Quick Intro to the &lt;code&gt;SpringBootServletInitializer&lt;/code&gt;&lt;/a&gt;, which is the mechanism that let&amp;rsquo;s Spring Boot applications run in a Servlet container setup, as opposed to a fat-&lt;code&gt;.jar&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Do &lt;em&gt;not&lt;/em&gt; miss this new &lt;a href="https://t.co/aVR0yIiKTr?ssr=true"&gt;guide on Spring Cloud Gateway&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Bartosz Jedrzejewski put together a nice post on using Reactor (in a Spring WebFlux application) &lt;a href="https://www.e4developer.com/2018/04/28/springs-webflux-reactor-parallelism-and-backpressure/"&gt;to obtain parallelism and backpressure&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;And yet another Baeldung post, this time with a &lt;a href="http://www.baeldung.com/java-in-2018"&gt;review of the state of Java&lt;/a&gt;. The numbers in this year&amp;rsquo;s survey are very interesting! The numbers are very promising: Java 8 is now, by far, the majority deployed version of Java. Java 9 and 10 are gaining ground, though! Also interesting: Spring Framework 4 and Spring Framework 5 are are, by far, the majority deployed enterprise Java framework. The precise numbers aren&amp;rsquo;t clear, but it looks to be almost 75% of the pie-chart. Java EE and &amp;ldquo;Other&amp;rdquo; technologies account for what I&amp;rsquo;d guess is 20% of the remaining deployments, followed by Spring Framework 3, which looks to be about 5% or so (Maybe less?) Of the deployments that are based on Spring, a majority are based on Spring Boot, with less than 20% or so based on Spring without Spring Boot. IntelliJ, Apache Tomcat, and Maven are the clear leaders, too. Also interesting: Groovy, Kotlin and Scala (in that order) are the leaders in non-Java languages.&lt;/li&gt;
+  &lt;li&gt;The Heroku documentation has a great list of steps that are required to make a Spring Boot application cloud-ready. This blog was published on the Heroku blog but a lot &lt;a href="https://t.co/9rFWKNmQC4?ssr=true"&gt;of it applies to building cloud-native applications for any platform&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;This post demonstrates &lt;a href="https://www.innoq.com/en/blog/springless-testing/"&gt;how to test in a Spring application&lt;/a&gt; &lt;em&gt;without&lt;/em&gt; Spring. It sets up a scenario that &lt;em&gt;should&lt;/em&gt; be very uncommon, field injection, and demonstrates how adversely this affects the goals of testing. Remember what I always say: &amp;ldquo;every time you do field injection, a unit test dies!&amp;rdquo; The post then looks at how to test components, and to even remove Spring from the testing process.&lt;/li&gt;
+  &lt;li&gt;Nicolas Frankel looks at changes in &lt;a href="https://blog.frankel.ch/spring-boot-2-actuator-change-analysis/"&gt;Spring Boot 2&amp;rsquo;s Actuator&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;I love this &lt;a href="https://twitter.com/sjmaple/status/989550060894638084?s=12"&gt;cheat sheet on using Java 10&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;The Spring Cloud team is hiring! &lt;a href="https://twitter.com/springcloud/status/989644142258081797"&gt;Join us!&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Michael Simons and Michael Plöd &lt;a href="https://speakerdeck.com/michaelsimons/jax-2018-spring-boot-2-hot-topics"&gt;put together a nice German-language slidedeck on Spring Boot 2&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;The &lt;em&gt;All and Sundry&lt;/em&gt; blog has a &lt;a href="http://www.java-allandsundry.com/2018/04/spring-cloud-gateway-configuring-simple.html?m=1"&gt;nice post on configuring a simple route with Spring Cloud Gateway&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Part two of my series on building reactive &lt;a href="http://www.javamagazine.mozaicreader.com/MarApr2018/Twitter#&amp;pageSet=85&amp;page=0"&gt;Spring-based applications is now available in Java Magazine&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;The &lt;em&gt;Java Revisited&lt;/em&gt; blog has a nice post on &lt;a href="http://javarevisited.blogspot.de/2017/07/does-spring-certification-help-in-job-and-career.html"&gt;the motivations for pursuing certification in Spring Cloud&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;The call-for-papers for the inaugural &lt;a href="https://twitter.com/springcentral/status/988919061571485696"&gt;RabbitMQ Summit on November 12th, 2018 at CodeNode in London, UK is now open!&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content>
+  </entry>
   <entry>
     <title>Spring Cloud Finchley.RC1 Has Been Released</title>
     <link rel="alternate" href="https://spring.io/blog/2018/04/25/spring-cloud-finchley-rc1-has-been-released" />
@@ -1731,22 +1769,5 @@ class StatementGenerator {&#xD;
   &lt;li&gt;Flowable 6.3.0 release has been &lt;a href="https://blog.flowable.org/2018/04/04/flowable-6-3-0-release/"&gt;updated to use Spring Boot 2.0&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;Java Champion and Java legend Simon Maple has been &lt;a href="https://www.cloudfoundry.org/blog/security-corner-snyk-top-six-vulnerabilities-maven-npm/"&gt;blogging about security for Java applications on Cloud Foundry. Check this out!&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</content>
-  </entry>
-  <entry>
-    <title>Spring IO Platform Brussels SR9</title>
-    <link rel="alternate" href="https://spring.io/blog/2018/04/10/spring-io-platform-brussels-sr9" />
-    <category term="releases" label="Releases" />
-    <author>
-      <name>Andy Wilkinson</name>
-    </author>
-    <id>tag:spring.io,2018-04-10:3244</id>
-    <updated>2018-04-10T15:36:29Z</updated>
-    <content type="html">&lt;p&gt;I am pleased to announce that &lt;a href="http://platform.spring.io/platform"&gt;Spring IO Platform&lt;/a&gt; Brussels-SR9 is now available from both &lt;a href="https://repo.spring.io/release"&gt;repo.spring.io&lt;/a&gt; and Maven Central. &lt;/p&gt;
-&lt;p&gt;This maintenance release upgrades the versions of a number of the projects in the Platform:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;Spring Boot 1.5.12&lt;/li&gt;
-  &lt;li&gt;Spring Framework 4.3.16&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;a href="http://platform.spring.io/platform"&gt;Project Page&lt;/a&gt; | &lt;a href="https://github.com/spring-io/platform"&gt;GitHub&lt;/a&gt; | &lt;a href="https://github.com/spring-io/platform/issues"&gt;Issues&lt;/a&gt; | &lt;a href="http://docs.spring.io/platform/docs/Brussels-SR9/reference/htmlsingle"&gt;Documentation&lt;/a&gt;&lt;/p&gt;</content>
   </entry>
 </feed>

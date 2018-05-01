@@ -53,6 +53,19 @@ public class VideoDao implements IVideoDao {
 		}
 	}
 
+	public Video getVideoById(int id) {
+		String sql = "SELECT id,name, date, views, user_id, description, path FROM video WHERE id = ?";
+		try (PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				return new Video(rs.getInt(1), rs.getString(2), rs.getTimestamp(3).toLocalDateTime(), rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(7));
+			}
+		} catch (SQLException e) {
+			System.out.println("DB error: " + e.getMessage());
+		}
+		return null;
+	}
 	
 	public Video getVideoByUserAndName(User u, String name) {
 		String sql = "SELECT id FROM video WHERE user_id = ? AND name = ?";
@@ -196,6 +209,34 @@ public class VideoDao implements IVideoDao {
 		return 0;
 	}
 	
+	public int getVideoLikes(int id) {
+		String sql = "SELECT SUM(liked_disliked) FROM video_like_dislike WHERE video_id = ? AND liked_disliked = 1";
+		try (PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			System.out.println("DB error: " + e.getMessage());
+		}
+		return 0;
+	}
+	
+	public int getVideoDislikes(int id) {
+		String sql = "SELECT SUM(liked_disliked) FROM video_like_dislike WHERE video_id = ? AND liked_disliked = 0";
+		try (PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			System.out.println("DB error: " + e.getMessage());
+		}
+		return 0;
+	}
+	
 	//TODO make it private if its not used anywhere else
 	public boolean isVideoLikedDislikedInDB(User u, String videoName) {
 		String sql = "SELECT liked_disliked FROM video_like_dislike WHERE user_id = ? AND video_id = ?";
@@ -212,6 +253,30 @@ public class VideoDao implements IVideoDao {
 			System.out.println("DB error: " + e.getMessage());
 		}
 		return exists;
+	}
+	
+	public void updateVideoViews(int videoId) {
+		String sql = "UPDATE video SET views = views + 1 WHERE id = ?";
+		try (PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setInt(1, videoId);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("DB error: " + e.getMessage());
+		}
+	}
+	
+	public int getVideoViews(int id) {
+		String sql = "SELECT views FROM video WHERE id = ?";
+		try (PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			System.out.println("DB error: " + e.getMessage());
+		}
+		return 0;
 	}
 	
 	@Override
