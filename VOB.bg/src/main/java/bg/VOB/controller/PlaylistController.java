@@ -25,6 +25,9 @@ public class PlaylistController {
 	public String showPlaylist(Model model,HttpSession session) {
 		User u = (User) session.getAttribute("user");
 		ArrayList<Video> videos = PlaylistDao.getInstance().getVideosFromPlaylist(u);
+		if(videos == null) {
+			videos = new ArrayList<>();
+		}
 		model.addAttribute("videos",videos);
 		return "playlist";
 	}

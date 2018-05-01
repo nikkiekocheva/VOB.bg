@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -111,6 +112,23 @@ public class UserDao implements IUserDao{
 		}catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
+	}
+	
+	public ArrayList<User> searchForUser(String text) {
+		ArrayList<User> matches = new ArrayList<>();
+		String sql = "SELECT id, user_name, email, phone_number, age FROM users WHERE user_name LIKE ?";
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+		ps.setString(1, "%" + text + "%");
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()) {
+			matches.add(new User(rs.getInt("id"),rs.getString("user_name"), rs.getString("email"),
+					rs.getString("phone_number"), rs.getInt("age")));
+		}
+		
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return matches;
 	}
 	
 }

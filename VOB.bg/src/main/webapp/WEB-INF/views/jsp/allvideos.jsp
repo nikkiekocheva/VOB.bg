@@ -34,7 +34,6 @@
 				</form>
 			</div>
 		</div>
-		<hr>
 	</c:forEach>
 </body>
 </html>

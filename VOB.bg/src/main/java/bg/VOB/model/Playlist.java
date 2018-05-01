@@ -10,15 +10,24 @@ public class Playlist {
 	private int id;
 	private String name;
 	private LocalDateTime date;
+	private int userId;
 	
 	public Playlist(String name) {
 		this.name = name;
 	}
 
 	public Playlist(int id, String name) {
-		this.name = name;
+		this(name);
 		this.id = id;
 	}
+	
+	public Playlist(int id, String name,LocalDateTime date,int userId) {
+		this(id,name);
+		this.id = id;
+		this.date = date;
+		this.userId = userId;
+	}
+	
 
 	public String getName() {
 		return name;

@@ -71,12 +71,12 @@ public class VideoDao implements IVideoDao {
 
 	//see the current user upload history
 	public ArrayList<Video> getAllVideosByUser(User u){
-		ArrayList<Video> userVideos = null;
-		try (PreparedStatement ps = connection.prepareStatement("SELECT id,name FROM video WHERE user_id = ?");) {
+		ArrayList<Video> userVideos = new ArrayList<>();
+		try (PreparedStatement ps = connection.prepareStatement("SELECT id,name,date,views,user_id,description,path FROM video WHERE user_id = ?");) {
 			ps.setInt(1, u.getId());
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				userVideos.add(new Video(rs.getInt("id"), rs.getString("name")));
+				userVideos.add(new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(), rs.getInt("views"), 0, rs.getString("description"),rs.getString("path")));
 			}
 		} catch (SQLException e) {
 			System.out.println("DB error: " + e.getMessage());
@@ -231,4 +231,22 @@ public class VideoDao implements IVideoDao {
 		
 		return allVideos;
 	}
+	
+	public ArrayList<Video> searchForVideos(String text) {
+		ArrayList<Video> matches = new ArrayList<>();
+		String sql = "SELECT id, name, date, views, user_id, description, path FROM video WHERE name LIKE ?";
+		
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+		ps.setString(1, "%" + text + "%");
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()) {
+			matches.add(new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(), rs.getInt("views"), 0, rs.getString("description"),rs.getString("path")));
+		}
+		
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return matches;
+	}
+	
 }

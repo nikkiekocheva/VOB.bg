@@ -44,6 +44,14 @@ public class User {
 		}
 		this.id = id;
 	}
+	
+	public User(int id, String username, String email,String phoneNumber, int age) {
+		this.id = id;
+		this.username = username;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+		this.age = age;
+	}
 
 	public int getId() {
 		return id;

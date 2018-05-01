@@ -1,16 +1,21 @@
 package bg.VOB.controller;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import bg.VOB.model.User;
+import bg.VOB.model.Video;
 import bg.VOB.model.dao.UserDao;
+import bg.VOB.model.dao.VideoDao;
 import util.exceptions.InvalidUserDataException;
 
 @Controller
@@ -73,8 +78,12 @@ public class UserController {
 		return "index";
 	}
 	
-	@RequestMapping(value = "/profile", method = RequestMethod.GET)
-	public String showUserProfile() {
+	@RequestMapping(value = "/profile/{username}", method = RequestMethod.GET)
+	public String showUserProfile(@PathVariable("username") String username,Model model) {
+		User user = UserDao.getInstance().generateUser(username);
+		ArrayList<Video> userVideos = VideoDao.getInstance().getAllVideosByUser(user);
+		model.addAttribute("userVideos", userVideos);
+		
 		return "profile";
 	}
 	

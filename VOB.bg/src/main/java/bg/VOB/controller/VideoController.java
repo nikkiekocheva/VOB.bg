@@ -26,6 +26,8 @@ import bg.VOB.SpringWebConfig;
 import bg.VOB.WebInitializer;
 import bg.VOB.model.User;
 import bg.VOB.model.Video;
+import bg.VOB.model.dao.PlaylistDao;
+import bg.VOB.model.dao.UserDao;
 import bg.VOB.model.dao.VideoDao;
 import util.exceptions.InvalidUserDataException;
 
@@ -74,13 +76,41 @@ public class VideoController {
 		try {
 			ServletOutputStream os = response.getOutputStream();
 			Files.copy(f.toPath(), os);
-			os.close();
+			os.flush();
+			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
 	
 	}
+	
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	public String searchFor(HttpServletRequest request,Model model) {
+		String searchText = request.getParameter("text");
+		String searchType = request.getParameter("type");
+		ArrayList found = new ArrayList<>();
+		System.out.println(searchType);
+		
+		switch(searchType){
+		case "user": found = UserDao.getInstance().searchForUser(searchText); 
+					model.addAttribute("type",1);
+					break;
+		case "video": found = VideoDao.getInstance().searchForVideos(searchText);
+					model.addAttribute("type",2);
+					break;
+		case "playlist": found = PlaylistDao.getInstance().searchForPlaylist(searchText);
+					model.addAttribute("type",3);
+					break;
+		}
+		
+		System.out.println(found.toString());
+		model.addAttribute("found", found);
+		
+		return "search";
+	}
+	
+	
 	
 }

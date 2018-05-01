@@ -139,5 +139,20 @@ public class PlaylistDao implements IPlaylistDao{
 		return videos;
 	}
 	
-	
+	public ArrayList<Playlist> searchForPlaylist(String text) {
+		ArrayList<Playlist> matches = new ArrayList<>();
+		String sql = "SELECT id, name, date, user_id FROM playlist WHERE name LIKE ?";
+		
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+		ps.setString(1, "%" + text + "%");
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()) {
+			matches.add(new Playlist(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(), rs.getInt("user_id")));
+		}
+		
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return matches;
+	}
 }
