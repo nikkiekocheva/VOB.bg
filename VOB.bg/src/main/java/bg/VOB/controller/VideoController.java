@@ -1,16 +1,21 @@
 package bg.VOB.controller;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,11 +41,12 @@ public class VideoController {
 	@RequestMapping(value = "/uploadVideo", method = RequestMethod.POST)
 	public String saveVideo(@RequestParam("videoFile") MultipartFile file, HttpSession session, HttpServletRequest request) {
 		User user = (User) session.getAttribute("user");
-		String path = SpringWebConfig.LOCATION + File.separator + user.getUsername() + file.getOriginalFilename();
+		String filename = user.getUsername() + file.getOriginalFilename();
+		String path = SpringWebConfig.LOCATION + File.separator + filename;
 		File f = new File(path); //username+photoname
 		try {
 			file.transferTo(f);
-			UserManager.getInstance().addVideo(user, request.getParameter("name"), request.getParameter("description"), path);
+			UserManager.getInstance().addVideo(user, request.getParameter("name"), request.getParameter("description"), filename);
 		} catch (IllegalStateException e) {
 			System.out.println("Invalid file saving.");
 		} catch (IOException e) {
@@ -53,14 +59,28 @@ public class VideoController {
 	}
 	
 	@RequestMapping(value = "/videos", method = RequestMethod.GET)
-	public String showVideos(Model model) {
+	public String showVideosPage(Model model,HttpServletResponse response) {
 		//get all the videos in the DB
 		ArrayList<Video> allVideosList = VideoDao.getInstance().getAllVideos();
-		System.out.println(allVideosList.get(0).getPath());
-		
-		//save the list of videos in the model
 		model.addAttribute("allVideos",allVideosList);
-		
+
 		return "allvideos";
 	}
+	
+	@RequestMapping(value = "/videos/{video.path:.+}", method = RequestMethod.GET)
+	public void showVideos(Model model,@PathVariable("video.path") String path,HttpServletResponse response) {
+		//get all the videos in the DB
+		File f = new File(SpringWebConfig.LOCATION + path);
+		try {
+			ServletOutputStream os = response.getOutputStream();
+			Files.copy(f.toPath(), os);
+			os.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	
+	}
+	
 }

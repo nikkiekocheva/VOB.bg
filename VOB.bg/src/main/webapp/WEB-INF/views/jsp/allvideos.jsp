@@ -25,8 +25,7 @@
 			</div>
 			<div>
 				<video width="220" height="200" controls>
-					 <source src= "${ video.path }" type="video/mp4"> –allow-file-access-from-files -disable-web-security --user-data-dir
-					 <source src= "${ video.path }" type="video/ogg"> 
+					 <source src= "videos/${video.path }" type="video/mp4">
 					 Your browser does not support the videotag. 
 				</video>
 				<form action="videotoplaylist" method="post">
@@ -35,6 +34,7 @@
 				</form>
 			</div>
 		</div>
+		<hr>
 	</c:forEach>
 </body>
 </html>
