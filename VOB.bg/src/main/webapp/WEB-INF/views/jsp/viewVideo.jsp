@@ -23,9 +23,11 @@
 	Likes:${likes}
 	Dislikes:${dislikes} <br>
 	Views: ${views}<br>
-
-	<div class="post" postid="10">
-   	 <input type="button" value="Like" /> </input>
-    	<input type="button" value="Dislike"> </input>
-	</div>
-
+	
+	<form action="/VOB.bg/rateVideo/${video.id}">
+			<button name="button" value = "button1"> Like</button>
+			<button name="button" value = "button2"> Dislike</button>	
+	 </form>
+	 
+</body>
+</html>

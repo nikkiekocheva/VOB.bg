@@ -13,12 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
 
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
@@ -140,6 +142,20 @@ public class VideoController {
 		model.addAttribute("found", found);
 
 		return "search";
+	}
+	
+	@RequestMapping(value="/rateVideo/{video.id}", method = RequestMethod.GET)
+	public String dislikeVideo(HttpSession session, @PathVariable("video.id") int id, HttpServletRequest request) {
+		Video v = UserManager.getInstance().getVideo(id);
+		User u = UserManager.getInstance().getUserById(v.getUserId());
+		String button = request.getParameter("button");
+		if(button.equals("button1")) {
+			UserManager.getInstance().likeVideo(u, id);
+		}
+		if(button.equals("button2")) {
+			UserManager.getInstance().dislikeVideo(u, id);
+		}
+		return "redirect:/view/{video.id}";
 	}
 
 }

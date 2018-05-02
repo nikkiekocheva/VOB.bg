@@ -18,13 +18,13 @@ public interface IVideoDao {
 
 	public Video getVideoByName(String name);
 
-	public void likeVideo(User u, String videoName);
+	public void likeVideo(User u, int videoId);
 
-	public void dislikeVideo(User u, String videoName);
+	public void dislikeVideo(User u, int videoId);
 
-	public int getLikedDisliked(User u, String videoName);
+	public int getLikedDisliked(User u, int videoId);
 
-	public boolean isVideoLikedDislikedInDB(User u, String videoName);
+	public boolean isVideoLikedDislikedInDB(User u, int videoId);
 
 	int getVideoLikes(int id);
 

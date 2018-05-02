@@ -141,11 +141,11 @@ public class VideoDao implements IVideoDao {
 	}
 
 	@Override
-	public void likeVideo(User u, String videoName) {
+	public void likeVideo(User u, int videoId) {
 		String sql;
-		Video v = getVideoByName(videoName);
-		// see if the video is allready liked or disliked by the user
-		if (!isVideoLikedDislikedInDB(u, videoName)) {
+		Video v = getVideoById(videoId);
+		// see if the video is already liked or disliked by the user
+		if (!isVideoLikedDislikedInDB(u, videoId)) {
 			sql = "INSERT INTO video_like_dislike(user_id, video_id, liked_disliked) VALUES (?,?,?)";
 			try (PreparedStatement ps = connection.prepareStatement(sql);) {
 				ps.setInt(1, u.getId());
@@ -158,7 +158,7 @@ public class VideoDao implements IVideoDao {
 			}
 		} else {
 			// check is the video liked or disliked by the user
-			int existAs = getLikedDisliked(u, videoName);
+			int existAs = getLikedDisliked(u,videoId);
 			if (existAs == 1) {
 				sql = "UPDATE video_like_dislike SET liked_disliked = 0 WHERE user_id = ? AND video_id = ?";
 			} else {
@@ -176,15 +176,14 @@ public class VideoDao implements IVideoDao {
 	}
 
 	@Override
-	public void dislikeVideo(User u, String videoName) {
+	public void dislikeVideo(User u, int videoId) {
 		String sql;
-		Video v = getVideoByName(videoName);
 		// see if the video is allready liked or disliked by the user
-		if (!isVideoLikedDislikedInDB(u, videoName)) {
+		if (!isVideoLikedDislikedInDB(u, videoId)) {
 			sql = "INSERT INTO video_like_dislike(user_id, video_id, liked_disliked) VALUES (?,?,?)";
 			try (PreparedStatement ps = connection.prepareStatement(sql);) {
 				ps.setInt(1, u.getId());
-				ps.setInt(2, v.getId());
+				ps.setInt(2, videoId);
 				ps.setInt(3, -1);
 				ps.executeUpdate();
 
@@ -193,7 +192,7 @@ public class VideoDao implements IVideoDao {
 			}
 		} else {
 			// check is the video liked or disliked by the user
-			int existAs = getLikedDisliked(u, videoName);
+			int existAs = getLikedDisliked(u, videoId);
 			if (existAs == -1) {
 				sql = "UPDATE video_like_dislike SET liked_disliked = 0 WHERE user_id = ? AND video_id = ?";
 			} else {
@@ -202,7 +201,7 @@ public class VideoDao implements IVideoDao {
 
 			try (PreparedStatement ps = connection.prepareStatement(sql);) {
 				ps.setInt(1, u.getId());
-				ps.setInt(2, v.getId());
+				ps.setInt(2, videoId);
 				ps.executeUpdate();
 			} catch (SQLException e) {
 				System.out.println("DB error: " + e.getMessage());
@@ -212,12 +211,11 @@ public class VideoDao implements IVideoDao {
 
 	// TODO make it private if its not used anywhere else
 	@Override
-	public int getLikedDisliked(User u, String videoName) {
+	public int getLikedDisliked(User u, int videoId) {
 		String sql = "SELECT liked_disliked FROM video_like_dislike WHERE user_id = ? AND video_id = ?";
-		Video v = VideoDao.getInstance().getVideoByName(videoName);
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, u.getId());
-			ps.setInt(2, v.getId());
+			ps.setInt(2, videoId);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				return rs.getInt(1);
@@ -245,7 +243,7 @@ public class VideoDao implements IVideoDao {
 
 	@Override
 	public int getVideoDislikes(int id) {
-		String sql = "SELECT SUM(liked_disliked) FROM video_like_dislike WHERE video_id = ? AND liked_disliked = 0";
+		String sql = "SELECT SUM(liked_disliked)*(-1) FROM video_like_dislike WHERE video_id = ? AND liked_disliked = -1";
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
@@ -260,13 +258,12 @@ public class VideoDao implements IVideoDao {
 
 	// TODO make it private if its not used anywhere else
 	@Override
-	public boolean isVideoLikedDislikedInDB(User u, String videoName) {
+	public boolean isVideoLikedDislikedInDB(User u, int videoId) {
 		String sql = "SELECT liked_disliked FROM video_like_dislike WHERE user_id = ? AND video_id = ?";
-		Video v = VideoDao.getInstance().getVideoByName(videoName);
 		boolean exists = false;
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, u.getId());
-			ps.setInt(2, v.getId());
+			ps.setInt(2, videoId);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				return exists = true;

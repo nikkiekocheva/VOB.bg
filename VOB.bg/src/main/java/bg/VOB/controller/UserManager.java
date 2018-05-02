@@ -51,12 +51,12 @@ public class UserManager {
 		PlaylistDao.getInstance().addVideoToPlaylist(u, videoName, playlistName);
 	}
 	
-	public synchronized void likeVideo(User u, String videoName) {
-		VideoDao.getInstance().likeVideo(u, videoName);
+	public synchronized void likeVideo(User u, int videoId) {
+		VideoDao.getInstance().likeVideo(u, videoId);
 	}
 	
-	public synchronized void dislikeVideo(User u, String videoName) {
-		VideoDao.getInstance().dislikeVideo(u, videoName);
+	public synchronized void dislikeVideo(User u, int videoId) {
+		VideoDao.getInstance().dislikeVideo(u, videoId);
 	}
 	
 	public synchronized void comment(User u, String videoName, String content) throws InvalidUserDataException {
