@@ -15,26 +15,42 @@
 		<%@ include file="menu.jsp" %>
 	</div>
 	
-	<form action="profile" method="post" align="center">
+	<form action="/VOB.bg/profile" method="post" align="center">
 		<table align="center" border="12px">
 			<tr>
 				<td>Username: </td>
-				<td>${ sessionScope.user.username }</td>
+				<td>${ user.username }</td>
 			</tr>	
 			<tr>
 				<td>E-mail: </td>
-				<td>${ sessionScope.user.email }</td>
+				<td>${ user.email }</td>
 			</tr>
 			<tr>
 				<td>PhoneNumber: </td>
-				<td>${ sessionScope.user.phoneNumber }</td>
+				<td>${ user.phoneNumber }</td>
 			</tr>
 			<tr>
 				<td>Age: </td>
-				<td>${ sessionScope.user.age }</td>
+				<td>${ user.age }</td>
 			</tr>
 			<tr>
-				<td colspan="2"><input type="submit" value="Update profile">  </td>
+				<c:choose>
+			   		<c:when test="${ user.username eq sessionScope.user.username }">
+			    	   <td colspan="2"><input type="submit" value="Update profile">  </td>
+			   	 	</c:when>    
+			   	 	<c:otherwise>
+			   	 	
+			    	   <c:choose>
+				    	   <c:when test="${	isUserFolloed }">
+				    	   		<td colspan="2"><a href="/VOB.bg/unfollow/${user.username }">Unfollow user</a>  </td>
+				    	   </c:when>
+				    	   <c:otherwise>
+				    	   		<td colspan="2"><a href="/VOB.bg/follow/${user.username }">Follow user</a>  </td>
+				    	   </c:otherwise>
+			    	   </c:choose>
+			    	   
+			   		</c:otherwise>
+				</c:choose>
 			</tr>
 		</table>
 	</form>

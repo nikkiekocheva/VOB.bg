@@ -79,11 +79,20 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/profile/{username}", method = RequestMethod.GET)
-	public String showUserProfile(@PathVariable("username") String username, Model model) {
+	public String showUserProfile(@PathVariable("username") String username, Model model,HttpSession session) {
 		User user = UserDao.getInstance().generateUser(username);
 		ArrayList<Video> userVideos = VideoDao.getInstance().getAllVideosByUser(user);
+		
+		User sessionUser = (User)session.getAttribute("user");
+		boolean isUserFolloed = false;
+		if(! sessionUser.getUsername().equals(user.getUsername()) ) {
+			System.out.println("user are not equals!");
+			isUserFolloed = UserDao.getInstance().checkIfUserIsFollowingAnotherUser(sessionUser, user);
+		}
+		
+		model.addAttribute("isUserFolloed", isUserFolloed);
 		model.addAttribute("userVideos", userVideos);
-
+		model.addAttribute("user",user);
 		return "profile";
 	}
 
@@ -121,7 +130,29 @@ public class UserController {
 			request.setAttribute("error", "Wrong password!!");
 			return "error";
 		}
-		return "profile";
+		return "redirect:/profile/" +user.getUsername();
 	}
 
+	@RequestMapping(value = "/follow/{username}", method = RequestMethod.GET)
+	public String followUser(@PathVariable("username") String folowingUsername, Model model,HttpSession session) {
+		User folowingUser = UserDao.getInstance().generateUser(folowingUsername);
+		User folowerUser = (User) session.getAttribute("user");
+		
+		UserDao.getInstance().followUser(folowerUser, folowingUser);
+		
+		model.addAttribute("user",folowingUser);
+		return "redirect:/profile/" +folowingUser.getUsername();
+	}
+	
+	@RequestMapping(value = "/unfollow/{username}", method = RequestMethod.GET)
+	public String unFollowUser(@PathVariable("username") String folowingUsername, Model model,HttpSession session) {
+		User folowingUser = UserDao.getInstance().generateUser(folowingUsername);
+		User folowerUser = (User) session.getAttribute("user");
+		
+		UserDao.getInstance().unFollowUser(folowerUser, folowingUser);
+		
+		model.addAttribute("user",folowingUser);
+		return "redirect:/profile/" +folowingUser.getUsername();
+	}
+	
 }

@@ -37,7 +37,7 @@ public class PlaylistController {
 		User u = (User) session.getAttribute("user");
 		PlaylistDao.getInstance().addPlaylist(u, request.getParameter("name"));
 		
-		return "playlist";
+		return "redirect:/playlist";
 	}
 	
 	@RequestMapping(value = "/videotoplaylist", method = RequestMethod.POST)
@@ -54,7 +54,7 @@ public class PlaylistController {
 				System.out.println("Video is allready in playlist!!");
 			}
 		}
-		return "playlist";
+		return "redirect:/playlist";
 	}
 	
 }

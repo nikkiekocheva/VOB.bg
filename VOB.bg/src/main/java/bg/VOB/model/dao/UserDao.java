@@ -107,7 +107,6 @@ public class UserDao implements IUserDao {
 
 	@Override
 	public void followUser(User follower, User following) {
-		// TODO check if the user is followed by that user
 		try (PreparedStatement ps = connection
 				.prepareStatement("INSERT INTO follower_following(follower_id,following_id) VALUES (?,?)")) {
 			ps.setInt(1, follower.getId());
@@ -116,8 +115,36 @@ public class UserDao implements IUserDao {
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
-
 	}
+	
+	
+	public void unFollowUser(User follower, User following) {
+		try (PreparedStatement ps = connection
+				.prepareStatement("DELETE FROM follower_following WHERE follower_id = ? AND following_id =?")) {
+			ps.setInt(1, follower.getId());
+			ps.setInt(2, following.getId());
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public boolean checkIfUserIsFollowingAnotherUser(User follower, User following) {
+		try (PreparedStatement ps = connection
+				.prepareStatement("SELECT follower_id,following_id FROM follower_following WHERE follower_id = ? AND following_id = ?")) {
+			ps.setInt(1, follower.getId());
+			ps.setInt(2, following.getId());
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				return true;
+			}
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return false;
+	}
+	
 
 	@Override
 	public void updateUserInDB(User u) {

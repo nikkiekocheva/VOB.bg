@@ -19,9 +19,10 @@
 	<c:forEach var="object" items="${ found }">
 		<c:if test="${ type > 1 }">
 			<p>${ object.name }</p>
+			
 		</c:if>
 		<c:if test="${ type == 1 }">
-			<p>${ object.username }</p>
+			<a href="/VOB.bg/profile/${object.username }">${ object.username }</a>
 		</c:if>
 		
 	<br><hr>

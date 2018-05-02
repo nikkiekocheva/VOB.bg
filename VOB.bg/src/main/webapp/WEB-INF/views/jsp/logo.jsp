@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
  
     <h1>VOB.BG LOGO</h1>
-    <form action="search" id="type">
+    <form action="/VOB.bg/search" id="type">
     	<input id="text" onkeyup="search()" type="text" placeholder="Search.." name="text">
     	<select name="type" form="type">
  			<option value="user">User</option>
