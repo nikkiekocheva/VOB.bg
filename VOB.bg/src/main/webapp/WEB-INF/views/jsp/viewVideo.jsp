@@ -67,7 +67,14 @@ td {
 					<td colspan="2"> ${comment.content}</td>
 			</tr>
 		</table>
+		Likes:${comment.likes}
+		Dislikes:${comment.dislikes}
+			<form action="/VOB.bg/rateComment/${comment.id}">
+			<button name="commentButton" value = "commentButton1"> Like</button>
+			<button name="commentButton" value = "commentButton2"> Dislike</button>	
+			 </form>
 		<br>
-	</c:forEach> 
+	</c:forEach>
+		
 </body>
 </html>

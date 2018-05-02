@@ -12,8 +12,11 @@ public class Comment {
 	private String content;
 	private String formattedDate;
 	private int userId;
+	private int videoId;
 	private String username;
-
+	private int likes;
+	private int dislikes;
+	
 	public Comment(String content) throws InvalidUserDataException {
 		setContent(content);
 	}
@@ -23,11 +26,12 @@ public class Comment {
 		this.id = id;
 	}
 	
-	public Comment(int id, LocalDateTime date, int userId, String content) {
+	public Comment(int id, LocalDateTime date, int userId,int videoId, String content) {
 		this.id = id;
 		this.date = date;
 		this.content = content;
 		this.userId = userId;
+		this.videoId = videoId;
 	}
 	
 	public void setUsername(String username) {
@@ -69,6 +73,25 @@ public class Comment {
 	public void setFormattedDate(String formattedDate) {
 		this.formattedDate = formattedDate;
 	}
-	
+
+	public int getLikes() {
+		return likes;
+	}
+
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+
+	public int getDislikes() {
+		return dislikes;
+	}
+
+	public void setDislikes(int dislikes) {
+		this.dislikes = dislikes;
+	}
+
+	public int getVideoId() {
+		return videoId;
+	}
 
 }

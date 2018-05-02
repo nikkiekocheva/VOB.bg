@@ -190,7 +190,6 @@ public class VideoDao implements IVideoDao {
 		}
 	}
 
-	// TODO make it private if its not used anywhere else
 	@Override
 	public int getLikedDisliked(User u, int videoId) throws SQLException{
 		String sql = "SELECT liked_disliked FROM video_like_dislike WHERE user_id = ? AND video_id = ?";
@@ -231,7 +230,6 @@ public class VideoDao implements IVideoDao {
 		return 0;
 	}
 
-	// TODO make it private if its not used anywhere else
 	@Override
 	public boolean isVideoLikedDislikedInDB(User u, int videoId) throws SQLException{
 		String sql = "SELECT liked_disliked FROM video_like_dislike WHERE user_id = ? AND video_id = ?";

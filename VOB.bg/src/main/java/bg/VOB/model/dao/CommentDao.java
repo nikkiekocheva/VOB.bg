@@ -86,11 +86,11 @@ public class CommentDao implements ICommentDao {
 	}
 
 	@Override
-	public void likeComment(User u, Comment comment) {
+	public void likeComment(User u, Comment comment) throws SQLException {
 		String sql;
 		// see if the comment is all ready liked or disliked by the user
 		if (!isCommentLikedByUser(u, comment)) {
-			sql = "INSERT INTO comment_like_dislike(user_id, comments_id, liked) VALUES (?,?,?)";
+			sql = "INSERT INTO comment_like_dislike(user_id, comment_id, liked_disliked) VALUES (?,?,?)";
 			try (PreparedStatement ps = connection.prepareStatement(sql);) {
 				ps.setInt(1, u.getId());
 				ps.setInt(2, comment.getId());
@@ -102,7 +102,12 @@ public class CommentDao implements ICommentDao {
 			}
 			// if it is allready liked unlike it
 		} else {
-			sql = "UPDATE video_like_dislike SET liked_disliked = 0 WHERE user_id = ? AND video_id = ?";
+			int existAs = getLikedDisliked(u, comment);
+			if (existAs == 1) {
+				sql = "UPDATE comment_like_dislike SET liked_disliked = 0 WHERE user_id = ? AND comment_id = ?";
+			} else {
+				sql = "UPDATE comment_like_dislike SET liked_disliked = 1 WHERE user_id = ? AND comment_id = ?";
+			}
 			try (PreparedStatement ps = connection.prepareStatement(sql);) {
 				ps.setInt(1, u.getId());
 				ps.setInt(2, comment.getId());
@@ -113,9 +118,42 @@ public class CommentDao implements ICommentDao {
 		}
 	}
 
-	// Check if the user has allready liked the comment
+	public void dislikeComment(User u, Comment comment) throws SQLException {
+		String sql;
+		// see if the comment is all ready liked or disliked by the user
+		if (!isCommentLikedByUser(u, comment)) {
+			sql = "INSERT INTO comment_like_dislike(user_id, comment_id, liked_disliked) VALUES (?,?,?)";
+			try (PreparedStatement ps = connection.prepareStatement(sql);) {
+				ps.setInt(1, u.getId());
+				ps.setInt(2, comment.getId());
+				ps.setInt(3, -1);
+				ps.executeUpdate();
+
+			} catch (SQLException e) {
+				System.out.println("DB error: " + e.getMessage());
+			}
+			
+		} else {
+
+			int existAs = getLikedDisliked(u, comment);
+			if (existAs == -1) {
+				sql = "UPDATE comment_like_dislike SET liked_disliked = 0 WHERE user_id = ? AND comment_id = ?";
+			} else {
+				sql = "UPDATE comment_like_dislike SET liked_disliked = -1 WHERE user_id = ? AND comment_id = ?";
+			}
+			try (PreparedStatement ps = connection.prepareStatement(sql);) {
+				ps.setInt(1, u.getId());
+				ps.setInt(2, comment.getId());
+				ps.executeUpdate();
+			} catch (SQLException e) {
+				System.out.println("DB error: " + e.getMessage());
+			}
+		}
+	}
+	
+	// Check if the user has already liked the comment
 	private boolean isCommentLikedByUser(User u, Comment c) {
-		String sql = "SELECT like FROM comment_like_dislike WHERE user_id = ? AND comment_id = ?";
+		String sql = "SELECT liked_disliked FROM comment_like_dislike WHERE user_id = ? AND comment_id = ?";
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, u.getId());
 			ps.setInt(2, c.getId());
@@ -128,20 +166,59 @@ public class CommentDao implements ICommentDao {
 		}
 		return false;
 	}
+	
+	public int getLikedDisliked(User u, Comment c) throws SQLException{
+		String sql = "SELECT liked_disliked FROM video_like_dislike WHERE user_id = ? AND video_id = ?";
+		try (PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setInt(1, u.getId());
+			ps.setInt(2, c.getId());
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		} 
+		return 0;
+	}
+	
+	public int getCommentLikes(int id) throws SQLException{
+		String sql = "SELECT SUM(liked_disliked) FROM comment_like_dislike WHERE comment_id = ? AND liked_disliked = 1";
+		try (PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		} 
+		return 0;
+	}
+
+	public int getCommentDislikes(int id) throws SQLException{
+		String sql = "SELECT SUM(liked_disliked)*(-1) FROM comment_like_dislike WHERE comment_id = ? AND liked_disliked = -1";
+		try (PreparedStatement ps = connection.prepareStatement(sql);) { 
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		} 
+		return 0;
+	}
 
 	public ArrayList<Comment> getAllComments(int videoId) throws SQLException {
 		ArrayList<Comment> allComments = new ArrayList<>();
-		String sql = "SELECT id, date, user_id, content FROM comments WHERE video_id = ? ORDER BY date";
+		String sql = "SELECT id, date, user_id,video_id, content FROM comments WHERE video_id = ? ORDER BY date";
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {
 			ps.setInt(1, videoId);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Comment c = new Comment(rs.getInt("id"), rs.getTimestamp("date").toLocalDateTime(),
-						rs.getInt("user_id"), rs.getString("content"));
+						rs.getInt("user_id"),rs.getInt("video_id"), rs.getString("content"));
 				c.setUsername(getUsername(c.getUserId()));
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 				 String formatDateTime = c.getDate().format(formatter);
 				 c.setFormattedDate(formatDateTime);
+				 c.setLikes(getCommentLikes(c.getId()));
+				 c.setDislikes(getCommentDislikes(c.getId()));
 				allComments.add(c);
 			}
 		} catch (SQLException e) {
@@ -149,6 +226,27 @@ public class CommentDao implements ICommentDao {
 		}
 
 		return allComments;
+	}
+	
+	public Comment generateCommentById(int commentId) {
+		String sql = "SELECT date, user_id, video_id, content FROM comments WHERE id = ?";
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setInt(1, commentId);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				Comment c = new Comment(commentId, rs.getTimestamp("date").toLocalDateTime(),
+						rs.getInt("user_id"),rs.getInt("video_id"), rs.getString("content"));
+				c.setUsername(getUsername(c.getUserId()));
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				 String formatDateTime = c.getDate().format(formatter);
+				 c.setFormattedDate(formatDateTime);
+				 return c;
+			}
+		} catch (SQLException e) {
+			System.out.println("DB error: " + e.getMessage());
+		}
+
+		return null;
 	}
 	
 	private String getUsername(int userId) {
