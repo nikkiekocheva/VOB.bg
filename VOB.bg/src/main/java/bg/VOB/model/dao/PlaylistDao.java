@@ -32,7 +32,7 @@ public class PlaylistDao implements IPlaylistDao {
 
 	// Add a new playlist and save it in DB
 	@Override
-	public Playlist addPlaylist(User u, String name) {
+	public Playlist addPlaylist(User u, String name) throws SQLException{
 		Playlist p = new Playlist(name);
 		savePlaylistInDB(u, p);
 		return p;
@@ -41,7 +41,7 @@ public class PlaylistDao implements IPlaylistDao {
 	// Save a playlist in the database
 	// TODO make it private if its not use anywhere else
 	@Override
-	public void savePlaylistInDB(User u, Playlist p) {
+	public void savePlaylistInDB(User u, Playlist p) throws SQLException{
 		String sql = "INSERT INTO playlist(name, date, user_id) VALUES(?,?,?)";
 		Date date = new Date();
 		Object param = new Timestamp(date.getTime());
@@ -50,14 +50,12 @@ public class PlaylistDao implements IPlaylistDao {
 			ps.setObject(2, param);
 			ps.setInt(3, u.getId());
 			ps.executeUpdate();
-		} catch (SQLException e) {
-			System.out.println("DB error: " + e.getMessage());
-		}
+		} 
 	}
 
 	// Add a video to a playlist and save it in DB
 	@Override
-	public void addVideoToPlaylist(User u, String videoName, String playlistName) {
+	public void addVideoToPlaylist(User u, String videoName, String playlistName) throws SQLException{
 		Playlist p = getPLaylistByUserAndName(u, playlistName);
 		Video v = VideoDao.getInstance().getVideoByUserAndName(u, videoName);
 		saveVideoInPlaylistInDB(p, v.getId());
@@ -66,7 +64,7 @@ public class PlaylistDao implements IPlaylistDao {
 	// TODO what is it for? we can have to search by name and we can have one extra
 	// by username
 	@Override
-	public Playlist getPLaylistByUserAndName(User u, String name) {
+	public Playlist getPLaylistByUserAndName(User u, String name) throws SQLException{
 		String sql = "SELECT id FROM playlist WHERE user_id = ? AND name = ?";
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, u.getId());
@@ -75,14 +73,12 @@ public class PlaylistDao implements IPlaylistDao {
 			while (rs.next()) {
 				return new Playlist(rs.getInt(1), name);
 			}
-		} catch (SQLException e) {
-			System.out.println("DB error: " + e.getMessage());
-		}
+		} 
 		return null;
 	}
 
 	@Override
-	public Playlist getPLaylistByUser(User u) {
+	public Playlist getPLaylistByUser(User u) throws SQLException{
 		String sql = "SELECT id,name FROM playlist WHERE user_id = ?";
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, u.getId());
@@ -90,37 +86,31 @@ public class PlaylistDao implements IPlaylistDao {
 			if (rs.next()) {
 				return new Playlist(rs.getInt("id"), rs.getString("name"));
 			}
-		} catch (SQLException e) {
-			System.out.println("DB error: " + e.getMessage());
-		}
+		} 
 		return null;
 	}
 
 	@Override
-	public void saveVideoInPlaylistInDB(Playlist p, int videoId) {
+	public void saveVideoInPlaylistInDB(Playlist p, int videoId) throws SQLException{
 		String sql = "INSERT INTO playlist_has_video(playlist_id, video_id) VALUES(?,?)";
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, p.getId());
 			ps.setInt(2, videoId);
 			ps.executeUpdate();
-		} catch (SQLException e) {
-			System.out.println("DB error: " + e.getMessage());
-		}
+		} 
 	}
 	
-	public void removeVideoFromPlaylistInDB(Playlist p, int videoId) {
+	public void removeVideoFromPlaylistInDB(Playlist p, int videoId) throws SQLException{
 		String sql = "DELETE FROM playlist_has_video WHERE playlist_id = ? AND video_id =?";
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, p.getId());
 			ps.setInt(2, videoId);
 			ps.executeUpdate();
-		} catch (SQLException e) {
-			System.out.println("DB error: " + e.getMessage());
 		}
 	}
 
 	@Override
-	public boolean checkIfVideoIsInPlaylist(Playlist p, int videoId) {
+	public boolean checkIfVideoIsInPlaylist(Playlist p, int videoId) throws SQLException{
 		String sql = "SELECT playlist_id, video_id FROM playlist_has_video WHERE playlist_id = ? AND video_id = ?";
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, p.getId());
@@ -129,14 +119,12 @@ public class PlaylistDao implements IPlaylistDao {
 			if (rs.next()) {
 				return true;
 			}
-		} catch (SQLException e) {
-			System.out.println("DB error: " + e.getMessage());
-		}
+		} 
 		return false;
 	}
 
 	@Override
-	public ArrayList<Video> getVideosFromPlaylist(User u) {
+	public ArrayList<Video> getVideosFromPlaylist(User u) throws SQLException{
 		Playlist p = getPLaylistByUser(u);
 		ArrayList<Video> videos = new ArrayList<>();
 		if(p != null) {
@@ -149,15 +137,13 @@ public class PlaylistDao implements IPlaylistDao {
 					videos.add(new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(),
 							0,0,0, rs.getString("description"), rs.getString("path")));
 				}
-			} catch (SQLException e) {
-				System.out.println("DB error: " + e.getMessage());
-			}
+			} 
 		}
 		return videos;
 	}
 
 	@Override
-	public ArrayList<Playlist> searchForPlaylist(String text) {
+	public ArrayList<Playlist> searchForPlaylist(String text) throws SQLException{
 		ArrayList<Playlist> matches = new ArrayList<>();
 		String sql = "SELECT id, name, date, user_id FROM playlist WHERE name LIKE ?";
 
@@ -169,9 +155,7 @@ public class PlaylistDao implements IPlaylistDao {
 						rs.getTimestamp("date").toLocalDateTime(), rs.getInt("user_id")));
 			}
 
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
+		} 
 		return matches;
 	}
 }

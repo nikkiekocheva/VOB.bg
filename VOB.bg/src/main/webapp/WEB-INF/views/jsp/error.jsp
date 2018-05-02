@@ -7,9 +7,9 @@
 <title>Error</title>
 </head>
 <body>
-<h1>
-		${ requestScope.error }!! Click <a href="http://localhost:8080/VOB.bg/main">here</a> to return to
-		main page!
-	</h1>
+	 <div>
+     	<h1>Error!</h1>
+    	<h2>${requestScope.exception.message }</h2>
+    </div>
 </body>
 </html>

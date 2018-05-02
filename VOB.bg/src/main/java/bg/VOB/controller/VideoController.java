@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.ServletOutputStream;
@@ -44,7 +45,7 @@ public class VideoController {
 
 	@RequestMapping(value = "/uploadVideo", method = RequestMethod.POST)
 	public String saveVideo(@RequestParam("videoFile") MultipartFile file, HttpSession session,
-			HttpServletRequest request) {
+			HttpServletRequest request) throws Exception {
 		User user = (User) session.getAttribute("user");
 		String filename = user.getUsername() + file.getOriginalFilename();
 		String path = SpringWebConfig.LOCATION + File.separator + filename;
@@ -53,19 +54,15 @@ public class VideoController {
 			file.transferTo(f);
 			UserManager.getInstance().addVideo(user, request.getParameter("name"), request.getParameter("description"),
 					filename);
-		} catch (IllegalStateException e) {
-			System.out.println("Invalid file saving.");
-		} catch (IOException e) {
-			System.out.println("Invalid file saving.");
-		} catch (InvalidUserDataException e) {
-			System.out.println("Invalid file saving.");
+		} catch (Exception e) {
+			throw new Exception("Invalid file saving: " + e.getMessage());
 		}
 
 		return "uploadVideo";
 	}
 
 	@RequestMapping(value = "/videos", method = RequestMethod.GET)
-	public String showVideosPage(Model model, HttpServletResponse response) {
+	public String showVideosPage(Model model, HttpServletResponse response) throws SQLException {
 		// get all the videos in the DB
 		ArrayList<Video> allVideosList = VideoDao.getInstance().getAllVideos();
 		model.addAttribute("allVideos", allVideosList);
@@ -74,7 +71,7 @@ public class VideoController {
 	}
 	
 	@RequestMapping(value = "/videos", method = RequestMethod.POST)
-	public String orderVideosInPage(Model model, HttpServletRequest request) {
+	public String orderVideosInPage(Model model, HttpServletRequest request) throws SQLException {
 		String orderType = request.getParameter("type");
 		
 		ArrayList<Video> allVideosList = VideoDao.getInstance().getAllVideosOrdered(orderType);
@@ -100,7 +97,7 @@ public class VideoController {
 	}
 
 	@RequestMapping(value = "/view/{video.id}", method = RequestMethod.GET)
-	public String view(Model model, @PathVariable("video.id") int id, HttpServletResponse response) {
+	public String view(Model model, @PathVariable("video.id") int id, HttpServletResponse response) throws SQLException {
 		Video v = UserManager.getInstance().getVideo(id);
 		UserManager.getInstance().updateVideoViews(id);
 		User u = UserManager.getInstance().getUserById(v.getUserId());
@@ -116,11 +113,10 @@ public class VideoController {
 	}
 
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	public String searchFor(HttpServletRequest request, Model model) {
+	public String searchFor(HttpServletRequest request, Model model) throws SQLException {
 		String searchText = request.getParameter("text");
 		String searchType = request.getParameter("type");
 		ArrayList found = new ArrayList<>();
-		System.out.println(searchType);
 
 		switch (searchType) {
 		case "user":
@@ -144,7 +140,7 @@ public class VideoController {
 	}
 	
 	@RequestMapping(value="/rateVideo/{video.id}", method = RequestMethod.GET)
-	public String dislikeVideo(HttpSession session, @PathVariable("video.id") int id, HttpServletRequest request) {
+	public String dislikeVideo(HttpSession session, @PathVariable("video.id") int id, HttpServletRequest request) throws SQLException{
 		Video v = UserManager.getInstance().getVideo(id);
 		User u = UserManager.getInstance().getUserById(v.getUserId());
 		String button = request.getParameter("button");

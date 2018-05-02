@@ -1,5 +1,6 @@
 package bg.VOB.model.dao;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import bg.VOB.model.Playlist;
@@ -8,22 +9,22 @@ import bg.VOB.model.Video;
 
 public interface IPlaylistDao {
 
-	public void savePlaylistInDB(User u, Playlist p);
+	public void savePlaylistInDB(User u, Playlist p) throws SQLException;
 
-	public void addVideoToPlaylist(User u, String videoName, String playlistName);
+	public void addVideoToPlaylist(User u, String videoName, String playlistName) throws SQLException;
 
-	public Playlist getPLaylistByUserAndName(User u, String name);
+	public Playlist getPLaylistByUserAndName(User u, String name) throws SQLException;
 
-	public void saveVideoInPlaylistInDB(Playlist p, int videoId);
+	public void saveVideoInPlaylistInDB(Playlist p, int videoId) throws SQLException;
 
-	Playlist addPlaylist(User u, String name);
+	Playlist addPlaylist(User u, String name) throws SQLException;
 
-	Playlist getPLaylistByUser(User u);
+	Playlist getPLaylistByUser(User u) throws SQLException;
 
-	boolean checkIfVideoIsInPlaylist(Playlist p, int videoId);
+	boolean checkIfVideoIsInPlaylist(Playlist p, int videoId) throws SQLException;
 
-	ArrayList<Video> getVideosFromPlaylist(User u);
+	ArrayList<Video> getVideosFromPlaylist(User u) throws SQLException;
 
-	ArrayList<Playlist> searchForPlaylist(String text);
+	ArrayList<Playlist> searchForPlaylist(String text) throws SQLException;
 
 }

@@ -1,5 +1,7 @@
 package bg.VOB.controller;
 
+import java.sql.SQLException;
+
 import bg.VOB.model.Playlist;
 import bg.VOB.model.User;
 import bg.VOB.model.Video;
@@ -24,12 +26,12 @@ public class UserManager {
 		return instance;
 	}
 	
-	public synchronized void registration(User u) {
+	public synchronized void registration(User u) throws SQLException {
 		UserDao.getInstance().saveUserInDB(u);
 		
 	}
 	
-	public User signIn(String username, String password) throws InvalidUserDataException {
+	public User signIn(String username, String password) throws InvalidUserDataException, SQLException {
 			if(UserDao.getInstance().checkForUser(username,password)) {
 				User u = UserDao.getInstance().generateUser(username);
 				return u;
@@ -39,23 +41,23 @@ public class UserManager {
 			}
 	}
 
-	public synchronized void addVideo(User u, String name, String description, String path) throws InvalidUserDataException {
+	public synchronized void addVideo(User u, String name, String description, String path) throws InvalidUserDataException, SQLException {
 		VideoDao.getInstance().uploadVideo(u, name, description, path);
 	}
 	
-	public synchronized void addPlaylist(User u, String name) {
+	public synchronized void addPlaylist(User u, String name) throws SQLException{
 		Playlist p = PlaylistDao.getInstance().addPlaylist(u, name);
 	}
 	
-	public synchronized void addVideoToPlaylist(User u, String videoName, String playlistName) {
+	public synchronized void addVideoToPlaylist(User u, String videoName, String playlistName) throws SQLException{
 		PlaylistDao.getInstance().addVideoToPlaylist(u, videoName, playlistName);
 	}
 	
-	public synchronized void likeVideo(User u, int videoId) {
+	public synchronized void likeVideo(User u, int videoId) throws SQLException{
 		VideoDao.getInstance().likeVideo(u, videoId);
 	}
 	
-	public synchronized void dislikeVideo(User u, int videoId) {
+	public synchronized void dislikeVideo(User u, int videoId) throws SQLException {
 		VideoDao.getInstance().dislikeVideo(u, videoId);
 	}
 	
@@ -71,27 +73,27 @@ public class UserManager {
 		CommentDao.getInstance().deleteComment(u, videoName, commentId);
 	}
 
-	public Video getVideo(int id) {
+	public Video getVideo(int id) throws SQLException {
 		return VideoDao.getInstance().getVideoById(id);
 	}
 	
-	public User getUserById(int id) {
+	public User getUserById(int id) throws SQLException {
 		return UserDao.getInstance().generateUserById(id);
 	}
 	
-	public int getVideoLikes(int videoId) {
+	public int getVideoLikes(int videoId) throws SQLException {
 		return VideoDao.getInstance().getVideoLikes(videoId);
 	}
 	
-	public int getVideoDislikes(int videoId) {
+	public int getVideoDislikes(int videoId) throws SQLException {
 		return VideoDao.getInstance().getVideoDislikes(videoId);
 	}
 	
-	public void updateVideoViews(int videoId) {
+	public void updateVideoViews(int videoId) throws SQLException {
 		VideoDao.getInstance().updateVideoViews(videoId);
 	}
 	
-	public int getVideoViews(int videoId) {
+	public int getVideoViews(int videoId) throws SQLException {
 		return VideoDao.getInstance().getVideoViews(videoId);
 	}
 }

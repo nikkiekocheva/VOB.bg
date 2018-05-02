@@ -1,5 +1,6 @@
 package bg.VOB.controller;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +33,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String loginUser(HttpServletRequest req) {
+	public String loginUser(HttpServletRequest req) throws SQLException {
 		// get the username and password
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
@@ -57,7 +58,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String registerUser(HttpServletRequest request) {
+	public String registerUser(HttpServletRequest request) throws SQLException{
 
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
@@ -79,7 +80,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/profile/{username}", method = RequestMethod.GET)
-	public String showUserProfile(@PathVariable("username") String username, Model model,HttpSession session) {
+	public String showUserProfile(@PathVariable("username") String username, Model model,HttpSession session) throws SQLException {
 		User user = UserDao.getInstance().generateUser(username);
 		ArrayList<Video> userVideos = VideoDao.getInstance().getAllVideosByUser(user);
 		
@@ -102,7 +103,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/updateprofile", method = RequestMethod.POST)
-	public String updateUserProfile(HttpServletRequest request, HttpSession session) {
+	public String updateUserProfile(HttpServletRequest request, HttpSession session) throws SQLException{
 		User user = (User) session.getAttribute("user");
 
 		String email = request.getParameter("email");
@@ -134,7 +135,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/follow/{username}", method = RequestMethod.GET)
-	public String followUser(@PathVariable("username") String folowingUsername, Model model,HttpSession session) {
+	public String followUser(@PathVariable("username") String folowingUsername, Model model,HttpSession session) throws SQLException {
 		User folowingUser = UserDao.getInstance().generateUser(folowingUsername);
 		User folowerUser = (User) session.getAttribute("user");
 		
@@ -145,7 +146,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/unfollow/{username}", method = RequestMethod.GET)
-	public String unFollowUser(@PathVariable("username") String folowingUsername, Model model,HttpSession session) {
+	public String unFollowUser(@PathVariable("username") String folowingUsername, Model model,HttpSession session) throws SQLException{
 		User folowingUser = UserDao.getInstance().generateUser(folowingUsername);
 		User folowerUser = (User) session.getAttribute("user");
 		

@@ -1,5 +1,6 @@
 package bg.VOB.model.dao;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import bg.VOB.model.User;
@@ -7,17 +8,17 @@ import util.exceptions.InvalidUserDataException;
 
 public interface IUserDao {
 
-	boolean checkForUser(String username, String password) throws InvalidUserDataException;
+	boolean checkForUser(String username, String password) throws InvalidUserDataException,SQLException;
 
-	void saveUserInDB(User u);
+	void saveUserInDB(User u) throws SQLException;
 
-	User generateUser(String username);
+	User generateUser(String username) throws SQLException;
 
-	void followUser(User follower, User following);
+	void followUser(User follower, User following) throws SQLException;
 
-	void updateUserInDB(User u);
+	void updateUserInDB(User u) throws SQLException;
 
-	User generateUserById(int id);
+	User generateUserById(int id) throws SQLException;
 
-	ArrayList<User> searchForUser(String text);
+	ArrayList<User> searchForUser(String text) throws SQLException;
 }

@@ -1,5 +1,6 @@
 package bg.VOB.controller;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.annotation.MultipartConfig;
@@ -22,7 +23,7 @@ import bg.VOB.model.dao.VideoDao;
 public class PlaylistController {
 
 	@RequestMapping(value = "/playlist", method = RequestMethod.GET)
-	public String showPlaylist(Model model,HttpSession session) {
+	public String showPlaylist(Model model,HttpSession session) throws SQLException{
 		User u = (User) session.getAttribute("user");
 		ArrayList<Video> videos = PlaylistDao.getInstance().getVideosFromPlaylist(u);
 		if(videos.isEmpty()) {
@@ -33,7 +34,7 @@ public class PlaylistController {
 	}
 	
 	@RequestMapping(value = "/playlist", method = RequestMethod.POST)
-	public String makeNewPlaylist(Model model,HttpServletRequest request,HttpSession session) {
+	public String makeNewPlaylist(Model model,HttpServletRequest request,HttpSession session) throws SQLException{
 		User u = (User) session.getAttribute("user");
 		PlaylistDao.getInstance().addPlaylist(u, request.getParameter("name"));
 		
@@ -41,7 +42,7 @@ public class PlaylistController {
 	}
 	
 	@RequestMapping(value = "/videotoplaylist", method = RequestMethod.POST)
-	public String addVideoToPlaylist(Model model,HttpServletRequest request,HttpSession session) {
+	public String addVideoToPlaylist(Model model,HttpServletRequest request,HttpSession session) throws SQLException{
 		int videoId = Integer.parseInt(request.getParameter("videoid"));
 		
 		User u = (User) session.getAttribute("user");
@@ -58,7 +59,7 @@ public class PlaylistController {
 	}
 	
 	@RequestMapping(value = "/removevideoplaylist", method = RequestMethod.POST)
-	public String removeVideoFromPlaylist(Model model,HttpServletRequest request,HttpSession session) {
+	public String removeVideoFromPlaylist(Model model,HttpServletRequest request,HttpSession session) throws SQLException{
 		int videoId = Integer.parseInt(request.getParameter("videoid"));
 		
 		User u = (User) session.getAttribute("user");

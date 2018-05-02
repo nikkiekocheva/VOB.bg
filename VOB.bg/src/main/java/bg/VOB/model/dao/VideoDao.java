@@ -34,7 +34,7 @@ public class VideoDao implements IVideoDao {
 	}
 
 	@Override
-	public Video uploadVideo(User u, String name, String description, String path) throws InvalidUserDataException {
+	public Video uploadVideo(User u, String name, String description, String path) throws InvalidUserDataException, SQLException {
 		Video v = new Video(name, description);
 		saveVideoInDB(u, v, path);
 		v = getVideoByName(name);
@@ -43,7 +43,7 @@ public class VideoDao implements IVideoDao {
 	}
 
 	@Override
-	public void saveVideoInDB(User u, Video v, String path) {
+	public void saveVideoInDB(User u, Video v, String path) throws SQLException{
 		String sql = "INSERT INTO video(name, date, views, user_id, description, path) VALUES(?,?,0,?,?,?)";
 		Date date = new Date();
 		Object param = new Timestamp(date.getTime());
@@ -54,27 +54,21 @@ public class VideoDao implements IVideoDao {
 			ps.setString(4, v.getDescription());
 			ps.setString(5, path);
 			ps.executeUpdate();
-		} catch (SQLException e) { // TODO: UploadingVideoException - no name, wrong path
-			System.out.println("DB error: " + e.getMessage());
-		}
+		} 
 	}
 
-	private void saveVideoLikes(Video v,User u) {
+	private void saveVideoLikes(Video v,User u) throws SQLException {
 		String sql = "INSERT INTO video_like_dislike (user_id, video_id, liked_disliked) VALUES(?,?,?)";
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, u.getId());
 			ps.setInt(2, v.getId());
 			ps.setInt(3, 0);
 			ps.executeUpdate();
-		} catch (SQLException e) { // TODO: UploadingVideoException - no name, wrong path
-			System.out.println("DB error: " + e.getMessage());
-		}
-		
-		
+		} 
 	}
 	
 	@Override
-	public Video getVideoById(int id) {
+	public Video getVideoById(int id) throws SQLException{
 		String sql = "SELECT id,name, date, views, user_id, description, path FROM video WHERE id = ?";
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, id);
@@ -83,14 +77,12 @@ public class VideoDao implements IVideoDao {
 				return new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(), rs.getInt("user_id"),
 						rs.getInt("views"), rs.getString("description"), rs.getString("path"));
 			}
-		} catch (SQLException e) {
-			System.out.println("DB error: " + e.getMessage());
 		}
 		return null;
 	}
 
 	@Override
-	public Video getVideoByUserAndName(User u, String name) {
+	public Video getVideoByUserAndName(User u, String name) throws SQLException{
 		String sql = "SELECT id FROM video WHERE user_id = ? AND name = ?";
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, u.getId());
@@ -99,8 +91,6 @@ public class VideoDao implements IVideoDao {
 			while (rs.next()) {
 				return new Video(rs.getInt(1), name);
 			}
-		} catch (SQLException e) {
-			System.out.println("DB error: " + e.getMessage());
 		}
 		return null;
 	}
@@ -141,7 +131,7 @@ public class VideoDao implements IVideoDao {
 	}
 
 	@Override
-	public void likeVideo(User u, int videoId) {
+	public void likeVideo(User u, int videoId) throws SQLException{
 		String sql;
 		Video v = getVideoById(videoId);
 		// see if the video is already liked or disliked by the user
@@ -153,9 +143,7 @@ public class VideoDao implements IVideoDao {
 				ps.setInt(3, 1);
 				ps.executeUpdate();
 
-			} catch (SQLException e) {
-				System.out.println("DB error: " + e.getMessage());
-			}
+			} 
 		} else {
 			// check is the video liked or disliked by the user
 			int existAs = getLikedDisliked(u,videoId);
@@ -169,14 +157,12 @@ public class VideoDao implements IVideoDao {
 				ps.setInt(1, u.getId());
 				ps.setInt(2, v.getId());
 				ps.executeUpdate();
-			} catch (SQLException e) {
-				System.out.println("DB error: " + e.getMessage());
-			}
+			} 
 		}
 	}
 
 	@Override
-	public void dislikeVideo(User u, int videoId) {
+	public void dislikeVideo(User u, int videoId) throws SQLException {
 		String sql;
 		// see if the video is allready liked or disliked by the user
 		if (!isVideoLikedDislikedInDB(u, videoId)) {
@@ -187,9 +173,7 @@ public class VideoDao implements IVideoDao {
 				ps.setInt(3, -1);
 				ps.executeUpdate();
 
-			} catch (SQLException e) {
-				System.out.println("DB error: " + e.getMessage());
-			}
+			} 
 		} else {
 			// check is the video liked or disliked by the user
 			int existAs = getLikedDisliked(u, videoId);
@@ -203,15 +187,13 @@ public class VideoDao implements IVideoDao {
 				ps.setInt(1, u.getId());
 				ps.setInt(2, videoId);
 				ps.executeUpdate();
-			} catch (SQLException e) {
-				System.out.println("DB error: " + e.getMessage());
-			}
+			} 
 		}
 	}
 
 	// TODO make it private if its not used anywhere else
 	@Override
-	public int getLikedDisliked(User u, int videoId) {
+	public int getLikedDisliked(User u, int videoId) throws SQLException{
 		String sql = "SELECT liked_disliked FROM video_like_dislike WHERE user_id = ? AND video_id = ?";
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, u.getId());
@@ -220,14 +202,12 @@ public class VideoDao implements IVideoDao {
 			if (rs.next()) {
 				return rs.getInt(1);
 			}
-		} catch (SQLException e) {
-			System.out.println("DB error: " + e.getMessage());
-		}
+		} 
 		return 0;
 	}
 
 	@Override
-	public int getVideoLikes(int id) {
+	public int getVideoLikes(int id) throws SQLException{
 		String sql = "SELECT SUM(liked_disliked) FROM video_like_dislike WHERE video_id = ? AND liked_disliked = 1";
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, id);
@@ -235,14 +215,12 @@ public class VideoDao implements IVideoDao {
 			if (rs.next()) {
 				return rs.getInt(1);
 			}
-		} catch (SQLException e) {
-			System.out.println("DB error: " + e.getMessage());
-		}
+		} 
 		return 0;
 	}
 
 	@Override
-	public int getVideoDislikes(int id) {
+	public int getVideoDislikes(int id) throws SQLException{
 		String sql = "SELECT SUM(liked_disliked)*(-1) FROM video_like_dislike WHERE video_id = ? AND liked_disliked = -1";
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, id);
@@ -250,15 +228,13 @@ public class VideoDao implements IVideoDao {
 			if (rs.next()) {
 				return rs.getInt(1);
 			}
-		} catch (SQLException e) {
-			System.out.println("DB error: " + e.getMessage());
-		}
+		} 
 		return 0;
 	}
 
 	// TODO make it private if its not used anywhere else
 	@Override
-	public boolean isVideoLikedDislikedInDB(User u, int videoId) {
+	public boolean isVideoLikedDislikedInDB(User u, int videoId) throws SQLException{
 		String sql = "SELECT liked_disliked FROM video_like_dislike WHERE user_id = ? AND video_id = ?";
 		boolean exists = false;
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
@@ -268,25 +244,21 @@ public class VideoDao implements IVideoDao {
 			if (rs.next()) {
 				return exists = true;
 			}
-		} catch (SQLException e) {
-			System.out.println("DB error: " + e.getMessage());
-		}
+		} 
 		return exists;
 	}
 
 	@Override
-	public void updateVideoViews(int videoId) {
+	public void updateVideoViews(int videoId) throws SQLException{
 		String sql = "UPDATE video SET views = views + 1 WHERE id = ?";
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, videoId);
 			ps.executeUpdate();
-		} catch (SQLException e) {
-			System.out.println("DB error: " + e.getMessage());
-		}
+		} 
 	}
 
 	@Override
-	public int getVideoViews(int id) {
+	public int getVideoViews(int id) throws SQLException{
 		String sql = "SELECT views FROM video WHERE id = ?";
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, id);
@@ -294,14 +266,12 @@ public class VideoDao implements IVideoDao {
 			if (rs.next()) {
 				return rs.getInt(1);
 			}
-		} catch (SQLException e) {
-			System.out.println("DB error: " + e.getMessage());
-		}
+		} 
 		return 0;
 	}
 
 	@Override
-	public ArrayList<Video> getAllVideos() {
+	public ArrayList<Video> getAllVideos() throws SQLException{
 		ArrayList<Video> allVideos = new ArrayList<>();
 		String sql = "SELECT id,name,date,views,user_id,description,path FROM video";
 
@@ -313,15 +283,13 @@ public class VideoDao implements IVideoDao {
 								rs.getInt("views"), 0, rs.getString("description"), rs.getString("path")));
 			}
 
-		} catch (SQLException e) {
-			System.out.println("DB error: " + e.getMessage());
-		}
+		} 
 
 		return allVideos;
 	}
 
 	@Override
-	public ArrayList<Video> searchForVideos(String text) {
+	public ArrayList<Video> searchForVideos(String text) throws SQLException{
 		ArrayList<Video> matches = new ArrayList<>();
 		String sql = "SELECT id, name, date, views, user_id, description, path FROM video WHERE name LIKE ?";
 
@@ -333,13 +301,11 @@ public class VideoDao implements IVideoDao {
 						rs.getInt("views"), 0, rs.getString("description"), rs.getString("path")));
 			}
 
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
+		} 
 		return matches;
 	}
 
-	public ArrayList<Video> getAllVideosOrdered(String orderBY) {
+	public ArrayList<Video> getAllVideosOrdered(String orderBY) throws SQLException{
 		ArrayList<Video> allVideos = new ArrayList<>();
 		String sql = "SELECT v.id, v.name, v.date, v.views, v.user_id, v.description, v.path, SUM(l.liked_disliked) AS likes FROM video AS v " + 
 						"JOIN video_like_dislike AS l ON v.id = l.video_id GROUP BY v.id;";
@@ -351,9 +317,7 @@ public class VideoDao implements IVideoDao {
 								rs.getInt("user_id"), rs.getInt("views"),rs.getInt("likes"), rs.getString("description"), rs.getString("path")));
 			}
 
-		} catch (SQLException e) {
-			System.out.println("DB error: " + e.getMessage());
-		}
+		} 
 		
 		//Order the collection by views
 		Collections.sort(allVideos, new Comparator<Video>() {
