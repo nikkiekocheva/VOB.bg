@@ -27,7 +27,7 @@
 		
 		<c:if test="${ type == 'playlist' }">
 			<p>${ object.name }</p>
-	
+			<a href="/VOB.bg/playlist/${ object.name }"> ${ object.name } </a>
 		</c:if>
 		
 	<br><hr>
