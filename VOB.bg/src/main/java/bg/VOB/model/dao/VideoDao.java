@@ -80,8 +80,8 @@ public class VideoDao implements IVideoDao {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				return new Video(rs.getInt(1), rs.getString(2), rs.getTimestamp(3).toLocalDateTime(), rs.getInt(4),
-						rs.getInt(5), rs.getString(6), rs.getString(7));
+				return new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(), rs.getInt("user_id"),
+						rs.getInt("views"), rs.getString("description"), rs.getString("path"));
 			}
 		} catch (SQLException e) {
 			System.out.println("DB error: " + e.getMessage());

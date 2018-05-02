@@ -107,7 +107,7 @@ public class VideoController {
 		int dislikes = UserManager.getInstance().getVideoDislikes(v.getId());
 		int views = UserManager.getInstance().getVideoViews(v.getId());
 		model.addAttribute("video", v);
-		model.addAttribute("user", u);
+		model.addAttribute("videouser", u);
 		model.addAttribute("likes", likes);
 		model.addAttribute("dislikes", dislikes);
 		model.addAttribute("views", views);

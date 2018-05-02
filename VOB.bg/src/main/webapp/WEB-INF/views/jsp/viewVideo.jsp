@@ -19,7 +19,7 @@
 			<source src= "/VOB.bg/videos/${video.path}" type="video/mp4">
 		</video>
 	</div>
-	User: ${user.username} <br>
+	User: ${videouser.username} <br>
 	Likes:${likes}
 	Dislikes:${dislikes} <br>
 	Views: ${views}<br>
