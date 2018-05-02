@@ -164,7 +164,7 @@ public class VideoDao implements IVideoDao {
 	@Override
 	public void dislikeVideo(User u, int videoId) throws SQLException {
 		String sql;
-		// see if the video is allready liked or disliked by the user
+		// see if the video is already liked or disliked by the user
 		if (!isVideoLikedDislikedInDB(u, videoId)) {
 			sql = "INSERT INTO video_like_dislike(user_id, video_id, liked_disliked) VALUES (?,?,?)";
 			try (PreparedStatement ps = connection.prepareStatement(sql);) {
@@ -172,7 +172,6 @@ public class VideoDao implements IVideoDao {
 				ps.setInt(2, videoId);
 				ps.setInt(3, -1);
 				ps.executeUpdate();
-
 			} 
 		} else {
 			// check is the video liked or disliked by the user
@@ -222,7 +221,7 @@ public class VideoDao implements IVideoDao {
 	@Override
 	public int getVideoDislikes(int id) throws SQLException{
 		String sql = "SELECT SUM(liked_disliked)*(-1) FROM video_like_dislike WHERE video_id = ? AND liked_disliked = -1";
-		try (PreparedStatement ps = connection.prepareStatement(sql);) {
+		try (PreparedStatement ps = connection.prepareStatement(sql);) { 
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {

@@ -142,13 +142,13 @@ public class VideoController {
 	@RequestMapping(value="/rateVideo/{video.id}", method = RequestMethod.GET)
 	public String dislikeVideo(HttpSession session, @PathVariable("video.id") int id, HttpServletRequest request) throws SQLException{
 		Video v = UserManager.getInstance().getVideo(id);
-		User u = UserManager.getInstance().getUserById(v.getUserId());
+		User user = (User)session.getAttribute("user");
 		String button = request.getParameter("button");
 		if(button.equals("button1")) {
-			UserManager.getInstance().likeVideo(u, id);
+			UserManager.getInstance().likeVideo(user, id);
 		}
 		if(button.equals("button2")) {
-			UserManager.getInstance().dislikeVideo(u, id);
+			UserManager.getInstance().dislikeVideo(user, id);
 		}
 		return "redirect:/view/{video.id}";
 	}
