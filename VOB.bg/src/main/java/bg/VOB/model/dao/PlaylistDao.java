@@ -107,6 +107,17 @@ public class PlaylistDao implements IPlaylistDao {
 			System.out.println("DB error: " + e.getMessage());
 		}
 	}
+	
+	public void removeVideoFromPlaylistInDB(Playlist p, int videoId) {
+		String sql = "DELETE FROM playlist_has_video WHERE playlist_id = ? AND video_id =?";
+		try (PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setInt(1, p.getId());
+			ps.setInt(2, videoId);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("DB error: " + e.getMessage());
+		}
+	}
 
 	@Override
 	public boolean checkIfVideoIsInPlaylist(Playlist p, int videoId) {

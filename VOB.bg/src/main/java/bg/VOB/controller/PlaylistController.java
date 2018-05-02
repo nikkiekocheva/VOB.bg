@@ -26,7 +26,7 @@ public class PlaylistController {
 		User u = (User) session.getAttribute("user");
 		ArrayList<Video> videos = PlaylistDao.getInstance().getVideosFromPlaylist(u);
 		if(videos.isEmpty()) {
-			videos = null;
+			videos = new ArrayList<>();
 		}
 		model.addAttribute("videos",videos);
 		return "playlist";
@@ -57,4 +57,17 @@ public class PlaylistController {
 		return "redirect:/playlist";
 	}
 	
+	@RequestMapping(value = "/removevideoplaylist", method = RequestMethod.POST)
+	public String removeVideoFromPlaylist(Model model,HttpServletRequest request,HttpSession session) {
+		int videoId = Integer.parseInt(request.getParameter("videoid"));
+		
+		User u = (User) session.getAttribute("user");
+		Playlist p = PlaylistDao.getInstance().getPLaylistByUser(u);
+		
+		if(p != null) {
+			PlaylistDao.getInstance().removeVideoFromPlaylistInDB(p, videoId);
+		}
+		
+		return "redirect:/playlist";
+	}
 }

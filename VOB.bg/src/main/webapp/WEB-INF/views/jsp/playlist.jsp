@@ -35,6 +35,10 @@
 						 <source src= "videos/${video.path }" type="video/mp4"> 
 						 Your browser does not support the videotag. 
 					</video>
+					<form action="removevideoplaylist" method="post">
+						<input type="hidden" name="videoid" value="${ video.id }"/>
+						<input type="submit" name="removevideo" value="Remove from playlist" />
+					</form>
 				</div>
 			</div>
 		</c:if>
