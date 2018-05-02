@@ -36,15 +36,14 @@ public class CommentDao implements ICommentDao {
 	}
 
 	@Override
-	public void addComment(User u, String videoName, String content) throws InvalidUserDataException {
-		Video v = VideoDao.getInstance().getVideoByName(videoName);
+	public void addComment(User u, int videoId, String content) throws InvalidUserDataException {
 		if (Validator.verifyCommentContent(content)) {
 			String sql = "INSERT INTO comments(date, video_id, user_id, content) VALUES(?,?,?,?)";
 			Date date = new Date();
 			Object param = new java.sql.Timestamp(date.getTime());
 			try (PreparedStatement ps = connection.prepareStatement(sql);) {
 				ps.setObject(1, param);
-				ps.setInt(2, v.getId());
+				ps.setInt(2, videoId);
 				ps.setInt(3, u.getId());
 				ps.setString(4, content);
 				ps.executeUpdate();
@@ -58,13 +57,12 @@ public class CommentDao implements ICommentDao {
 	}
 
 	@Override
-	public void editComment(User u, String videoName, int commentId, String content) throws InvalidUserDataException {
-		Video v = VideoDao.getInstance().getVideoByName(videoName);
+	public void editComment(User u, int videoId, int commentId, String content) throws InvalidUserDataException {
 		String sql = "UPDATE comments SET content = ? WHERE video_id = ? AND id = ?";
 		if (Validator.verifyCommentContent(content)) {
 			try (PreparedStatement ps = connection.prepareStatement(sql);) {
 				ps.setString(1, content);
-				ps.setInt(2, v.getId());
+				ps.setInt(2, videoId);
 				ps.setInt(3, commentId);
 				ps.executeUpdate();
 			} catch (SQLException e) {
@@ -76,11 +74,10 @@ public class CommentDao implements ICommentDao {
 	}
 
 	@Override
-	public void deleteComment(User u, String videoName, int commentId) {
-		Video v = VideoDao.getInstance().getVideoByName(videoName);
+	public void deleteComment(User u, int videoId, int commentId) {
 		String sql = "DELETE FROM comments WHERE video_id = ? AND id = ?";
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
-			ps.setInt(1, v.getId());
+			ps.setInt(1, videoId);
 			ps.setInt(2, commentId);
 			ps.executeUpdate();
 		} catch (SQLException e) {

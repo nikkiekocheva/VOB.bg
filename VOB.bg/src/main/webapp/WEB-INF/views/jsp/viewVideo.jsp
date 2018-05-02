@@ -30,6 +30,7 @@ td {
 		<%@ include file="menu.jsp" %>
 	</div>
 	
+	<!-- VIDEO -->
 	<h1 >${video.name}</h1>
 	<div>
 		<video width="420" height="300" controls>
@@ -41,11 +42,20 @@ td {
 	Dislikes:${dislikes} <br>
 	Views: ${views}<br>
 	
+		<!-- LIKE/DISLIKE BUTTON -->
 	<form action="/VOB.bg/rateVideo/${video.id}">
 			<button name="button" value = "button1"> Like</button>
 			<button name="button" value = "button2"> Dislike</button>	
 	 </form>
 	<br>
+		<!-- ADD COMMENT -->
+		<h4>Add a comment: </h4>
+	<form action="/VOB.bg/addComment/${video.id}">
+	<input type="text" name="comment" required> 
+	<input type="submit">
+	</form>
+	
+		<!-- COMMENTS -->
 	<h3> Comments: </h3>
 	<c:forEach var="comment" items= "${allComments}">
 		<table>
@@ -58,6 +68,6 @@ td {
 			</tr>
 		</table>
 		<br>
-	</c:forEach>	 
+	</c:forEach> 
 </body>
 </html>

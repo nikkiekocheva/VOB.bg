@@ -61,16 +61,20 @@ public class UserManager {
 		VideoDao.getInstance().dislikeVideo(u, videoId);
 	}
 	
-	public synchronized void comment(User u, String videoName, String content) throws InvalidUserDataException {
-		CommentDao.getInstance().addComment(u, videoName, content);
+	public synchronized void comment(User u, int videoId, String content){
+		try {
+			CommentDao.getInstance().addComment(u, videoId, content);
+		} catch (InvalidUserDataException e) {
+			e.getMessage();
+		}
 	}
 	
-	public synchronized void editComment(User u, String videoName, int commentId, String content) throws InvalidUserDataException {
-		CommentDao.getInstance().editComment(u, videoName, commentId, content);
+	public synchronized void editComment(User u, int videoId, int commentId, String content) throws InvalidUserDataException {
+		CommentDao.getInstance().editComment(u, videoId, commentId, content);
 	}
 	
-	public synchronized void deleteComment(User u, String videoName, int commentId) {
-		CommentDao.getInstance().deleteComment(u, videoName, commentId);
+	public synchronized void deleteComment(User u, int videoId, int commentId) {
+		CommentDao.getInstance().deleteComment(u, videoId, commentId);
 	}
 
 	public Video getVideo(int id) throws SQLException {

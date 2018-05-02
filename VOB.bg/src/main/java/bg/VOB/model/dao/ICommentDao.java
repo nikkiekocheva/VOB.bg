@@ -6,11 +6,11 @@ import util.exceptions.InvalidUserDataException;
 
 public interface ICommentDao {
 
-	public void addComment(User u, String videoName, String content) throws InvalidUserDataException;
+	public void addComment(User u, int videoId, String content) throws InvalidUserDataException;
 
-	public void editComment(User u, String videoName, int commentId, String content) throws InvalidUserDataException;
+	public void editComment(User u, int videoId, int commentId, String content) throws InvalidUserDataException;
 
-	public void deleteComment(User u, String videoName, int commentId);
+	public void deleteComment(User u, int videoId, int commentId);
 
 	void likeComment(User u, Comment comment);
 
