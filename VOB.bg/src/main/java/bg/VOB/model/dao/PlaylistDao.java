@@ -135,7 +135,7 @@ public class PlaylistDao implements IPlaylistDao {
 				ResultSet rs = ps.executeQuery();
 				while (rs.next()) {
 					videos.add(new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(),
-							0, 0, rs.getString("description"), rs.getString("path")));
+							0,0,0, rs.getString("description"), rs.getString("path")));
 				}
 			} catch (SQLException e) {
 				System.out.println("DB error: " + e.getMessage());

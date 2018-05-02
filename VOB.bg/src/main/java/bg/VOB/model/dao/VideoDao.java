@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import bg.VOB.controller.DBManager;
@@ -35,6 +37,8 @@ public class VideoDao implements IVideoDao {
 	public Video uploadVideo(User u, String name, String description, String path) throws InvalidUserDataException {
 		Video v = new Video(name, description);
 		saveVideoInDB(u, v, path);
+		v = getVideoByName(name);
+		saveVideoLikes(v, u);
 		return v;
 	}
 
@@ -55,6 +59,20 @@ public class VideoDao implements IVideoDao {
 		}
 	}
 
+	private void saveVideoLikes(Video v,User u) {
+		String sql = "INSERT INTO video_like_dislike (user_id, video_id, liked_disliked) VALUES(?,?,?)";
+		try (PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setInt(1, u.getId());
+			ps.setInt(2, v.getId());
+			ps.setInt(3, 0);
+			ps.executeUpdate();
+		} catch (SQLException e) { // TODO: UploadingVideoException - no name, wrong path
+			System.out.println("DB error: " + e.getMessage());
+		}
+		
+		
+	}
+	
 	@Override
 	public Video getVideoById(int id) {
 		String sql = "SELECT id,name, date, views, user_id, description, path FROM video WHERE id = ?";
@@ -114,7 +132,7 @@ public class VideoDao implements IVideoDao {
 			ps.setString(1, name);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				return new Video(rs.getInt(1), name);
+				return new Video(rs.getInt("id"), name);
 			}
 		} catch (SQLException e) {
 			System.out.println("DB error: " + e.getMessage());
@@ -324,4 +342,41 @@ public class VideoDao implements IVideoDao {
 		return matches;
 	}
 
+	public ArrayList<Video> getAllVideosOrdered(String orderBY) {
+		ArrayList<Video> allVideos = new ArrayList<>();
+		String sql = "SELECT v.id, v.name, v.date, v.views, v.user_id, v.description, v.path, SUM(l.liked_disliked) AS likes FROM video AS v " + 
+						"JOIN video_like_dislike AS l ON v.id = l.video_id GROUP BY v.id;";
+
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				allVideos.add(new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(),
+								rs.getInt("user_id"), rs.getInt("views"),rs.getInt("likes"), rs.getString("description"), rs.getString("path")));
+			}
+
+		} catch (SQLException e) {
+			System.out.println("DB error: " + e.getMessage());
+		}
+		
+		//Order the collection by views
+		Collections.sort(allVideos, new Comparator<Video>() {
+			@Override
+		    public int compare(Video v1, Video v2) {
+				int i = 0;
+				if(orderBY.equals("views")) {
+					i = v2.getViews() - v1.getViews();
+				}
+				if(orderBY.equals("date")) {
+					i = v2.getDate().compareTo(v1.getDate());
+				}
+				if(orderBY.equals("like")) {
+					i = v2.getLikes() - v1.getLikes();
+				}
+				return i;
+		    }
+		});
+		
+		return allVideos;
+	}
+	
 }

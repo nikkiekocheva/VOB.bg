@@ -19,8 +19,9 @@
 	
 	<form action="videos" method="post" id="type">
     	<select name="type">
- 			<option value="like">Order by likes</option>
+ 			<option value="date">Order by date</option>
  			<option value="views">Order by views</option>
+ 			<option value="like">Order by likes</option>
 		</select>
     	<input type="submit" value="Order">
     </form>
@@ -33,7 +34,7 @@
 				</h3>	
 			</div>
 			<div>
-				<video width="220" height="200" controls>
+				<video width="220" height="150" controls>
 					 <source src= "videos/${video.path}" type="video/mp4">
 					 Your browser does not support the videotag. 
 				</video>

@@ -73,12 +73,10 @@ public class VideoController {
 	
 	@RequestMapping(value = "/videos", method = RequestMethod.POST)
 	public String orderVideosInPage(Model model, HttpServletRequest request) {
-		ArrayList<Video> allVideosList = VideoDao.getInstance().getAllVideos();
 		String orderType = request.getParameter("type");
+		
+		ArrayList<Video> allVideosList = VideoDao.getInstance().getAllVideosOrdered(orderType);
 		System.out.println(orderType);
-		
-		
-		
 		
 		model.addAttribute("allVideos", allVideosList);
 		return "allvideos";

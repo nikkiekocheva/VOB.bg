@@ -35,6 +35,11 @@ public class Video {
 		this.description = description;
 		this.path = path;
 	}
+	
+	public Video(int id, String name, LocalDateTime date, int userId, int views,int likes, String description, String path) {
+		this(id,name,date,userId,views,description,path);
+		this.likes = likes;
+	}
 
 	public Video(int id, String name) {
 		this.name = name;
