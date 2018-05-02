@@ -17,12 +17,17 @@
 	
 	<h2>Found:</h2>
 	<c:forEach var="object" items="${ found }">
-		<c:if test="${ type > 1 }">
-			<p>${ object.name }</p>
-			
+		<c:if test="${ type == 'user' }">
+			<a href="/VOB.bg/profile/${ object.username }"> ${ object.username } </a>
 		</c:if>
-		<c:if test="${ type == 1 }">
-			<a href="/VOB.bg/profile/${object.username }">${ object.username }</a>
+		
+		<c:if test="${ type == 'video' }">
+			<a href="/VOB.bg/views/${ object.name }"> ${ object.name } </a>
+		</c:if>
+		
+		<c:if test="${ type == 'playlist' }">
+			<p>${ object.name }</p>
+	
 		</c:if>
 		
 	<br><hr>

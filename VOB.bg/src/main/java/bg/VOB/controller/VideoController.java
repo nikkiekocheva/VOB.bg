@@ -121,19 +121,15 @@ public class VideoController {
 		switch (searchType) {
 		case "user":
 			found = UserDao.getInstance().searchForUser(searchText);
-			model.addAttribute("type", 1);
 			break;
 		case "video":
 			found = VideoDao.getInstance().searchForVideos(searchText);
-			model.addAttribute("type", 2);
 			break;
 		case "playlist":
 			found = PlaylistDao.getInstance().searchForPlaylist(searchText);
-			model.addAttribute("type", 3);
 			break;
 		}
-
-		System.out.println(found.toString());
+		model.addAttribute("type", searchType);
 		model.addAttribute("found", found);
 
 		return "search";
@@ -151,6 +147,13 @@ public class VideoController {
 			UserManager.getInstance().dislikeVideo(u, id);
 		}
 		return "redirect:/view/{video.id}";
+	}
+	
+	@RequestMapping(value = "/views/{video.name}", method = RequestMethod.GET)
+	public String viewFoundVideo(Model model, @PathVariable("video.name") String videoName, HttpServletResponse response) throws SQLException {
+		Video v = VideoDao.getInstance().getVideoByName(videoName);
+		
+		return "redirect:/view/" + v.getId();
 	}
 
 }
