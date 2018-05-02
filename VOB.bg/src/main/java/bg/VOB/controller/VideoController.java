@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.servlet.ServletOutputStream;
@@ -27,8 +28,10 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import bg.VOB.SpringWebConfig;
 import bg.VOB.WebInitializer;
+import bg.VOB.model.Comment;
 import bg.VOB.model.User;
 import bg.VOB.model.Video;
+import bg.VOB.model.dao.CommentDao;
 import bg.VOB.model.dao.PlaylistDao;
 import bg.VOB.model.dao.UserDao;
 import bg.VOB.model.dao.VideoDao;
@@ -104,6 +107,9 @@ public class VideoController {
 		int likes = UserManager.getInstance().getVideoLikes(v.getId());
 		int dislikes = UserManager.getInstance().getVideoDislikes(v.getId());
 		int views = UserManager.getInstance().getVideoViews(v.getId());
+		ArrayList<Comment> allCommentsList = CommentDao.getInstance().getAllComments(id);
+		model.addAttribute("localDateTimeFormat", new SimpleDateFormat("MM/dd/yyyy HH:mm:ss"));
+		model.addAttribute("allComments", allCommentsList);
 		model.addAttribute("video", v);
 		model.addAttribute("videouser", u);
 		model.addAttribute("likes", likes);
@@ -153,4 +159,6 @@ public class VideoController {
 		return "redirect:/view/{video.id}";
 	}
 
+
+	
 }

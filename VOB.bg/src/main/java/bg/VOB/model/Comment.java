@@ -9,37 +9,37 @@ public class Comment {
 
 	private int id;
 	private LocalDateTime date;
-	private int likes;
-	private int dislikes;
 	private String content;
-	private final static int DEFAULT_LIKES = 0;
-	private final static int DEFAULT_DISLIKES = 0;
+	private String formattedDate;
+	private int userId;
+	private String username;
 
 	public Comment(String content) throws InvalidUserDataException {
 		setContent(content);
-		this.likes = DEFAULT_LIKES;
-		this.dislikes = DEFAULT_DISLIKES;
 	}
 
 	public Comment(int id, String content) throws InvalidUserDataException {
 		this(content);
 		this.id = id;
 	}
-
+	
+	public Comment(int id, LocalDateTime date, int userId, String content) {
+		this.id = id;
+		this.date = date;
+		this.content = content;
+		this.userId = userId;
+	}
+	
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
 	public int getId() {
 		return id;
 	}
 
 	public LocalDateTime getDate() {
 		return date;
-	}
-
-	public int getLikes() {
-		return likes;
-	}
-
-	public int getDislikes() {
-		return dislikes;
 	}
 
 	private void setContent(String content) throws InvalidUserDataException {
@@ -53,5 +53,22 @@ public class Comment {
 	public String getContent() {
 		return content;
 	}
+
+	public int getUserId() {
+		return userId;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+
+	public String getFormattedDate() {
+		return formattedDate;
+	}
+
+	public void setFormattedDate(String formattedDate) {
+		this.formattedDate = formattedDate;
+	}
+	
 
 }

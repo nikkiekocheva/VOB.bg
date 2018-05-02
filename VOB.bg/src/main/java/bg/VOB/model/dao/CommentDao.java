@@ -4,7 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 import bg.VOB.controller.DBManager;
 import bg.VOB.model.Comment;
@@ -33,16 +39,14 @@ public class CommentDao implements ICommentDao {
 	public void addComment(User u, String videoName, String content) throws InvalidUserDataException {
 		Video v = VideoDao.getInstance().getVideoByName(videoName);
 		if (Validator.verifyCommentContent(content)) {
-			String sql = "INSERT INTO comments(date, likes, dislikes, video_id, user_id, content) VALUES(?,?,?,?,?,?)";
+			String sql = "INSERT INTO comments(date, video_id, user_id, content) VALUES(?,?,?,?)";
 			Date date = new Date();
 			Object param = new java.sql.Timestamp(date.getTime());
 			try (PreparedStatement ps = connection.prepareStatement(sql);) {
 				ps.setObject(1, param);
-				ps.setInt(2, 0);
-				ps.setInt(3, 0);
-				ps.setInt(4, v.getId());
-				ps.setInt(5, u.getId());
-				ps.setString(6, content);
+				ps.setInt(2, v.getId());
+				ps.setInt(3, u.getId());
+				ps.setString(4, content);
 				ps.executeUpdate();
 			} catch (SQLException e) {
 				System.out.println("DB error: " + e.getMessage());
@@ -127,4 +131,41 @@ public class CommentDao implements ICommentDao {
 		}
 		return false;
 	}
+
+	public ArrayList<Comment> getAllComments(int videoId) throws SQLException {
+		ArrayList<Comment> allComments = new ArrayList<>();
+		String sql = "SELECT id, date, user_id, content FROM comments WHERE video_id = ? ORDER BY date";
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setInt(1, videoId);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Comment c = new Comment(rs.getInt("id"), rs.getTimestamp("date").toLocalDateTime(),
+						rs.getInt("user_id"), rs.getString("content"));
+				c.setUsername(getUsername(c.getUserId()));
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				 String formatDateTime = c.getDate().format(formatter);
+				 c.setFormattedDate(formatDateTime);
+				allComments.add(c);
+			}
+		} catch (SQLException e) {
+			System.out.println("DB error: " + e.getMessage());
+		}
+
+		return allComments;
+	}
+	
+	private String getUsername(int userId) {
+		String sql = "SELECT user_name FROM users WHERE id = ?";
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setInt(1, userId);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				return rs.getString("user_name");
+			}
+		} catch (SQLException e) {
+			System.out.println("DB error: " + e.getMessage());
+		}
+		return null;
+	}
+
 }
