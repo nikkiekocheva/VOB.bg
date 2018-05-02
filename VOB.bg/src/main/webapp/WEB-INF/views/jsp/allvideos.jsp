@@ -15,7 +15,16 @@
 		<%@ include file="menu.jsp" %>
 	</div>
 
-	 <h2>Most Recent</h2>
+	<h2>Most Recent</h2>
+	
+	<form action="videos" method="post" id="type">
+    	<select name="type">
+ 			<option value="like">Order by likes</option>
+ 			<option value="views">Order by views</option>
+		</select>
+    	<input type="submit" value="Order">
+    </form>
+    
 	<c:forEach var="video" items= "${ allVideos }">
 		<div>
 			<div>

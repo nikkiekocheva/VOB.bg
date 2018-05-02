@@ -70,6 +70,20 @@ public class VideoController {
 
 		return "allvideos";
 	}
+	
+	@RequestMapping(value = "/videos", method = RequestMethod.POST)
+	public String orderVideosInPage(Model model, HttpServletRequest request) {
+		ArrayList<Video> allVideosList = VideoDao.getInstance().getAllVideos();
+		String orderType = request.getParameter("type");
+		System.out.println(orderType);
+		
+		
+		
+		
+		model.addAttribute("allVideos", allVideosList);
+		return "allvideos";
+	}
+	
 
 	@RequestMapping(value = "/videos/{video.path:.+}", method = RequestMethod.GET)
 	public void showVideos(Model model, @PathVariable("video.path") String path, HttpServletResponse response) {

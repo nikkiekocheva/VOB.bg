@@ -15,7 +15,7 @@
 	
 	<h1 >${video.name}</h1>
 	<div>
-		<video width="220" height="200" controls>
+		<video width="420" height="300" controls>
 			<source src= "/VOB.bg/videos/${video.path}" type="video/mp4">
 		</video>
 	</div>

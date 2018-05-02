@@ -127,17 +127,19 @@ public class PlaylistDao implements IPlaylistDao {
 	@Override
 	public ArrayList<Video> getVideosFromPlaylist(User u) {
 		Playlist p = getPLaylistByUser(u);
-		String sql = "SELECT v.id,v.name,v.date,v.views,v.description,v.path FROM video AS v JOIN playlist_has_video AS p ON v.id = p.video_id JOIN playlist AS l ON l.user_id = ?";
 		ArrayList<Video> videos = new ArrayList<>();
-		try (PreparedStatement ps = connection.prepareStatement(sql);) {
-			ps.setInt(1, p.getId());
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				videos.add(new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(),
-						0, 0, rs.getString("description"), rs.getString("path")));
+		if(p != null) {
+			String sql = "SELECT v.id,v.name,v.date,v.views,v.description,v.path FROM video AS v JOIN playlist_has_video AS p ON v.id = p.video_id JOIN playlist AS l ON l.user_id = ?";
+			try (PreparedStatement ps = connection.prepareStatement(sql);) {
+				ps.setInt(1, p.getId());
+				ResultSet rs = ps.executeQuery();
+				while (rs.next()) {
+					videos.add(new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(),
+							0, 0, rs.getString("description"), rs.getString("path")));
+				}
+			} catch (SQLException e) {
+				System.out.println("DB error: " + e.getMessage());
 			}
-		} catch (SQLException e) {
-			System.out.println("DB error: " + e.getMessage());
 		}
 		return videos;
 	}

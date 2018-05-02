@@ -25,8 +25,8 @@ public class PlaylistController {
 	public String showPlaylist(Model model,HttpSession session) {
 		User u = (User) session.getAttribute("user");
 		ArrayList<Video> videos = PlaylistDao.getInstance().getVideosFromPlaylist(u);
-		if(videos == null) {
-			videos = new ArrayList<>();
+		if(videos.isEmpty()) {
+			videos = null;
 		}
 		model.addAttribute("videos",videos);
 		return "playlist";
@@ -47,13 +47,14 @@ public class PlaylistController {
 		User u = (User) session.getAttribute("user");
 		Playlist p = PlaylistDao.getInstance().getPLaylistByUser(u);
 		
-		if(!PlaylistDao.getInstance().checkIfVideoIsInPlaylist(p, videoId)) {
-			PlaylistDao.getInstance().saveVideoInPlaylistInDB(p, videoId);
-		}else {
-			System.out.println("Video is allready in playlist!!");
+		if(p != null) {
+			if(!PlaylistDao.getInstance().checkIfVideoIsInPlaylist(p, videoId)) {
+				PlaylistDao.getInstance().saveVideoInPlaylistInDB(p, videoId);
+			}else {
+				System.out.println("Video is allready in playlist!!");
+			}
 		}
-		
-		return "allvideos";
+		return "playlist";
 	}
 	
 }

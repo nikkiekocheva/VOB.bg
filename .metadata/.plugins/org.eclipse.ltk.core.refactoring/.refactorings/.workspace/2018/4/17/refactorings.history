@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;MyProject&apos; to &apos;VOB.bg&apos;" description="Rename resource &apos;MyProject&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="/MyProject" name="VOB.bg" stamp="1524770437774" updateReferences="true"/>
-</session>

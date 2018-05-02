@@ -23,19 +23,21 @@
 	
 	<h2>Videos in your palylist</h2>
 	<c:forEach var="video" items= "${ videos }">
-		<div>
+		<c:if test="${ videos =! null }">
 			<div>
-				<h3>
-						${video.name}
-				</h3>	
+				<div>
+					<h3>
+							${video.name}
+					</h3>	
+				</div>
+				<div>
+					<video width="220" height="200" controls>
+						 <source src= "videos/${video.path }" type="video/mp4"> 
+						 Your browser does not support the videotag. 
+					</video>
+				</div>
 			</div>
-			<div>
-				<video width="220" height="200" controls>
-					 <source src= "videos/${video.path }" type="video/mp4"> 
-					 Your browser does not support the videotag. 
-				</video>
-			</div>
-		</div>
+		</c:if>
 	</c:forEach>
 	
 	
