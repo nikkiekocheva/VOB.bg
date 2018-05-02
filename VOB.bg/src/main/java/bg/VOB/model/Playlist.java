@@ -23,7 +23,6 @@ public class Playlist {
 	
 	public Playlist(int id, String name,LocalDateTime date,int userId) {
 		this(id,name);
-		this.id = id;
 		this.date = date;
 		this.userId = userId;
 	}
@@ -36,6 +35,10 @@ public class Playlist {
 	//name can be changed in editing the playlist
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public int getUserId() {
+		return userId;
 	}
 
 	public int getId() {

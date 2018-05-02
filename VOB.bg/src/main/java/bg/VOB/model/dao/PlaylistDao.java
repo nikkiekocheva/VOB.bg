@@ -61,8 +61,6 @@ public class PlaylistDao implements IPlaylistDao {
 		saveVideoInPlaylistInDB(p, v.getId());
 	}
 
-	// TODO what is it for? we can have to search by name and we can have one extra
-	// by username
 	@Override
 	public Playlist getPLaylistByUserAndName(User u, String name) throws SQLException{
 		String sql = "SELECT id FROM playlist WHERE user_id = ? AND name = ?";
@@ -77,6 +75,19 @@ public class PlaylistDao implements IPlaylistDao {
 		return null;
 	}
 
+	
+	public Playlist getPLaylistByName(String name) throws SQLException{
+		String sql = "SELECT id, name, date, user_id FROM playlist WHERE name = ?";
+		try (PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setString(1, name);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return new Playlist(rs.getInt("id"), rs.getString("name"),rs.getTimestamp("date").toLocalDateTime(),rs.getInt("user_id"));
+			}
+		} 
+		return null;
+	}
+	
 	@Override
 	public Playlist getPLaylistByUser(User u) throws SQLException{
 		String sql = "SELECT id,name FROM playlist WHERE user_id = ?";

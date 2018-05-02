@@ -15,13 +15,15 @@
 		<%@ include file="menu.jsp" %>
 	</div>
 	
-	<h2>Make new playlist</h2>
-	<form action="playlist" method="post">
-		Playlist name: <input type="text" name="name" required/> <br>
-		<input type="submit"/>
-	</form>
+	<c:if test="${ username == sessionScope.user.username }">
+		<h2>Make new playlist</h2>
+		<form action="playlist" method="post">
+			Playlist name: <input type="text" name="name" required/> <br>
+			<input type="submit"/>
+		</form>
+	</c:if>
 	
-	<h2>Videos in your palylist</h2>
+	<h2>Videos in ${ username } palylist</h2>
 	<c:forEach var="video" items= "${ videos }">
 		<c:if test="${ videos =! null }">
 			<div>
@@ -32,7 +34,7 @@
 				</div>
 				<div>
 					<video width="220" height="200" controls>
-						 <source src= "videos/${video.path }" type="video/mp4"> 
+						 <source src= "/VOB.bg/videos/${video.path }" type="video/mp4"> 
 						 Your browser does not support the videotag. 
 					</video>
 					<form action="removevideoplaylist" method="post">
