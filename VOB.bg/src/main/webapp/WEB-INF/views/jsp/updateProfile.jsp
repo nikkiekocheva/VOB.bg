@@ -14,6 +14,7 @@
 		<%@ include file="menu.jsp" %>
 	</div>
 	
+	<!-- INPUT FORM FOR REGISTRATION -->
 	<form action="updateprofile" method="post" align="center">
 		<table align="center" border="12px">
 			<tr>

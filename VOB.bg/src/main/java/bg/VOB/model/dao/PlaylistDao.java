@@ -47,14 +47,6 @@ public class PlaylistDao implements IPlaylistDao {
 		return p;
 	}
 
-	// Add a video to a playlist and save it in DB
-	@Override
-	public void addVideoToPlaylist(User u, String videoName, String playlistName) throws SQLException{
-		Playlist p = getPLaylistByUserAndName(u, playlistName);
-		Video v = VideoDao.getInstance().getVideoByUserAndName(u, videoName);
-		saveVideoInPlaylistInDB(p, v.getId());
-	}
-
 	@Override
 	public Playlist getPLaylistByUserAndName(User u, String name) throws SQLException{
 		String sql = "SELECT id FROM playlist WHERE user_id = ? AND name = ?";

@@ -8,6 +8,7 @@ import java.nio.file.spi.FileTypeDetector;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ServiceLoader;
 
 import javax.servlet.ServletOutputStream;
@@ -72,11 +73,18 @@ public class VideoController {
 	}
 
 	@RequestMapping(value = "/videos", method = RequestMethod.GET)
-	public String showVideosPage(Model model, HttpServletResponse response) throws SQLException {
+	public String showVideosPage(Model model, HttpServletResponse response,HttpSession session) throws SQLException {
 		// get all the videos in the data base
 		ArrayList<Video> allVideosList = VideoDao.getInstance().getAllVideos();
 		model.addAttribute("allVideos", allVideosList);
-
+		//get the videos of following users
+		User user = (User) session.getAttribute("user");
+		ArrayList<User> followingUsers = UserDao.getInstance().getAllFollowingUsers(user);
+		HashMap<String, ArrayList<Video>> usersVideos = new HashMap<>();
+		for(User u : followingUsers) {
+			usersVideos.put(u.getUsername(), VideoDao.getInstance().getAllVideosByUser(u));
+		}
+		model.addAttribute("usersVideos",usersVideos);
 		return "allvideos";
 	}
 	
@@ -98,9 +106,9 @@ public class VideoController {
 		File f = new File(SpringWebConfig.LOCATION + path);
 		try {
 			ServletOutputStream os = response.getOutputStream();
-			Files.copy(f.toPath(), os);
+			Files.copy(f.toPath(), response.getOutputStream());
 			os.flush();
-
+			
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}

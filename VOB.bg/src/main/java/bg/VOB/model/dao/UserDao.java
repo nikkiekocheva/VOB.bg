@@ -157,4 +157,19 @@ public class UserDao implements IUserDao {
 		return matches;
 	}
 
+	public ArrayList<User> getAllFollowingUsers(User follower) throws SQLException{
+		ArrayList<User> followingUsers = new ArrayList<>();
+		String sql = "SELECT u.id, u.user_name, u.email,u.phone_number, u.age FROM users AS u" + 
+				" JOIN follower_following AS f ON u.id = f.following_id WHERE f.follower_id = ?";
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setInt(1, follower.getId());
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				followingUsers.add(new User(rs.getInt("id"), rs.getString("user_name"), rs.getString("email"),
+						rs.getString("phone_number"), rs.getInt("age")));
+			}
+		}
+		return followingUsers;
+	}
+	
 }

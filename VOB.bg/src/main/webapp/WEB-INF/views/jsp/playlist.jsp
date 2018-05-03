@@ -29,7 +29,7 @@
 			<div>
 				<div>
 					<h3>
-							${video.name}
+						<a href = "/VOB.bg/view/${video.id}">${video.name}</a>
 					</h3>	
 				</div>
 				<div>

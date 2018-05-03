@@ -15,8 +15,9 @@
 		<%@ include file="menu.jsp" %>
 	</div>
 
+	<!-- ALL VIDEOS -->
+	<!-- ORDER BY -->
 	<h2>Most Recent</h2>
-	
 	<form action="videos" method="post" id="type">
     	<select name="type">
  			<option value="date">Order by date</option>
@@ -26,11 +27,12 @@
     	<input type="submit" value="Order">
     </form>
     
+    <!-- SHOW VIDEOS -->
 	<c:forEach var="video" items= "${ allVideos }">
-		<div>
+		<div style="display: inline-block; border:medium;">
 			<div>
 				<h3>
-		<a href = "view/${video.id}">${video.name}</a>
+					<a href = "view/${video.id}">${video.name}</a>
 				</h3>	
 			</div>
 			<div>
@@ -45,5 +47,35 @@
 			</div>
 		</div>
 	</c:forEach>
+	
+	<!-- ALL VIDEOS OF FOLLOWING USERS -->
+	<h2>Videos of users you follow:</h2>
+	<c:forEach var="type" items="${ usersVideos }">
+		<hr>
+		<h2>${ type.key } videos:</h2>
+		
+		<c:forEach var="video" items= "${ type.value }">
+			<div>
+				<div>
+					<h3>
+						<a href = "view/${video.id}">${video.name}</a>
+					</h3>	
+				</div>
+				<div>
+					<video width="220" height="150" controls>
+						 <source src= "videos/${video.path}" type="video/mp4">
+						 Your browser does not support the videotag. 
+					</video>
+					<form action="videotoplaylist" method="post">
+						<input type="hidden" name="videoid" value="${ video.id }"/>
+						<input type="submit" name="addvideo" value="Add to playlist" />
+					</form>
+				</div>
+			</div>
+		</c:forEach>
+		
+	</c:forEach>
+	
+	
 </body>
 </html>
