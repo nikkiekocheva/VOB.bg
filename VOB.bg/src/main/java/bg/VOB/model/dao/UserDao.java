@@ -30,22 +30,18 @@ public class UserDao implements IUserDao {
 
 	@Override
 	public boolean checkForUser(String username, String password) throws InvalidUserDataException,SQLException {
-		try (PreparedStatement ps = connection
-				.prepareStatement("SELECT user_name, password FROM users WHERE user_name = ?;");) {
+		String sql = "SELECT user_name, password FROM users WHERE user_name = ?;";
+		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setString(1, username);
 			ResultSet rs = ps.executeQuery();
 
 			if (rs.next()) {
 				if (BCrypt.checkpw(password, rs.getString(2))) {
-					System.out.println("true");
 					return true;
 				}
 			} else {
 				throw new InvalidUserDataException("invalid username or password");
 			}
-
-		} catch (SQLException e) {
-			throw new SQLException(e);
 		}
 		return false;
 	}
@@ -68,7 +64,7 @@ public class UserDao implements IUserDao {
 	}
 
 	@Override
-	public User generateUserById(int id) throws SQLException{
+	public User generateUserById(int id) throws Exception{
 		User u = null;
 		String sql = "SELECT id, user_name, password, email, phone_number, age FROM users WHERE id = ?";
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -80,7 +76,9 @@ public class UserDao implements IUserDao {
 						rs.getString("email"), rs.getString("phone_number"), rs.getInt("age"));
 			}
 		} 
-		
+		if(u == null) {
+			throw new Exception("Cant get user by ID!");
+		}
 		return u;
 	}
 
@@ -107,7 +105,7 @@ public class UserDao implements IUserDao {
 		} 
 	}
 	
-	
+	@Override
 	public void unFollowUser(User follower, User following) throws SQLException {
 		try (PreparedStatement ps = connection
 				.prepareStatement("DELETE FROM follower_following WHERE follower_id = ? AND following_id =?")) {
@@ -117,6 +115,7 @@ public class UserDao implements IUserDao {
 		}
 	}
 	
+	@Override
 	public boolean checkIfUserIsFollowingAnotherUser(User follower, User following) throws SQLException {
 		try (PreparedStatement ps = connection
 				.prepareStatement("SELECT follower_id,following_id FROM follower_following WHERE follower_id = ? AND following_id = ?")) {
@@ -126,12 +125,10 @@ public class UserDao implements IUserDao {
 			if(rs.next()) {
 				return true;
 			}
-			
 		} 
 		return false;
 	}
 	
-
 	@Override
 	public void updateUserInDB(User u)  throws SQLException{
 		String sql = "UPDATE users SET user_name = ? ,password = ?, email = ?,phone_number = ? WHERE id = ?";
@@ -156,7 +153,6 @@ public class UserDao implements IUserDao {
 				matches.add(new User(rs.getInt("id"), rs.getString("user_name"), rs.getString("email"),
 						rs.getString("phone_number"), rs.getInt("age")));
 			}
-
 		}
 		return matches;
 	}

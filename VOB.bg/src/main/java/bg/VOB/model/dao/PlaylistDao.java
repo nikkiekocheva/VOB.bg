@@ -30,18 +30,11 @@ public class PlaylistDao implements IPlaylistDao {
 		return instance;
 	}
 
-	// Add a new playlist and save it in DB
+	
 	@Override
 	public Playlist addPlaylist(User u, String name) throws SQLException{
 		Playlist p = new Playlist(name);
-		savePlaylistInDB(u, p);
-		return p;
-	}
-
-	// Save a playlist in the database
-	// TODO make it private if its not use anywhere else
-	@Override
-	public void savePlaylistInDB(User u, Playlist p) throws SQLException{
+		//save the playlist in the data base
 		String sql = "INSERT INTO playlist(name, date, user_id) VALUES(?,?,?)";
 		Date date = new Date();
 		Object param = new Timestamp(date.getTime());
@@ -51,6 +44,7 @@ public class PlaylistDao implements IPlaylistDao {
 			ps.setInt(3, u.getId());
 			ps.executeUpdate();
 		} 
+		return p;
 	}
 
 	// Add a video to a playlist and save it in DB
@@ -111,6 +105,7 @@ public class PlaylistDao implements IPlaylistDao {
 		} 
 	}
 	
+	@Override
 	public void removeVideoFromPlaylistInDB(Playlist p, int videoId) throws SQLException{
 		String sql = "DELETE FROM playlist_has_video WHERE playlist_id = ? AND video_id =?";
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {

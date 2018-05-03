@@ -18,7 +18,11 @@ public interface IUserDao {
 
 	void updateUserInDB(User u) throws SQLException;
 
-	User generateUserById(int id) throws SQLException;
+	User generateUserById(int id) throws Exception;
 
 	ArrayList<User> searchForUser(String text) throws SQLException;
+	
+	boolean checkIfUserIsFollowingAnotherUser(User follower, User following) throws SQLException;
+	
+	void unFollowUser(User follower, User following) throws SQLException;
 }

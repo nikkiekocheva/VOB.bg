@@ -34,6 +34,9 @@ public class UserManager {
 	public User signIn(String username, String password) throws InvalidUserDataException, SQLException {
 			if(UserDao.getInstance().checkForUser(username,password)) {
 				User u = UserDao.getInstance().generateUser(username);
+				if(u == null) {
+					throw new InvalidUserDataException("Invalid username");
+				}
 				return u;
 			}
 			else {
@@ -61,11 +64,11 @@ public class UserManager {
 		VideoDao.getInstance().dislikeVideo(u, videoId);
 	}
 	
-	public synchronized void comment(User u, int videoId, String content){
+	public synchronized void comment(User u, int videoId, String content) throws Exception{
 		try {
 			CommentDao.getInstance().addComment(u, videoId, content);
 		} catch (InvalidUserDataException e) {
-			e.getMessage();
+			throw new Exception(e.getMessage());
 		}
 	}
 	
@@ -73,7 +76,7 @@ public class UserManager {
 		CommentDao.getInstance().editComment(u, videoId, commentId, content);
 	}
 	
-	public synchronized void deleteComment(User u, int videoId, int commentId) {
+	public synchronized void deleteComment(User u, int videoId, int commentId) throws SQLException{
 		CommentDao.getInstance().deleteComment(u, videoId, commentId);
 	}
 
@@ -81,7 +84,7 @@ public class UserManager {
 		return VideoDao.getInstance().getVideoById(id);
 	}
 	
-	public User getUserById(int id) throws SQLException {
+	public User getUserById(int id) throws Exception {
 		return UserDao.getInstance().generateUserById(id);
 	}
 	

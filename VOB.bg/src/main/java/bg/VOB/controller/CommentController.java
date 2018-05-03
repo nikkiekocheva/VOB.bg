@@ -25,7 +25,7 @@ import bg.VOB.model.dao.VideoDao;
 public class CommentController {
 
 	@RequestMapping(value = "/addComment/{video.id}", method = RequestMethod.GET)
-	public String addComment(HttpSession session, @PathVariable("video.id") int id, HttpServletRequest request) throws SQLException {
+	public String addComment(HttpSession session, @PathVariable("video.id") int id, HttpServletRequest request) throws Exception {
 		Video v = UserManager.getInstance().getVideo(id);
 		User user = (User)session.getAttribute("user");
 		String text = request.getParameter("comment");
@@ -38,14 +38,17 @@ public class CommentController {
 	public String rateComment(HttpSession session, @PathVariable("comment.id") int id, HttpServletRequest request) throws SQLException {
 		Comment c = CommentDao.getInstance().generateCommentById(id);
 		User user = (User)session.getAttribute("user");
-		String text = request.getParameter("comment");
+		
 		String button = request.getParameter("commentButton");
-		if(button.equals("commentButton1")) {
+		
+		if(button.equals("commentButtonLike")) {
 			CommentDao.getInstance().likeComment(user, c);
 		}
-		if(button.equals("commentButton2")) {
+		
+		if(button.equals("commentButtonDislike")) {
 			CommentDao.getInstance().dislikeComment(user, c);
 		}
+		
 		return "redirect:/view/" + c.getVideoId();
 	}
 

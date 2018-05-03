@@ -9,8 +9,6 @@ import bg.VOB.model.Video;
 
 public interface IPlaylistDao {
 
-	public void savePlaylistInDB(User u, Playlist p) throws SQLException;
-
 	public void addVideoToPlaylist(User u, String videoName, String playlistName) throws SQLException;
 
 	public Playlist getPLaylistByUserAndName(User u, String name) throws SQLException;
@@ -26,5 +24,7 @@ public interface IPlaylistDao {
 	ArrayList<Video> getVideosFromPlaylist(User u) throws SQLException;
 
 	ArrayList<Playlist> searchForPlaylist(String text) throws SQLException;
+	
+	void removeVideoFromPlaylistInDB(Playlist p, int videoId) throws SQLException;
 
 }

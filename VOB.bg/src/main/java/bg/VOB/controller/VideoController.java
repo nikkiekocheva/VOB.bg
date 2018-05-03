@@ -48,25 +48,23 @@ public class VideoController {
 
 	@RequestMapping(value = "/uploadVideo", method = RequestMethod.POST)
 	public String saveVideo(@RequestParam("videoFile") MultipartFile file, HttpSession session,
-			HttpServletRequest request) throws Exception {
+							HttpServletRequest request) throws Exception {
 		User user = (User) session.getAttribute("user");
 		String filename = user.getUsername() + file.getOriginalFilename();
 		String path = SpringWebConfig.LOCATION + File.separator + filename;
-		File f = new File(path); // username+photoname
+		File f = new File(path); 
 		try {
 			file.transferTo(f);
-			UserManager.getInstance().addVideo(user, request.getParameter("name"), request.getParameter("description"),
-					filename);
+			UserManager.getInstance().addVideo(user, request.getParameter("name"), request.getParameter("description"),filename);
 		} catch (Exception e) {
 			throw new Exception("Invalid file saving: " + e.getMessage());
 		}
-
 		return "uploadVideo";
 	}
 
 	@RequestMapping(value = "/videos", method = RequestMethod.GET)
 	public String showVideosPage(Model model, HttpServletResponse response) throws SQLException {
-		// get all the videos in the DB
+		// get all the videos in the data base
 		ArrayList<Video> allVideosList = VideoDao.getInstance().getAllVideos();
 		model.addAttribute("allVideos", allVideosList);
 
@@ -75,10 +73,10 @@ public class VideoController {
 	
 	@RequestMapping(value = "/videos", method = RequestMethod.POST)
 	public String orderVideosInPage(Model model, HttpServletRequest request) throws SQLException {
+		//get what to order the videos by
 		String orderType = request.getParameter("type");
-		
+		//get all the videos ordered
 		ArrayList<Video> allVideosList = VideoDao.getInstance().getAllVideosOrdered(orderType);
-		System.out.println(orderType);
 		
 		model.addAttribute("allVideos", allVideosList);
 		return "allvideos";
@@ -100,14 +98,18 @@ public class VideoController {
 	}
 
 	@RequestMapping(value = "/view/{video.id}", method = RequestMethod.GET)
-	public String view(Model model, @PathVariable("video.id") int id, HttpServletResponse response) throws SQLException {
+	public String view(Model model, @PathVariable("video.id") int id, HttpServletResponse response) throws Exception {
 		Video v = UserManager.getInstance().getVideo(id);
 		UserManager.getInstance().updateVideoViews(id);
 		User u = UserManager.getInstance().getUserById(v.getUserId());
 		int likes = UserManager.getInstance().getVideoLikes(v.getId());
 		int dislikes = UserManager.getInstance().getVideoDislikes(v.getId());
 		int views = UserManager.getInstance().getVideoViews(v.getId());
+		
+		//get all the comments of the video
 		ArrayList<Comment> allCommentsList = CommentDao.getInstance().getAllComments(id);
+		
+		//add the attributes needed to view the video
 		model.addAttribute("localDateTimeFormat", new SimpleDateFormat("MM/dd/yyyy HH:mm:ss"));
 		model.addAttribute("allComments", allCommentsList);
 		model.addAttribute("video", v);
@@ -146,12 +148,14 @@ public class VideoController {
 		Video v = UserManager.getInstance().getVideo(id);
 		User user = (User)session.getAttribute("user");
 		String button = request.getParameter("button");
-		if(button.equals("button1")) {
+		
+		if(button.equals("buttonlike")) {
 			UserManager.getInstance().likeVideo(user, id);
 		}
-		if(button.equals("button2")) {
+		if(button.equals("buttondislike")) {
 			UserManager.getInstance().dislikeVideo(user, id);
 		}
+		
 		return "redirect:/view/{video.id}";
 	}
 	

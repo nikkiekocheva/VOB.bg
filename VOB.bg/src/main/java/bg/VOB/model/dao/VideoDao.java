@@ -89,7 +89,7 @@ public class VideoDao implements IVideoDao {
 			ps.setString(2, name);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				return new Video(rs.getInt(1), name);
+				return new Video(rs.getInt("id"), name);
 			}
 		}
 		return null;
@@ -104,8 +104,7 @@ public class VideoDao implements IVideoDao {
 			ps.setInt(1, u.getId());
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				userVideos
-						.add(new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(),
+				userVideos.add(new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(),
 								rs.getInt("views"), 0, rs.getString("description"), rs.getString("path")));
 			}
 		} catch (SQLException e) {
@@ -116,7 +115,7 @@ public class VideoDao implements IVideoDao {
 	}
 
 	@Override
-	public Video getVideoByName(String name) {
+	public Video getVideoByName(String name) throws SQLException {
 		String sql = "SELECT id FROM video WHERE name = ?";
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setString(1, name);
@@ -124,8 +123,6 @@ public class VideoDao implements IVideoDao {
 			while (rs.next()) {
 				return new Video(rs.getInt("id"), name);
 			}
-		} catch (SQLException e) {
-			System.out.println("DB error: " + e.getMessage());
 		}
 		return null;
 	}
@@ -313,9 +310,7 @@ public class VideoDao implements IVideoDao {
 				allVideos.add(new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(),
 								rs.getInt("user_id"), rs.getInt("views"),rs.getInt("likes"), rs.getString("description"), rs.getString("path")));
 			}
-
 		} 
-		
 		//Order the collection by views
 		Collections.sort(allVideos, new Comparator<Video>() {
 			@Override
@@ -333,7 +328,6 @@ public class VideoDao implements IVideoDao {
 				return i;
 		    }
 		});
-		
 		return allVideos;
 	}
 	

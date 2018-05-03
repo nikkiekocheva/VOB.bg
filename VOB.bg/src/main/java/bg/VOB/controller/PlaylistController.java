@@ -27,23 +27,23 @@ public class PlaylistController {
 
 	@RequestMapping(value = "/playlist", method = RequestMethod.GET)
 	public String showPlaylist(Model model,HttpSession session) throws SQLException{
-		
 		User user = (User) session.getAttribute("user");
-		
+		//Get the videos in the playlist
 		ArrayList<Video> videos = PlaylistDao.getInstance().getVideosFromPlaylist(user);
 		if(videos.isEmpty()) {
 			videos = new ArrayList<>();
 		}
+		
 		model.addAttribute("username",user.getUsername());
 		model.addAttribute("videos",videos);
 		return "playlist";
 	}
 	
 	@RequestMapping(value = "/playlist/{playlist.name}", method = RequestMethod.GET)
-	public String showPlaylistOfUser(@PathVariable("playlist.name") String name, Model model, HttpSession session) throws SQLException{
+	public String showPlaylistOfUser(@PathVariable("playlist.name") String name, Model model, HttpSession session) throws Exception{
 		Playlist p = PlaylistDao.getInstance().getPLaylistByName(name);
 		User user = UserDao.getInstance().generateUserById(p.getUserId());
-		
+		//Get the videos in the playlist
 		ArrayList<Video> videos = PlaylistDao.getInstance().getVideosFromPlaylist(user);
 		if(videos.isEmpty()) {
 			videos = new ArrayList<>();

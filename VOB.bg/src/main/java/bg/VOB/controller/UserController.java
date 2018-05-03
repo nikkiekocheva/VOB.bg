@@ -34,11 +34,11 @@ public class UserController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String loginUser(HttpServletRequest req) throws SQLException {
-		// get the username and password
+		// get the user name and password
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
 
-		// check for if the input values are in the db
+		// check for if the input values are in the data base
 		try {
 			User user = UserManager.getInstance().signIn(username, password);
 			if (user != null) {
@@ -58,14 +58,14 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String registerUser(HttpServletRequest request) throws SQLException{
-
+	public String registerUser(HttpServletRequest request) throws SQLException {
+		//Get the input data 
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String email = request.getParameter("email");
 		String phone = request.getParameter("phone");
 		int age = Integer.parseInt(request.getParameter("age"));
-
+		//Put the new data in to the date base
 		UserManager.getInstance().registration(new User(username, password, email, phone, age));
 
 		return "index";
@@ -80,20 +80,20 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/profile/{username}", method = RequestMethod.GET)
-	public String showUserProfile(@PathVariable("username") String username, Model model,HttpSession session) throws SQLException {
-		User user = UserDao.getInstance().generateUser(username);
-		ArrayList<Video> userVideos = VideoDao.getInstance().getAllVideosByUser(user);
-		
-		User sessionUser = (User)session.getAttribute("user");
-		boolean isUserFolloed = false;
-		if(! sessionUser.getUsername().equals(user.getUsername()) ) {
-			System.out.println("user are not equals!");
-			isUserFolloed = UserDao.getInstance().checkIfUserIsFollowingAnotherUser(sessionUser, user);
+	public String showUserProfile(@PathVariable("username") String username, Model model, HttpSession session) throws SQLException {
+		User profileUser = UserDao.getInstance().generateUser(username);
+		ArrayList<Video> userVideos = VideoDao.getInstance().getAllVideosByUser(profileUser);
+
+		User sessionUser = (User) session.getAttribute("user");
+		boolean isUserFollowed = false;
+		if(profileUser != null) {
+			if (!sessionUser.getUsername().equals(profileUser.getUsername())) {
+				isUserFollowed = UserDao.getInstance().checkIfUserIsFollowingAnotherUser(sessionUser, profileUser);
+			}
 		}
-		
-		model.addAttribute("isUserFolloed", isUserFolloed);
+		model.addAttribute("isUserFolloed", isUserFollowed);
 		model.addAttribute("userVideos", userVideos);
-		model.addAttribute("user",user);
+		model.addAttribute("user", profileUser);
 		return "profile";
 	}
 
@@ -103,16 +103,18 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/updateprofile", method = RequestMethod.POST)
-	public String updateUserProfile(HttpServletRequest request, HttpSession session) throws SQLException{
+	public String updateUserProfile(HttpServletRequest request, HttpSession session) throws SQLException {
 		User user = (User) session.getAttribute("user");
-
+		//Get the input parameters of the user
 		String email = request.getParameter("email");
 		String phoneNumber = request.getParameter("phone");
 		String newPassword = request.getParameter("newpassword");
 		String newPassword1 = request.getParameter("newpassword1");
 		String currentPassword = request.getParameter("currentpassword");
-
+		
+		//check if the password enterd matches the user password
 		if (user.getPassword() != null && BCrypt.checkpw(currentPassword, user.getPassword())) {
+			//check if there is password input data
 			if (!(newPassword.isEmpty() && newPassword1.isEmpty())) {
 				if (!newPassword.equals(newPassword1)) {
 					request.setAttribute("error", "The new passwords dont match!!! ");
@@ -120,40 +122,50 @@ public class UserController {
 				}
 				user.setPassword(newPassword);
 			}
+			//check if there is e-mail input data
 			if (!email.isEmpty()) {
 				user.setEmail(email);
 			}
+			//check if there is phone number input data
 			if (!phoneNumber.isEmpty()) {
 				user.setPhoneNumber(phoneNumber);
 			}
+			//set the new parameters to the user
 			UserDao.getInstance().updateUserInDB(user);
 		} else {
 			request.setAttribute("error", "Wrong password!!");
 			return "error";
 		}
-		return "redirect:/profile/" +user.getUsername();
+		return "redirect:/profile/" + user.getUsername();
 	}
 
 	@RequestMapping(value = "/follow/{username}", method = RequestMethod.GET)
-	public String followUser(@PathVariable("username") String folowingUsername, Model model,HttpSession session) throws SQLException {
+	public String followUser(@PathVariable("username") String folowingUsername, Model model, HttpSession session) throws Exception {
 		User folowingUser = UserDao.getInstance().generateUser(folowingUsername);
 		User folowerUser = (User) session.getAttribute("user");
-		
+
 		UserDao.getInstance().followUser(folowerUser, folowingUser);
+		if(folowingUser != null) {
+			model.addAttribute("user", folowingUser);
+		}else {
+			throw new Exception("Invalid follow user");
+		}
 		
-		model.addAttribute("user",folowingUser);
-		return "redirect:/profile/" +folowingUser.getUsername();
+		
+		return "redirect:/profile/" + folowingUser.getUsername();
 	}
-	
+
 	@RequestMapping(value = "/unfollow/{username}", method = RequestMethod.GET)
-	public String unFollowUser(@PathVariable("username") String folowingUsername, Model model,HttpSession session) throws SQLException{
+	public String unFollowUser(@PathVariable("username") String folowingUsername, Model model, HttpSession session) throws Exception {
 		User folowingUser = UserDao.getInstance().generateUser(folowingUsername);
 		User folowerUser = (User) session.getAttribute("user");
-		
+		if(folowingUser == null) {
+			throw new Exception("Invalid unfollow user");
+		}
 		UserDao.getInstance().unFollowUser(folowerUser, folowingUser);
-		
-		model.addAttribute("user",folowingUser);
-		return "redirect:/profile/" +folowingUser.getUsername();
+
+		model.addAttribute("user", folowingUser);
+		return "redirect:/profile/" + folowingUser.getUsername();
 	}
-	
+
 }
