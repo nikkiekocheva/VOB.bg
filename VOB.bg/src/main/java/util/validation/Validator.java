@@ -4,6 +4,8 @@ import java.util.Random;
 
 public class Validator {
 
+	private static int verifyCode = 1000;
+	
 	private Validator() {
 	}
 	
@@ -82,5 +84,11 @@ public class Validator {
 			return false;
 		}
 		return true;
+	}
+	
+	public static int generateRegisterCode() {
+		int code = Validator.verifyCode;
+		Validator.verifyCode += 8;
+		return code;
 	}
 }

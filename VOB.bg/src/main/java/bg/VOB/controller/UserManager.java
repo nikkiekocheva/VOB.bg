@@ -31,7 +31,7 @@ public class UserManager {
 		
 	}
 	
-	public User signIn(String username, String password) throws InvalidUserDataException, SQLException {
+	public User signIn(String username, String password) throws Exception {
 			if(UserDao.getInstance().checkForUser(username,password)) {
 				User u = UserDao.getInstance().generateUser(username);
 				if(u == null) {

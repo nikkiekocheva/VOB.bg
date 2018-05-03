@@ -12,7 +12,7 @@ public interface IUserDao {
 
 	void saveUserInDB(User u) throws SQLException;
 
-	User generateUser(String username) throws SQLException;
+	User generateUser(String username) throws Exception;
 
 	void followUser(User follower, User following) throws SQLException;
 

@@ -7,7 +7,7 @@
 	<title>Register</title>
 </head>
 <body>
-	<form action="register" method="post" align="center">
+	<form action="registerverify" method="post" align="center">
 		<table align="center">
 			<tr>
 				<td>Username: </td>
@@ -23,14 +23,14 @@
 			</tr>
 			<tr>
 				<td>PhoneNumber: </td>
-				<td><input type="text" name="phone" placeholder="Enter your phone number" required maxlength="10"></td>
+				<td><input type="text" name="phoneNumber" placeholder="Enter your phone number" required maxlength="10"></td>
 			</tr>
 			<tr>
 				<td>Age: </td>
 				<td><input type="text" name="age" placeholder="Enter your age" required maxlength="3"></td>
 			</tr>
 		</table> <br>
-		<a href="http://localhost:8080/VOB.bg/main"><button>Register</button> </a>
+		<input type="submit" value="Register">
 	</form>
 </body>
 </html>

@@ -47,7 +47,7 @@ public class UserDao implements IUserDao {
 	}
 
 	@Override
-	public User generateUser(String username) throws SQLException{
+	public User generateUser(String username) throws Exception{
 		User u = null;
 		String sql = "SELECT id, user_name, password, email, phone_number, age FROM users WHERE user_name = ?";
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {

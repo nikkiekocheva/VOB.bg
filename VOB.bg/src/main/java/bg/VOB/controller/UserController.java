@@ -1,9 +1,11 @@
 package bg.VOB.controller;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -13,11 +15,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import bg.VOB.model.User;
 import bg.VOB.model.Video;
 import bg.VOB.model.dao.UserDao;
 import bg.VOB.model.dao.VideoDao;
 import util.exceptions.InvalidUserDataException;
+import util.validation.ObjectToJSON;
+import util.validation.SendMail;
+import util.validation.Validator;
 
 @Controller
 public class UserController {
@@ -33,7 +40,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String loginUser(HttpServletRequest req) throws SQLException {
+	public String loginUser(HttpServletRequest req) throws Exception {
 		// get the user name and password
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
@@ -57,20 +64,45 @@ public class UserController {
 		return "register";
 	}
 
-	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String registerUser(HttpServletRequest request) throws SQLException {
-		//Get the input data 
+	@RequestMapping(value = "/registerverify", method = RequestMethod.POST)
+	public String verifyRegister(HttpServletRequest request, Model model) throws Exception {
+		//Get the input data
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String email = request.getParameter("email");
-		String phone = request.getParameter("phone");
+		String phone = request.getParameter("phoneNumber");
 		int age = Integer.parseInt(request.getParameter("age"));
-		//Put the new data in to the date base
-		UserManager.getInstance().registration(new User(username, password, email, phone, age));
-
-		return "index";
+		
+		int code = Validator.generateRegisterCode();
+		User user = new User(username, password , email, phone, age);
+		
+		HttpSession session = request.getSession();
+		session.setAttribute("user", user);
+		session.setAttribute("code", code);
+		
+		//Send the verify e-mail
+		SendMail.sendMailForRegister(email, code);
+		
+		return "verifyRegister";
 	}
 
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	public String registerUser(HttpServletRequest request, HttpSession session) throws Exception {
+		int inputCode = Integer.parseInt(request.getParameter("inputCode"));
+		int trueCode = (Integer) session.getAttribute("code");
+		
+		if(inputCode != trueCode) {
+			return "verifyRegister";
+		}
+		
+		User user = (User) session.getAttribute("user");
+		//Put the new data in to the date base
+		UserManager.getInstance().registration(user);
+		
+		session.invalidate();
+		return "index";
+	}
+	
 	@RequestMapping(value = "/logout", method = RequestMethod.POST)
 	public String userLogout(HttpSession session) {
 		// Invalidate the session
@@ -80,7 +112,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/profile/{username}", method = RequestMethod.GET)
-	public String showUserProfile(@PathVariable("username") String username, Model model, HttpSession session) throws SQLException {
+	public String showUserProfile(@PathVariable("username") String username, Model model, HttpSession session) throws Exception {
 		User profileUser = UserDao.getInstance().generateUser(username);
 		ArrayList<Video> userVideos = VideoDao.getInstance().getAllVideosByUser(profileUser);
 

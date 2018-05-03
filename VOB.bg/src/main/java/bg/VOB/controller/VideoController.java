@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.spi.FileTypeDetector;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.ServiceLoader;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.MultipartConfig;
@@ -50,15 +52,22 @@ public class VideoController {
 	public String saveVideo(@RequestParam("videoFile") MultipartFile file, HttpSession session,
 							HttpServletRequest request) throws Exception {
 		User user = (User) session.getAttribute("user");
+		
 		String filename = user.getUsername() + file.getOriginalFilename();
-		String path = SpringWebConfig.LOCATION + File.separator + filename;
-		File f = new File(path); 
-		try {
-			file.transferTo(f);
-			UserManager.getInstance().addVideo(user, request.getParameter("name"), request.getParameter("description"),filename);
-		} catch (Exception e) {
-			throw new Exception("Invalid file saving: " + e.getMessage());
+		//Validate the file type
+		if(filename.endsWith(".mp4")){
+			String path = SpringWebConfig.LOCATION + File.separator + filename;
+			File f = new File(path); 
+			try {
+				file.transferTo(f);
+				UserManager.getInstance().addVideo(user, request.getParameter("name"), request.getParameter("description"),filename);
+			} catch (Exception e) {
+				throw new Exception("Invalid file saving: " + e.getMessage());
+			}
+		}else {
+			throw new Exception("Only video files are to be uploded!!!!");
 		}
+		
 		return "uploadVideo";
 	}
 
