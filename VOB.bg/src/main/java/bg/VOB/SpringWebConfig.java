@@ -74,6 +74,6 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 	    return resolver;
 	   }
 	
-	    public static final String LOCATION =  "C:\\Users\\Asus\\Desktop\\videos\\"; //"/home/nikikocheva/Desktop/videos/"
-	    public static final long MAX_FILE_SIZE = 52_428_800; //50 MB - max file size
+	  public static final String LOCATION =  "/home/nikikocheva/Desktop/videos/";//"C:\\Users\\Asus\\Desktop\\videos\\
+	  public static final long MAX_FILE_SIZE = 52_428_800; //50 MB - max file size
 }

@@ -19,6 +19,7 @@ import bg.VOB.model.User;
 import bg.VOB.model.Video;
 import bg.VOB.model.dao.CommentDao;
 import bg.VOB.model.dao.VideoDao;
+import util.exceptions.InvalidUserDataException;
 
 @Controller
 @MultipartConfig
@@ -49,6 +50,30 @@ public class CommentController {
 			CommentDao.getInstance().dislikeComment(user, c);
 		}
 		
+		return "redirect:/view/" + c.getVideoId();
+	}
+	
+	@RequestMapping(value = "/deleteComment/{comment.id}", method = RequestMethod.GET)
+	public String deleteComment(HttpSession session, @PathVariable("comment.id") int id) throws SQLException {
+		Comment c = CommentDao.getInstance().generateCommentById(id);
+		User user = (User)session.getAttribute("user");
+		CommentDao.getInstance().deleteComment(user, c.getVideoId(), id);
+		return "redirect:/view/" + c.getVideoId();
+	}
+	
+	@RequestMapping(value = "/editComment/{comment.id}", method = RequestMethod.GET)
+	public String editComment(HttpSession session, @PathVariable("comment.id") int id, Model model) throws SQLException {
+		model.addAttribute("comment",CommentDao.getInstance().generateCommentById(id));
+		return "editComment";
+	}
+	
+	@RequestMapping(value = "/editCommentForm/{comment.id}", method = RequestMethod.GET)
+	public String editCommentRedirect(HttpSession session, @PathVariable("comment.id") int id, Model model,HttpServletRequest request) throws SQLException {
+		Comment c = CommentDao.getInstance().generateCommentById(id);
+		User user = (User)session.getAttribute("user");
+		String content = request.getParameter("content");
+		model.addAttribute("commentId",id);
+		UserManager.getInstance().editComment(user, c.getVideoId(), id, content);
 		return "redirect:/view/" + c.getVideoId();
 	}
 

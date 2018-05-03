@@ -52,7 +52,9 @@ table {
 	<!-- ADD COMMENT -->
 	<h4>Add a comment:</h4>
 	<form action="/VOB.bg/addComment/${video.id}">
-		<input type="text" name="comment" required> <input type="submit">
+	<textarea name="comment" rows="3" cols="50" required></textarea>
+	<br>
+	<input type="submit">
 	</form>
 
 	<!-- COMMENTS -->
@@ -62,19 +64,35 @@ table {
 			<tr>
 				<td>${comment.formattedDate}</td>
 				<td>${comment.username}</td>
+				<c:set var = "userId" scope = "session" value = "${videouser.id}"/>
+			<c:if test ="${comment.userId == userId}">
+				<form action="/VOB.bg/editComment/${comment.id}">
+					<td style="text-align:center">
+						<button>Edit</button>
+					</td>
+					</form>
+					<form action="/VOB.bg/deleteComment/${comment.id}">
+					<td style="text-align:center">
+						<button>Delete</button>
+					</td>
+				</form>
+			</c:if>
 			</tr>
 			<tr>
-				<td colspan="2">${comment.content}</td>
+				<td colspan="4">${comment.content}</td>
 			</tr>
+			
 		</table>
 		Likes:${comment.likes}
 		Dislikes:${comment.dislikes}
 			<form action="/VOB.bg/rateComment/${comment.id}">
 			<button name="commentButton" value="commentButtonLike">Like</button>
 			<button name="commentButton" value="commentButtonDislike">Dislike</button>
-		</form>
-		<br>
+			
+		</form><br>
+		
 	</c:forEach>
+	
 
 </body>
 </html>

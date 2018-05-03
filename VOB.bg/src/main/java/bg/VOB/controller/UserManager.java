@@ -72,8 +72,12 @@ public class UserManager {
 		}
 	}
 	
-	public synchronized void editComment(User u, int videoId, int commentId, String content) throws InvalidUserDataException {
-		CommentDao.getInstance().editComment(u, videoId, commentId, content);
+	public synchronized void editComment(User u, int videoId, int commentId, String content){
+		try {
+			CommentDao.getInstance().editComment(u, videoId, commentId, content);
+		} catch (InvalidUserDataException e) {
+			e.getMessage();
+		}
 	}
 	
 	public synchronized void deleteComment(User u, int videoId, int commentId) throws SQLException{
