@@ -1,7 +1,6 @@
 package bg.VOB.model;
 
 import java.time.LocalDateTime;
-
 import util.exceptions.InvalidUserDataException;
 import util.validation.Validator;
 

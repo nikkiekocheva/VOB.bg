@@ -9,8 +9,6 @@ import bg.VOB.model.Video;
 
 public interface IPlaylistDao {
 
-	public void addVideoToPlaylist(User u, String videoName, String playlistName) throws SQLException;
-
 	public Playlist getPLaylistByUserAndName(User u, String name) throws SQLException;
 
 	public void saveVideoInPlaylistInDB(Playlist p, int videoId) throws SQLException;

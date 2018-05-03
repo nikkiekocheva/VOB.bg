@@ -97,7 +97,7 @@ public class VideoDao implements IVideoDao {
 
 	// see the current user upload history
 	@Override
-	public ArrayList<Video> getAllVideosByUser(User u) {
+	public ArrayList<Video> getAllVideosByUser(User u) throws SQLException {
 		ArrayList<Video> userVideos = new ArrayList<>();
 		try (PreparedStatement ps = connection
 				.prepareStatement("SELECT id,name,date,views,user_id,description,path FROM video WHERE user_id = ?");) {
@@ -105,11 +105,9 @@ public class VideoDao implements IVideoDao {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				userVideos.add(new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(),
-								rs.getInt("views"), 0, rs.getString("description"), rs.getString("path")));
+								rs.getInt("user_id"), rs.getInt("views"), rs.getString("description"), rs.getString("path")));
 			}
-		} catch (SQLException e) {
-			System.out.println("DB error: " + e.getMessage());
-		}
+		} 
 
 		return userVideos;
 	}

@@ -52,10 +52,6 @@ public class UserManager {
 		Playlist p = PlaylistDao.getInstance().addPlaylist(u, name);
 	}
 	
-	public synchronized void addVideoToPlaylist(User u, String videoName, String playlistName) throws SQLException{
-		PlaylistDao.getInstance().addVideoToPlaylist(u, videoName, playlistName);
-	}
-	
 	public synchronized void likeVideo(User u, int videoId) throws SQLException{
 		VideoDao.getInstance().likeVideo(u, videoId);
 	}

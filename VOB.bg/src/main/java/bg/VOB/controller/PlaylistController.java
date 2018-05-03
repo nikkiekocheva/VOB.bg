@@ -57,7 +57,7 @@ public class PlaylistController {
 	@RequestMapping(value = "/playlist", method = RequestMethod.POST)
 	public String makeNewPlaylist(Model model,HttpServletRequest request,HttpSession session) throws SQLException{
 		User u = (User) session.getAttribute("user");
-		PlaylistDao.getInstance().addPlaylist(u, request.getParameter("name"));
+		UserManager.getInstance().addPlaylist(u, request.getParameter("name"));
 		
 		return "redirect:/playlist";
 	}

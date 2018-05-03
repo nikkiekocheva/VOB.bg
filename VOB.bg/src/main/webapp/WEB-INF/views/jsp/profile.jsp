@@ -15,6 +15,7 @@
 		<%@ include file="menu.jsp" %>
 	</div>
 	
+	<!-- FORM OF USER'S INFO -->
 	<form action="/VOB.bg/profile" method="post" align="center">
 		<table align="center" border="12px">
 			<tr>
@@ -34,6 +35,7 @@
 				<td>${ user.age }</td>
 			</tr>
 			<tr>
+				<!-- IF IT'S SESSION USER SHOW UPDATE PROFILE, OTWERWISE SHOW FOLLOW -->
 				<c:choose>
 			   		<c:when test="${ user.username eq sessionScope.user.username }">
 			    	   <td colspan="2"><input type="submit" value="Update profile">  </td>
@@ -54,13 +56,13 @@
 			</tr>
 		</table>
 	</form>
-
- <h2>Uploaded videos by the user</h2>
+	<!-- ALL UPLOADED VIDEOS OF THE USER -->
+	<h2>Uploaded videos by the user</h2>
 	<c:forEach var="video" items= "${ userVideos }">
 		<div>
 			<div>
 				<h3>
-						${video.name}
+					<a href = "/VOB.bg/view/${video.id}">${video.name}</a>
 				</h3>	
 			</div>
 			<div>

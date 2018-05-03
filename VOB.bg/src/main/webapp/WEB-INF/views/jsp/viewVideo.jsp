@@ -37,7 +37,7 @@ table {
 		<video width="420" height="300" controls> <source
 			src="/VOB.bg/videos/${video.path}" type="video/mp4"></video>
 	</div>
-	User: ${videouser.username}
+	User: <a href = "/VOB.bg/profile/${ videouser.username }">${videouser.username}</a>
 	<br> Likes:${likes} Dislikes:${dislikes}
 	<br> Views: ${views}
 	<br>
