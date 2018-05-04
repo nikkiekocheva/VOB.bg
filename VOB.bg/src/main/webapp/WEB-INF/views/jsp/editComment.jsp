@@ -19,7 +19,7 @@
 		<br>
 		<input type="submit" value="Save">
 	</form>
-	<form action="/view/${comment.videoId}">
+	<form action="/VOB.bg/view/${comment.videoId}">
 		<input type="submit" value="Cancel">
 	</form>
 </body>

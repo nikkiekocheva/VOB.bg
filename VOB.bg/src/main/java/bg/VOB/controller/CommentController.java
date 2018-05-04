@@ -63,6 +63,7 @@ public class CommentController {
 	
 	@RequestMapping(value = "/editComment/{comment.id}", method = RequestMethod.GET)
 	public String editComment(HttpSession session, @PathVariable("comment.id") int id, Model model) throws SQLException {
+		User u =(User)  session.getAttribute("user");
 		model.addAttribute("comment",CommentDao.getInstance().generateCommentById(id));
 		return "editComment";
 	}

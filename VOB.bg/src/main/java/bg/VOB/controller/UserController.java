@@ -1,5 +1,7 @@
 package bg.VOB.controller;
 
+import static org.mockito.Mockito.doThrow;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -71,7 +73,13 @@ public class UserController {
 		String password = request.getParameter("password");
 		String email = request.getParameter("email");
 		String phone = request.getParameter("phoneNumber");
-		int age = Integer.parseInt(request.getParameter("age"));
+		int age = 0;
+		try {
+			age = Integer.parseInt(request.getParameter("age"));
+		}catch (Exception e) {
+			throw new Exception("Age must be a number!!");
+		}
+		
 		
 		int code = Validator.generateRegisterCode();
 		User user = new User(username, password , email, phone, age);

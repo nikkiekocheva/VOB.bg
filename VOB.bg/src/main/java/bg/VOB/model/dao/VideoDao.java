@@ -256,7 +256,7 @@ public class VideoDao implements IVideoDao {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				return rs.getInt(1);
+				return rs.getInt("views");
 			}
 		} 
 		return 0;
@@ -327,6 +327,13 @@ public class VideoDao implements IVideoDao {
 		    }
 		});
 		return allVideos;
+	}
+	
+	public void videoViewCheck(String videoName) {
+		
+		
+		
+		
 	}
 	
 }

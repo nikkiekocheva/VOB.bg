@@ -103,4 +103,5 @@ public class UserManager {
 	public int getVideoViews(int videoId) throws SQLException {
 		return VideoDao.getInstance().getVideoViews(videoId);
 	}
+	
 }

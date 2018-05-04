@@ -39,7 +39,7 @@ table {
 	</div>
 	User: <a href = "/VOB.bg/profile/${ videouser.username }">${videouser.username}</a>
 	<br> Likes:${likes} Dislikes:${dislikes}
-	<br> Views: ${views}
+	<br> Views: ${video.views}
 	<br>
 
 	<!-- LIKE/DISLIKE BUTTON -->
@@ -65,7 +65,7 @@ table {
 				<td>${comment.formattedDate}</td>
 				<td>${comment.username}</td>
 				<c:set var = "userId" scope = "session" value = "${videouser.id}"/>
-			<c:if test ="${comment.userId == userId}">
+			<c:if test ="${comment.userId == user.id}">
 				<form action="/VOB.bg/editComment/${comment.id}">
 					<td style="text-align:center">
 						<button>Edit</button>

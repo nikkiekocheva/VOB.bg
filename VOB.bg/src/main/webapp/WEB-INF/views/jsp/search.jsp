@@ -32,6 +32,8 @@
 		
 	<br><hr>
 	</c:forEach>
-
+	<c:if test=" ${ nothingfound }">
+		<h5>No</h5>
+	</c:if>
 </body>
 </html>

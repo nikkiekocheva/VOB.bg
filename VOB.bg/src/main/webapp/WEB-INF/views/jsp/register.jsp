@@ -7,6 +7,7 @@
 	<title>Register</title>
 </head>
 <body>
+	<h2 style="text-align: center;">Registration</h2>
 	<form action="registerverify" method="post" align="center">
 		<table align="center">
 			<tr>

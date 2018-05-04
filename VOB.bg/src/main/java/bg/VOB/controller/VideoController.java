@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.ServiceLoader;
 
 import javax.servlet.ServletOutputStream;
@@ -18,7 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,7 +47,7 @@ import util.exceptions.InvalidUserDataException;
 @Controller
 @MultipartConfig
 public class VideoController {
-
+	
 	@RequestMapping(value = "/uploadVideo", method = RequestMethod.GET)
 	public String uploadVideo() {
 		return "uploadVideo";
@@ -115,13 +119,30 @@ public class VideoController {
 	}
 
 	@RequestMapping(value = "/view/{video.id}", method = RequestMethod.GET)
-	public String view(Model model, @PathVariable("video.id") int id, HttpServletResponse response) throws Exception {
+	public String view(Model model, @PathVariable("video.id") int id, HttpServletResponse response,HttpSession session) throws Exception {
+		//get the video that will bi viewed
 		Video v = UserManager.getInstance().getVideo(id);
-		UserManager.getInstance().updateVideoViews(id);
-		User u = UserManager.getInstance().getUserById(v.getUserId());
-		int likes = UserManager.getInstance().getVideoLikes(v.getId());
-		int dislikes = UserManager.getInstance().getVideoDislikes(v.getId());
-		int views = UserManager.getInstance().getVideoViews(v.getId());
+		//get the user watching the video
+		User watcherUser = (User) session.getAttribute("user");
+		
+		//Check if the user has viewed the video soon
+		if(session.getAttribute(v.getPath()) == null) {
+			//if the user haven't watched it this session increment the views
+			UserManager.getInstance().updateVideoViews(id);
+			v = UserManager.getInstance().getVideo(id);
+			session.setAttribute(v.getPath(), v.getPath());
+			ViewsCheckerManager.getInstance().addVideoForViewsBlock(v.getPath(), watcherUser.getUsername());
+		}else {
+			//if the time for view blocking has expired increment the view again
+			if(ViewsCheckerManager.getInstance().areVideoViewsForIncrement(v.getPath(),watcherUser.getUsername())) {
+				UserManager.getInstance().updateVideoViews(id);
+				v = UserManager.getInstance().getVideo(id);
+			}
+		}
+		//get the owner of the video and the likes and dislikes of video
+		User videoUser = UserManager.getInstance().getUserById(v.getUserId());
+		int videoLikes = UserManager.getInstance().getVideoLikes(v.getId());
+		int videoDislikes = UserManager.getInstance().getVideoDislikes(v.getId());
 		
 		//get all the comments of the video
 		ArrayList<Comment> allCommentsList = CommentDao.getInstance().getAllComments(id);
@@ -130,10 +151,9 @@ public class VideoController {
 		model.addAttribute("localDateTimeFormat", new SimpleDateFormat("MM/dd/yyyy HH:mm:ss"));
 		model.addAttribute("allComments", allCommentsList);
 		model.addAttribute("video", v);
-		model.addAttribute("videouser", u);
-		model.addAttribute("likes", likes);
-		model.addAttribute("dislikes", dislikes);
-		model.addAttribute("views", views);
+		model.addAttribute("videouser", videoUser);
+		model.addAttribute("likes", videoLikes);
+		model.addAttribute("dislikes", videoDislikes);
 		return "viewVideo";
 	}
 
@@ -156,7 +176,9 @@ public class VideoController {
 		}
 		model.addAttribute("type", searchType);
 		model.addAttribute("found", found);
-
+		if(found.isEmpty()) {
+			model.addAttribute("nothingfound",true);
+		}
 		return "search";
 	}
 	
