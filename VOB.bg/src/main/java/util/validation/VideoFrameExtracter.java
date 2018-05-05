@@ -7,6 +7,9 @@ import org.jcodec.common.model.Picture;
 import org.jcodec.scale.ColorUtil;
 import org.jcodec.scale.RgbToBgr;
 import org.jcodec.scale.Transform;
+
+import bg.VOB.SpringWebConfig;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
@@ -17,7 +20,7 @@ import java.nio.file.Paths;
 public class VideoFrameExtracter {
 	public File createThumbnailFromVideo(File file, int frameNumber) throws IOException, JCodecException {
         Picture frame = FrameGrab.getFrameFromFile(file, frameNumber);
-        File tempFile = File.createTempFile("C:\\Users\\Asus\\Desktop\\videos\\thumb_" + frameNumber + file.getName().replaceAll("(.+)\\..+", "$1"), ".png");
+        File tempFile = File.createTempFile(SpringWebConfig.LOCATION + "thumb_" + frameNumber + file.getName().replaceAll("(.+)\\..+", "$1"), ".png");
         ImageIO.write(toBufferedImage(frame), "png", tempFile);
         return tempFile;
     }

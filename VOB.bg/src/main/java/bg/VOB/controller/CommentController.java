@@ -27,7 +27,6 @@ public class CommentController {
 
 	@RequestMapping(value = "/addComment/{video.id}", method = RequestMethod.GET)
 	public String addComment(HttpSession session, @PathVariable("video.id") int id, HttpServletRequest request) throws Exception {
-		Video v = UserManager.getInstance().getVideo(id);
 		User user = (User)session.getAttribute("user");
 		String text = request.getParameter("comment");
 		UserManager.getInstance().comment(user, id, text);

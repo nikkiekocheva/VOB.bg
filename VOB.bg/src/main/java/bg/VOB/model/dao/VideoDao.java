@@ -195,7 +195,7 @@ public class VideoDao implements IVideoDao {
 			ps.setInt(2, videoId);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				return rs.getInt(1);
+				return rs.getInt("liked_disliked");
 			}
 		} 
 		return 0;
@@ -298,7 +298,8 @@ public class VideoDao implements IVideoDao {
 		} 
 		return matches;
 	}
-
+	
+	@Override
 	public ArrayList<Video> getAllVideosOrdered(String orderBY) throws SQLException{
 		ArrayList<Video> allVideos = new ArrayList<>();
 		String sql = "SELECT v.id, v.name, v.date, v.views, v.user_id, v.description, v.path, v.image_path, SUM(l.liked_disliked) AS likes FROM video AS v " + 
@@ -331,12 +332,5 @@ public class VideoDao implements IVideoDao {
 		});
 		return allVideos;
 	}
-	
-	public void videoViewCheck(String videoName) {
-		
-		
-		
-		
-	}
-	
+
 }

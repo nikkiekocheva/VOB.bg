@@ -61,7 +61,7 @@ public class PlaylistDao implements IPlaylistDao {
 		return null;
 	}
 
-	
+	@Override
 	public Playlist getPLaylistByName(String name) throws SQLException{
 		String sql = "SELECT id, name, date, user_id FROM playlist WHERE name = ?";
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
@@ -139,7 +139,8 @@ public class PlaylistDao implements IPlaylistDao {
 		}
 		return videos;
 	}
-
+	
+	@Override
 	public ArrayList<Video> getVideosFromPlaylist(Playlist p) throws SQLException{
 		ArrayList<Video> videos = new ArrayList<>();
 		if(p != null) {
