@@ -24,5 +24,7 @@ public interface IPlaylistDao {
 	ArrayList<Playlist> searchForPlaylist(String text) throws SQLException;
 	
 	void removeVideoFromPlaylistInDB(Playlist p, int videoId) throws SQLException;
+	
+	ArrayList<Playlist> getUserPlaylists(User u) throws SQLException;
 
 }

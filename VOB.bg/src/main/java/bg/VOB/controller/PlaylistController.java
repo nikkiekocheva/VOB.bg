@@ -28,29 +28,26 @@ public class PlaylistController {
 	@RequestMapping(value = "/playlist", method = RequestMethod.GET)
 	public String showPlaylist(Model model,HttpSession session) throws SQLException{
 		User user = (User) session.getAttribute("user");
-		//Get the videos in the playlist
-		ArrayList<Video> videos = PlaylistDao.getInstance().getVideosFromPlaylist(user);
-		if(videos.isEmpty()) {
-			videos = new ArrayList<>();
-		}
+		//Get the all the playlists of user
+		ArrayList<Playlist> playlists = PlaylistDao.getInstance().getUserPlaylists(user);
 		
 		model.addAttribute("username",user.getUsername());
-		model.addAttribute("videos",videos);
+		model.addAttribute("playlists",playlists);
 		return "playlist";
 	}
 	
 	@RequestMapping(value = "/playlist/{playlist.name}", method = RequestMethod.GET)
 	public String showPlaylistOfUser(@PathVariable("playlist.name") String name, Model model, HttpSession session) throws Exception{
-		Playlist p = PlaylistDao.getInstance().getPLaylistByName(name);
-		User user = UserDao.getInstance().generateUserById(p.getUserId());
+		//Get the playlist and the user it belongs to
+		Playlist playlist = PlaylistDao.getInstance().getPLaylistByName(name);
+		User user = UserDao.getInstance().generateUserById(playlist.getUserId());
 		//Get the videos in the playlist
-		ArrayList<Video> videos = PlaylistDao.getInstance().getVideosFromPlaylist(user);
-		if(videos.isEmpty()) {
-			videos = new ArrayList<>();
-		}
+		ArrayList<Video> videos = PlaylistDao.getInstance().getVideosFromPlaylist(playlist);
+		
 		model.addAttribute("username",user.getUsername());
 		model.addAttribute("videos",videos);
-		return "playlist";
+		model.addAttribute("playlist",playlist);
+		return "playlistvideos";
 	}
 	
 	

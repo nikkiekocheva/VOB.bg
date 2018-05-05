@@ -81,7 +81,7 @@ public class VideoController {
 			 
 		     File frameFile = Paths.get(path).toFile();
 		     try {
-		         File imageFrame = videoFrameExtracter.createThumbnailFromVideo(frameFile, 12);
+		         File imageFrame = videoFrameExtracter.createThumbnailFromVideo(frameFile, 500);
 		         imageFrame.createNewFile();
 		         System.out.println("input file name : " + frameFile.getAbsolutePath());
 		         System.out.println("output video frame file name  : " + imageFrame.getAbsolutePath());

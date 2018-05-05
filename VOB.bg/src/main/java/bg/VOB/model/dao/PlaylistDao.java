@@ -140,6 +140,42 @@ public class PlaylistDao implements IPlaylistDao {
 		return videos;
 	}
 
+	public ArrayList<Video> getVideosFromPlaylist(Playlist p) throws SQLException{
+		ArrayList<Video> videos = new ArrayList<>();
+		if(p != null) {
+			String sql = "SELECT v.id,v.name,v.date,v.user_id,v.views,v.description,v.path,v.image_path FROM video AS v"
+					+ " JOIN playlist_has_video AS l ON v.id = l.video_id WHERE l.playlist_id = ?";
+						
+			try (PreparedStatement ps = connection.prepareStatement(sql);) {
+				ps.setInt(1, p.getId());
+				ResultSet rs = ps.executeQuery();
+				while (rs.next()) {
+					videos.add(new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(),
+							rs.getInt("user_id"),rs.getInt("views"),rs.getString("description"), rs.getString("path"),rs.getString("image_path")));
+				}
+			} 
+		}
+		return videos;
+	}
+	
+	@Override
+	public ArrayList<Playlist> getUserPlaylists(User u) throws SQLException{
+		ArrayList<Playlist> matches = new ArrayList<>();
+		String sql = "SELECT id, name, date, user_id FROM playlist WHERE user_id = ?";
+
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setInt(1, u.getId());
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				matches.add(new Playlist(rs.getInt("id"), rs.getString("name"),
+						rs.getTimestamp("date").toLocalDateTime(), rs.getInt("user_id")));
+			}
+		
+		} 
+		return matches;
+	}
+	
+	
 	@Override
 	public ArrayList<Playlist> searchForPlaylist(String text) throws SQLException{
 		ArrayList<Playlist> matches = new ArrayList<>();

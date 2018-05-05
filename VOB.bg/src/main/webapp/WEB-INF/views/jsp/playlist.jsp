@@ -14,7 +14,7 @@
 	<div id="menu">  
 		<%@ include file="menu.jsp" %>
 	</div>
-	
+	<!-- MAKE NEW PLAYLIST -->
 	<c:if test="${ username == sessionScope.user.username }">
 		<h2>Make new playlist</h2>
 		<form action="playlist" method="post">
@@ -23,25 +23,17 @@
 		</form>
 	</c:if>
 	
-	<h2>Videos in ${ username } palylist</h2>
-	<c:forEach var="video" items= "${ videos }">
-		<c:if test="${ videos =! null }">
+	<!-- SHOW ALL PLAYLIST -->
+	<h2>${ username } palylists:</h2>
+	<c:forEach var="playlist" items= "${ playlists }">
+		
 			<div>
-				<div>
-					<h3>
-						${video.name}
-					</h3>	
-				</div>
-				<div>
-					<a href = "/VOB.bg/view/${video.id}"><img alt="videoImg" src="/VOB.bg/img/${ video.imagePath } " width="200" height="150" border="1"></a>
-					
-					<form action="removevideoplaylist" method="post">
-						<input type="hidden" name="videoid" value="${ video.id }"/>
-						<input type="submit" name="removevideo" value="Remove from playlist" />
-					</form>
-				</div>
+				<h3>
+					<a href="/VOB.bg/playlist/${ playlist.name }">${ playlist.name }</a>
+				</h3>	
 			</div>
-		</c:if>
+			<hr>
+		
 	</c:forEach>
 	
 	
