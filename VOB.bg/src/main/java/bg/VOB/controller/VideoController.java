@@ -3,7 +3,10 @@ package bg.VOB.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.spi.FileTypeDetector;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -20,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
 
+import org.apache.commons.io.FilenameUtils;
+import org.jcodec.api.JCodecException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
@@ -43,6 +48,7 @@ import bg.VOB.model.dao.PlaylistDao;
 import bg.VOB.model.dao.UserDao;
 import bg.VOB.model.dao.VideoDao;
 import util.exceptions.InvalidUserDataException;
+import util.validation.VideoFrameExtracter;
 
 @Controller
 @MultipartConfig
@@ -69,9 +75,26 @@ public class VideoController {
 			} catch (Exception e) {
 				throw new Exception("Invalid file saving: " + e.getMessage());
 			}
+			
+			//get The frame form video
+			 VideoFrameExtracter videoFrameExtracter = new VideoFrameExtracter();
+			 
+		     File frameFile = Paths.get(path).toFile();
+		     try {
+		         File imageFrame = videoFrameExtracter.createThumbnailFromVideo(frameFile, 12);
+		         imageFrame.createNewFile();
+		         System.out.println("input file name : " + frameFile.getAbsolutePath());
+		         System.out.println("output video frame file name  : " + imageFrame.getAbsolutePath());
+		         File nameFile = new File(SpringWebConfig.LOCATION + File.separator + FilenameUtils.removeExtension(filename) + ".png");
+		         Files.copy(imageFrame.toPath(), nameFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		     } catch (IOException | JCodecException e) {
+		         System.out.println("error occurred while extracting image : " + e.getMessage());
+		     }
+			
 		}else {
 			throw new Exception("Only video files are to be uploded!!!!");
 		}
+		
 		
 		return "uploadVideo";
 	}
@@ -80,6 +103,7 @@ public class VideoController {
 	public String showVideosPage(Model model, HttpServletResponse response,HttpSession session) throws SQLException {
 		// get all the videos in the data base
 		ArrayList<Video> allVideosList = VideoDao.getInstance().getAllVideos();
+		
 		model.addAttribute("allVideos", allVideosList);
 		//get the videos of following users
 		User user = (User) session.getAttribute("user");

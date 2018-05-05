@@ -29,14 +29,12 @@
 			<div>
 				<div>
 					<h3>
-						<a href = "/VOB.bg/view/${video.id}">${video.name}</a>
+						${video.name}
 					</h3>	
 				</div>
 				<div>
-					<video width="220" height="200" controls>
-						 <source src= "/VOB.bg/videos/${video.path }" type="video/mp4"> 
-						 Your browser does not support the videotag. 
-					</video>
+					<a href = "/VOB.bg/view/${video.id}"><img alt="videoImg" src="/VOB.bg/img/${ video.imagePath } " width="200" height="150" border="1"></a>
+					
 					<form action="removevideoplaylist" method="post">
 						<input type="hidden" name="videoid" value="${ video.id }"/>
 						<input type="submit" name="removevideo" value="Remove from playlist" />

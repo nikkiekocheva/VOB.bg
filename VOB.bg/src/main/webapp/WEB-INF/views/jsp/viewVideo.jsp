@@ -42,6 +42,11 @@ table {
 	<br> Views: ${video.views}
 	<br>
 
+	<form action="/VOB.bg/videotoplaylist" method="post">
+		<input type="hidden" name="videoid" value="${ video.id }"/>
+		<input type="submit" name="addvideo" value="Add to playlist" />
+	</form>
+
 	<!-- LIKE/DISLIKE BUTTON -->
 	<form action="/VOB.bg/rateVideo/${video.id}">
 		<button name="button" value="buttonlike">Like</button>

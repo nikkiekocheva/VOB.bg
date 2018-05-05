@@ -1,6 +1,9 @@
 package bg.VOB.model;
 
 import java.time.LocalDateTime;
+
+import org.omg.CORBA.OMGVMCID;
+
 import util.exceptions.InvalidUserDataException;
 import util.validation.Validator;
 
@@ -15,6 +18,7 @@ public class Video {
 	private String description;
 	private String path;
 	private int userId;
+	private String imagePath;
 
 	public Video(String name, String description) throws InvalidUserDataException {
 		this.name = name;
@@ -25,7 +29,7 @@ public class Video {
 		}
 	}
 
-	public Video(int id, String name, LocalDateTime date, int userId, int views, String description, String path) {
+	public Video(int id, String name, LocalDateTime date, int userId, int views, String description, String path, String imagePath) {
 		this.id = id;
 		this.name = name;
 		this.date = date;
@@ -33,10 +37,11 @@ public class Video {
 		this.userId = userId;
 		this.description = description;
 		this.path = path;
+		this.imagePath = imagePath;
 	}
 	
-	public Video(int id, String name, LocalDateTime date, int userId, int views,int likes, String description, String path) {
-		this(id,name,date,userId,views,description,path);
+	public Video(int id, String name, LocalDateTime date, int userId, int views,int likes, String description, String path,String imagePath) {
+		this(id,name,date,userId,views,description,path,imagePath);
 		this.likes = likes;
 	}
 
@@ -86,4 +91,9 @@ public class Video {
 		return userId;
 	}
 
+	public String getImagePath() {
+		return imagePath;
+	}
+	
+	
 }

@@ -2,7 +2,9 @@ package bg.VOB.controller;
 
 import static org.mockito.Mockito.doThrow;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.jcodec.api.JCodecException;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,17 +30,24 @@ import util.exceptions.InvalidUserDataException;
 import util.validation.ObjectToJSON;
 import util.validation.SendMail;
 import util.validation.Validator;
+import util.validation.VideoFrameExtracter;
 
 @Controller
 public class UserController {
 
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
-	public String showHomePage() {
+	public String showHomePage(HttpSession session) {
+		if(session.getAttribute("user") != null) {
+			return "main";	
+		}
 		return "index";
 	}
 
 	@RequestMapping(value = "/main", method = RequestMethod.GET)
-	public String showMainPage() {
+	public String showMainPage(HttpSession session) {
+		if(session.getAttribute("user") == null) {
+			return "index";	
+		}
 		return "main";
 	}
 
@@ -143,7 +153,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/updateprofile", method = RequestMethod.POST)
-	public String updateUserProfile(HttpServletRequest request, HttpSession session) throws SQLException {
+	public String updateUserProfile(HttpServletRequest request, HttpSession session) throws Exception {
 		User user = (User) session.getAttribute("user");
 		//Get the input parameters of the user
 		String email = request.getParameter("email");
@@ -173,8 +183,7 @@ public class UserController {
 			//set the new parameters to the user
 			UserDao.getInstance().updateUserInDB(user);
 		} else {
-			request.setAttribute("error", "Wrong password!!");
-			return "error";
+			throw new Exception("Invalid password for update profile!");
 		}
 		return "redirect:/profile/" + user.getUsername();
 	}

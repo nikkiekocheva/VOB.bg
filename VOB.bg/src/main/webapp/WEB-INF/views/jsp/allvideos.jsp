@@ -32,18 +32,13 @@
 		<div style="display: inline-block; border:medium;">
 			<div>
 				<h3>
-					<a href = "view/${video.id}">${video.name}</a>
+					${video.name}
 				</h3>	
 			</div>
 			<div>
-				<video width="220" height="150" controls>
-					 <source src= "videos/${video.path}" type="video/mp4">
-					 Your browser does not support the videotag. 
-				</video>
-				<form action="videotoplaylist" method="post">
-					<input type="hidden" name="videoid" value="${ video.id }"/>
-					<input type="submit" name="addvideo" value="Add to playlist" />
-				</form>
+				
+				<a href = "view/${video.id}"><img alt="videoImg" src="img/${ video.imagePath } " width="200" height="150" border="2"></a>
+				
 			</div>
 		</div>
 	</c:forEach>

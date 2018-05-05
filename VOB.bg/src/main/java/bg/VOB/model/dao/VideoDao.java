@@ -44,15 +44,17 @@ public class VideoDao implements IVideoDao {
 
 	@Override
 	public void saveVideoInDB(User u, Video v, String path) throws SQLException{
-		String sql = "INSERT INTO video(name, date, views, user_id, description, path) VALUES(?,?,0,?,?,?)";
+		String sql = "INSERT INTO video(name, date, views, user_id, description, path, image_path) VALUES(?,?,0,?,?,?,?)";
 		Date date = new Date();
 		Object param = new Timestamp(date.getTime());
+		String imgPath = path.replaceAll(".mp4", ".png");
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setString(1, v.getName());
 			ps.setObject(2, param);
 			ps.setInt(3, u.getId());
 			ps.setString(4, v.getDescription());
 			ps.setString(5, path);
+			ps.setString(6, imgPath);
 			ps.executeUpdate();
 		} 
 	}
@@ -69,13 +71,13 @@ public class VideoDao implements IVideoDao {
 	
 	@Override
 	public Video getVideoById(int id) throws SQLException{
-		String sql = "SELECT id,name, date, views, user_id, description, path FROM video WHERE id = ?";
+		String sql = "SELECT id,name, date, views, user_id, description, path, image_path FROM video WHERE id = ?";
 		try (PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				return new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(), rs.getInt("user_id"),
-						rs.getInt("views"), rs.getString("description"), rs.getString("path"));
+						rs.getInt("views"), rs.getString("description"), rs.getString("path"), rs.getString("image_path"));
 			}
 		}
 		return null;
@@ -100,12 +102,12 @@ public class VideoDao implements IVideoDao {
 	public ArrayList<Video> getAllVideosByUser(User u) throws SQLException {
 		ArrayList<Video> userVideos = new ArrayList<>();
 		try (PreparedStatement ps = connection
-				.prepareStatement("SELECT id,name,date,views,user_id,description,path FROM video WHERE user_id = ?");) {
+				.prepareStatement("SELECT id,name,date,views,user_id,description,path, image_path FROM video WHERE user_id = ?");) {
 			ps.setInt(1, u.getId());
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				userVideos.add(new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(),
-								rs.getInt("user_id"), rs.getInt("views"), rs.getString("description"), rs.getString("path")));
+								rs.getInt("user_id"), rs.getInt("views"), rs.getString("description"), rs.getString("path"), rs.getString("image_path")));
 			}
 		} 
 
@@ -265,14 +267,14 @@ public class VideoDao implements IVideoDao {
 	@Override
 	public ArrayList<Video> getAllVideos() throws SQLException{
 		ArrayList<Video> allVideos = new ArrayList<>();
-		String sql = "SELECT id,name,date,views,user_id,description,path FROM video";
+		String sql = "SELECT id,name,date,views,user_id,description,path,image_path FROM video";
 
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				allVideos
 						.add(new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(),
-								rs.getInt("views"), 0, rs.getString("description"), rs.getString("path")));
+								rs.getInt("views"), 0, rs.getString("description"), rs.getString("path"),rs.getString("image_path")));
 			}
 
 		} 
@@ -283,14 +285,14 @@ public class VideoDao implements IVideoDao {
 	@Override
 	public ArrayList<Video> searchForVideos(String text) throws SQLException{
 		ArrayList<Video> matches = new ArrayList<>();
-		String sql = "SELECT id, name, date, views, user_id, description, path FROM video WHERE name LIKE ?";
+		String sql = "SELECT id, name, date, views, user_id, description, path, image_path FROM video WHERE name LIKE ?";
 
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {
 			ps.setString(1, "%" + text + "%");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				matches.add(new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(),
-						rs.getInt("views"), 0, rs.getString("description"), rs.getString("path")));
+						rs.getInt("views"), 0, rs.getString("description"), rs.getString("path"),rs.getString("image_path")));
 			}
 
 		} 
@@ -299,14 +301,15 @@ public class VideoDao implements IVideoDao {
 
 	public ArrayList<Video> getAllVideosOrdered(String orderBY) throws SQLException{
 		ArrayList<Video> allVideos = new ArrayList<>();
-		String sql = "SELECT v.id, v.name, v.date, v.views, v.user_id, v.description, v.path, SUM(l.liked_disliked) AS likes FROM video AS v " + 
+		String sql = "SELECT v.id, v.name, v.date, v.views, v.user_id, v.description, v.path, v.image_path, SUM(l.liked_disliked) AS likes FROM video AS v " + 
 						"JOIN video_like_dislike AS l ON v.id = l.video_id GROUP BY v.id;";
 
 		try (PreparedStatement ps = connection.prepareStatement(sql)) {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				allVideos.add(new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(),
-								rs.getInt("user_id"), rs.getInt("views"),rs.getInt("likes"), rs.getString("description"), rs.getString("path")));
+								rs.getInt("user_id"), rs.getInt("views"),rs.getInt("likes"), rs.getString("description"),
+								rs.getString("path"),rs.getString("image_path")));
 			}
 		} 
 		//Order the collection by views

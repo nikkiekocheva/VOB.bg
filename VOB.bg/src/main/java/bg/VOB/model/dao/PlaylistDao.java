@@ -126,14 +126,14 @@ public class PlaylistDao implements IPlaylistDao {
 		Playlist p = getPLaylistByUser(u);
 		ArrayList<Video> videos = new ArrayList<>();
 		if(p != null) {
-			String sql = "SELECT v.id,v.name,v.date,v.views,v.description,v.path FROM video AS v "
+			String sql = "SELECT v.id,v.name,v.date,v.views,v.description,v.path,v.image_path FROM video AS v "
 						+ "JOIN playlist_has_video AS p ON v.id = p.video_id JOIN playlist AS l ON p.playlist_id = l.id WHERE l.user_id = ?";
 			try (PreparedStatement ps = connection.prepareStatement(sql);) {
 				ps.setInt(1, u.getId());
 				ResultSet rs = ps.executeQuery();
 				while (rs.next()) {
 					videos.add(new Video(rs.getInt("id"), rs.getString("name"), rs.getTimestamp("date").toLocalDateTime(),
-							0,0,0, rs.getString("description"), rs.getString("path")));
+							0,0,0, rs.getString("description"), rs.getString("path"),rs.getString("image_path")));
 				}
 			} 
 		}
