@@ -10,7 +10,7 @@
 		<%@ include file="menu.jsp" %>
 	</div>
 	
-	<meta http-equiv="Refresh" content="1.5;url=/VOB.bg/videos">
+	<!--  <meta http-equiv="Refresh" content="1.5;url=/VOB.bg/videos"> -->
 	<img  style="position: relative;left: 370px;bottom: 50px;" src="images/welcometext.png"/>
   </body>
 </html>
