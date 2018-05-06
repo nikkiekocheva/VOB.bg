@@ -17,7 +17,7 @@ import java.nio.file.Paths;
 public class VideoFrameExtracter {
 	public File createThumbnailFromVideo(File file, int frameNumber) throws IOException, JCodecException {
         Picture frame = FrameGrab.getFrameFromFile(file, frameNumber);
-        File tempFile = File.createTempFile("C:\\Users\\Asus\\Desktop\\videos\\thumb_" + frameNumber + file.getName().replaceAll("(.+)\\..+", "$1"), ".png");
+        File tempFile = File.createTempFile("/home/nikikocheva/Desktop/videos/thumb_"/*C:\\Users\\Asus\\Desktop\\videos\\thumb_"*/ + frameNumber + file.getName().replaceAll("(.+)\\..+", "$1"), ".png");
         ImageIO.write(toBufferedImage(frame), "png", tempFile);
         return tempFile;
     }

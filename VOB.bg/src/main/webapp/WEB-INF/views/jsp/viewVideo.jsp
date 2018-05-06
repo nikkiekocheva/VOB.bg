@@ -6,6 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<base href="http://localhost:8080/VOB.bg/viewVideo">
 <style>
 table, th, td {
 	border: 1px solid black;
@@ -24,11 +25,8 @@ table {
 </style>
 </head>
 <body>
-	<div id="top">
-		<%@ include file="logo.jsp"%>
-	</div>
-	<div id="menu">
-		<%@ include file="menu.jsp"%>
+	<div id="menu">  
+		<%@ include file="menu.jsp" %>
 	</div>
 
 	<!-- VIDEO -->

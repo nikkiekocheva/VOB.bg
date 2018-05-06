@@ -3,13 +3,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<base href="http://localhost:8080/VOB.bg/editComment">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
-	<div id="top">  
-		<%@ include file="logo.jsp" %>
-	</div>
-	<div id="menu">  
+	</div><div id="menu">  
 		<%@ include file="menu.jsp" %>
 	</div>
 	

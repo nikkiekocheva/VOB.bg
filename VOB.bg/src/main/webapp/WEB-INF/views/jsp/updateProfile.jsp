@@ -7,9 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<div id="top">  
-		<%@ include file="logo.jsp" %>
-	</div>
 	<div id="menu">  
 		<%@ include file="menu.jsp" %>
 	</div>
