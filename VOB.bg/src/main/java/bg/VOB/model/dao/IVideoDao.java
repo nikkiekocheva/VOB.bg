@@ -40,4 +40,6 @@ public interface IVideoDao {
 	int getVideoViews(int id) throws SQLException;
 
 	void updateVideoViews(int videoId) throws SQLException;
+	
+	ArrayList<Video> getAllVideosOrdered(String orderBY) throws SQLException;
 }

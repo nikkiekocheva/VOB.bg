@@ -24,11 +24,11 @@
 			</tr>
 			<tr>
 				<td>PhoneNumber: </td>
-				<td><input type="text" name="phoneNumber" placeholder="Enter your phone number" required maxlength="10"></td>
+				<td><input type="number" name="phoneNumber" placeholder="Enter your phone number" required maxlength="10"></td>
 			</tr>
 			<tr>
 				<td>Age: </td>
-				<td><input type="text" name="age" placeholder="Enter your age" required maxlength="3"></td>
+				<td><input type="number" name="age" placeholder="Enter your age" required maxlength="3"></td>
 			</tr>
 		</table> <br>
 		<input type="submit" value="Register">

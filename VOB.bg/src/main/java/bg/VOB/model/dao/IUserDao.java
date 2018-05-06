@@ -25,4 +25,6 @@ public interface IUserDao {
 	boolean checkIfUserIsFollowingAnotherUser(User follower, User following) throws SQLException;
 	
 	void unFollowUser(User follower, User following) throws SQLException;
+	
+	ArrayList<User> getAllFollowingUsers(User follower) throws SQLException;
 }

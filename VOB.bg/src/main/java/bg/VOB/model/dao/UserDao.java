@@ -156,7 +156,8 @@ public class UserDao implements IUserDao {
 		}
 		return matches;
 	}
-
+	
+	@Override
 	public ArrayList<User> getAllFollowingUsers(User follower) throws SQLException{
 		ArrayList<User> followingUsers = new ArrayList<>();
 		String sql = "SELECT u.id, u.user_name, u.email,u.phone_number, u.age FROM users AS u" + 

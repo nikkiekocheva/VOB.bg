@@ -3,8 +3,6 @@ package util.validation;
 import java.util.Random;
 
 public class Validator {
-
-	private static int verifyCode = 1000;
 	
 	private Validator() {
 	}
@@ -87,8 +85,6 @@ public class Validator {
 	}
 	
 	public static int generateRegisterCode() {
-		int code = Validator.verifyCode;
-		Validator.verifyCode += 8;
-		return code;
+		return new Random().nextInt(8888) + 1000;
 	}
 }

@@ -2,17 +2,11 @@ package bg.VOB.controller;
 
 import static org.mockito.Mockito.doThrow;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.jcodec.api.JCodecException;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,17 +14,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import bg.VOB.model.User;
 import bg.VOB.model.Video;
 import bg.VOB.model.dao.UserDao;
 import bg.VOB.model.dao.VideoDao;
 import util.exceptions.InvalidUserDataException;
-import util.validation.ObjectToJSON;
 import util.validation.SendMail;
 import util.validation.Validator;
-import util.validation.VideoFrameExtracter;
 
 @Controller
 public class UserController {
@@ -83,13 +73,12 @@ public class UserController {
 		String password = request.getParameter("password");
 		String email = request.getParameter("email");
 		String phone = request.getParameter("phoneNumber");
-		int age = 0;
+		int age;
 		try {
 			age = Integer.parseInt(request.getParameter("age"));
 		}catch (Exception e) {
 			throw new Exception("Age must be a number!!");
 		}
-		
 		
 		int code = Validator.generateRegisterCode();
 		User user = new User(username, password , email, phone, age);
@@ -131,9 +120,11 @@ public class UserController {
 
 	@RequestMapping(value = "/profile/{username}", method = RequestMethod.GET)
 	public String showUserProfile(@PathVariable("username") String username, Model model, HttpSession session) throws Exception {
+		//GEt the profile user and his videos
 		User profileUser = UserDao.getInstance().generateUser(username);
 		ArrayList<Video> userVideos = VideoDao.getInstance().getAllVideosByUser(profileUser);
-
+		
+		//Get the loged user and see if the profile is his and if not check the follow of the user
 		User sessionUser = (User) session.getAttribute("user");
 		boolean isUserFollowed = false;
 		if(profileUser != null) {

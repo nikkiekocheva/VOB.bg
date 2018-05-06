@@ -71,7 +71,15 @@ public class VideoController {
 			File f = new File(path); 
 			try {
 				file.transferTo(f);
-				UserManager.getInstance().addVideo(user, request.getParameter("name"), request.getParameter("description"),filename);
+				String name = request.getParameter("name");
+				String description = request.getParameter("description");
+				if(name.isEmpty()) {
+					name = filename.replaceAll(".mp4", "");
+				}
+				if(description.isEmpty()) {
+					description = filename.replaceAll(".mp4", "");
+				}
+				VideoDao.getInstance().uploadVideo(user, name, description, filename);
 			} catch (Exception e) {
 				throw new Exception("Invalid file saving: " + e.getMessage());
 			}
@@ -79,13 +87,19 @@ public class VideoController {
 			//get The frame form video
 			 VideoFrameExtracter videoFrameExtracter = new VideoFrameExtracter();
 			 
-		     File frameFile = Paths.get(path).toFile();
+			 //get the video to extract from
+		     File videoFile = Paths.get(path).toFile();
 		     try {
-		         File imageFrame = videoFrameExtracter.createThumbnailFromVideo(frameFile, 500);
+		    	 //Extract the frame from video
+		         File imageFrame = videoFrameExtracter.createThumbnailFromVideo(videoFile, 500);
 		         imageFrame.createNewFile();
-		         System.out.println("input file name : " + frameFile.getAbsolutePath());
+		         System.out.println("input file name : " + videoFile.getAbsolutePath());
 		         System.out.println("output video frame file name  : " + imageFrame.getAbsolutePath());
+		         
+		         //Create the file in the right dir
 		         File nameFile = new File(SpringWebConfig.LOCATION + File.separator + FilenameUtils.removeExtension(filename) + ".png");
+		         
+		         //Copy the img from temp to the right dir
 		         Files.copy(imageFrame.toPath(), nameFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		     } catch (IOException | JCodecException e) {
 		         System.out.println("error occurred while extracting image : " + e.getMessage());
@@ -94,7 +108,6 @@ public class VideoController {
 		}else {
 			throw new Exception("Only video files are to be uploded!!!!");
 		}
-		
 		
 		return "uploadVideo";
 	}
@@ -144,15 +157,15 @@ public class VideoController {
 
 	@RequestMapping(value = "/view/{video.id}", method = RequestMethod.GET)
 	public String view(Model model, @PathVariable("video.id") int id, HttpServletResponse response,HttpSession session) throws Exception {
-		//get the video that will bi viewed
+		//get the video that will be viewed
 		Video v = UserManager.getInstance().getVideo(id);
 		//get the user watching the video
 		User watcherUser = (User) session.getAttribute("user");
 		
 		//Check if the user has viewed the video soon
 		if(session.getAttribute(v.getPath()) == null) {
-			//if the user haven't watched it this session increment the views
-			UserManager.getInstance().updateVideoViews(id);
+			//if the user haven't watched it this session soon increment the views
+			VideoDao.getInstance().updateVideoViews(id);
 			v = UserManager.getInstance().getVideo(id);
 			session.setAttribute(v.getPath(), v.getPath());
 			ViewsCheckerManager.getInstance().addVideoForViewsBlock(v.getPath(), watcherUser.getUsername());
@@ -165,8 +178,11 @@ public class VideoController {
 		}
 		//get the owner of the video and the likes and dislikes of video
 		User videoUser = UserManager.getInstance().getUserById(v.getUserId());
-		int videoLikes = UserManager.getInstance().getVideoLikes(v.getId());
-		int videoDislikes = UserManager.getInstance().getVideoDislikes(v.getId());
+		int videoLikes = VideoDao.getInstance().getVideoLikes(v.getId());
+		int videoDislikes = VideoDao.getInstance().getVideoDislikes(v.getId());
+		
+		//Check if the watching user has liked or disliked the video
+		int userLikeDislike = VideoDao.getInstance().getLikedDisliked(watcherUser, v.getId());
 		
 		//get all the comments of the video
 		ArrayList<Comment> allCommentsList = CommentDao.getInstance().getAllComments(id);
@@ -178,6 +194,7 @@ public class VideoController {
 		model.addAttribute("videouser", videoUser);
 		model.addAttribute("likes", videoLikes);
 		model.addAttribute("dislikes", videoDislikes);
+		model.addAttribute("userLikeDislike", userLikeDislike);
 		return "viewVideo";
 	}
 
@@ -213,10 +230,10 @@ public class VideoController {
 		String button = request.getParameter("button");
 		
 		if(button.equals("buttonlike")) {
-			UserManager.getInstance().likeVideo(user, id);
+			VideoDao.getInstance().likeVideo(user, id);
 		}
 		if(button.equals("buttondislike")) {
-			UserManager.getInstance().dislikeVideo(user, id);
+			VideoDao.getInstance().dislikeVideo(user, id);
 		}
 		
 		return "redirect:/view/{video.id}";
@@ -225,10 +242,7 @@ public class VideoController {
 	@RequestMapping(value = "/views/{video.name}", method = RequestMethod.GET)
 	public String viewFoundVideo(Model model, @PathVariable("video.name") String videoName, HttpServletResponse response) throws SQLException {
 		Video v = VideoDao.getInstance().getVideoByName(videoName);
-		
 		return "redirect:/view/" + v.getId();
 	}
 
-
-	
 }

@@ -47,8 +47,14 @@ table {
 
 	<!-- LIKE/DISLIKE BUTTON -->
 	<form action="/VOB.bg/rateVideo/${video.id}">
-		<button name="button" value="buttonlike">Like</button>
-		<button name="button" value="buttondislike">Dislike</button>
+		<c:if test="${ userLikeDislike == 0 || userLikeDislike == -1 }">
+			<button name="button" value="buttonlike">Like</button>
+		</c:if>	
+			
+		<c:if test="${ userLikeDislike == 0 || userLikeDislike == 1 }">
+			<button name="button" value="buttondislike">Dislike</button>
+		</c:if>
+		
 	</form>
 	<br>
 	
