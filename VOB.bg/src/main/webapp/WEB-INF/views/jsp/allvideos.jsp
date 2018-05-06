@@ -6,6 +6,57 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>All Videos</title>
+	
+	<style>
+
+	select#soflow, select#soflow-color {
+   -webkit-appearance: button;
+   -webkit-border-radius: 2px;
+   -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+   -webkit-padding-end: 20px;
+   -webkit-padding-start: 2px;
+   -webkit-user-select: none;
+   background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#fff, #fff 40%, #fff);
+   background-position: 97% center;
+   background-repeat: no-repeat;
+   border: 1px solid #AAA;
+   color: #555;
+   font-size: inherit;
+   margin: 20px;
+   overflow: hidden;
+   padding: 5px 10px;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   width: 300px;
+}
+	
+	.text{
+color:#2e6da4;
+position: relative;
+    left: 40px;
+    }
+	div.gallery {
+    margin: 5px;
+    border: 1px solid #ccc;
+    float: left;
+    width: 20%;
+}
+
+div.gallery:hover {
+    border: 1px solid #777;
+}
+
+div.gallery img {
+    width: 100%;
+    height: auto;
+}
+
+div.desc {
+    padding: 15px;
+    text-align: center;
+}
+
+</style>
 </head>
 <body>
 <div id="menu">  
@@ -14,60 +65,50 @@
 
 	<!-- ALL VIDEOS -->
 	<!-- ORDER BY -->
-	<h2>Most Recent</h2>
 	<form action="videos" method="post" id="type">
-    	<select name="type">
+      <div >
+ 			<select id="soflow" name="type" >
  			<option value="date">Order by date</option>
  			<option value="views">Order by views</option>
  			<option value="like">Order by likes</option>
 		</select>
-    	<input type="submit" value="Order">
+		</div>
+    	<input type="submit" class="btn btn-primary" value="Order" style="position: relative;height: 25px;bottom: 46px;padding-top: 1px;left: 325px;text-align: center;">
     </form>
     
     <!-- SHOW VIDEOS -->
+	<h2 class="text">Most recent</h2>
+	<br><br><br>
+	<div style="width: 900px">
 	<c:forEach var="video" items= "${ allVideos }">
-		<div style="display: inline-block; border:medium;">
-			<div>
-				<h3>
-					${video.name}
-				</h3>	
+			<div class="gallery" style="position: relative;bottom:35px;left: 20px;">
+			<a target="_blank" href="/VOB.bg/view/${video.id}">
+			<img src="/VOB.bg/img/${ video.imagePath }" alt="videoImg" width="200" height="150"></a>
+			<div class="desc"> ${video.name}</div>
 			</div>
-			<div>
-				
-				<a href = "view/${video.id}"><img alt="videoImg" src="img/${ video.imagePath } " width="200" height="150" border="2"></a>
-				
-			</div>
+	</c:forEach>
+	</div>
+	<br><br><br><br><br><br>
+	<div style="width:600px">
+	<!-- ALL VIDEOS OF FOLLOWING USERS -->
+	<h2 class="text">Videos of users you follow:</h2>
+	<c:forEach var="type" items="${usersVideos}">
+	<br>
+		<h4 style="position:relative; left:180px;"> ${type.key}:</h4>
+		<div style="width:900px;">
+		<c:forEach var="video" items= "${ type.value }">
+			<div class="gallery" style="position: relative;top: 20px;left: 20px;">
+			<a target="_blank" href="/VOB.bg/view/${video.id}">
+			<img src="/VOB.bg/img/${ video.imagePath }" alt="videoImg" width="200" height="150"></a>
+			<div class="desc"> ${video.name}</div>
+				</div>
+		</c:forEach>
 		</div>
 	</c:forEach>
-	
-	<!-- ALL VIDEOS OF FOLLOWING USERS -->
-	<h2>Videos of users you follow:</h2>
-	<c:forEach var="type" items="${ usersVideos }">
-		<hr>
-		<h2>${ type.key } videos:</h2>
-		
-		<c:forEach var="video" items= "${ type.value }">
-			<div>
-				<div>
-					<h3>
-						<a href = "view/${video.id}">${video.name}</a>
-					</h3>	
-				</div>
-				<div>
-					<video width="220" height="150" controls>
-						 <source src= "videos/${video.path}" type="video/mp4">
-						 Your browser does not support the videotag. 
-					</video>
-					<form action="videotoplaylist" method="post">
-						<input type="hidden" name="videoid" value="${ video.id }"/>
-						<input type="submit" name="addvideo" value="Add to playlist" />
-					</form>
-				</div>
-			</div>
-		</c:forEach>
-		
-	</c:forEach>
+	</div>
 	
 	
+
+			 
 </body>
 </html>
