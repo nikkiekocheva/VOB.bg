@@ -66,30 +66,21 @@ public class VideoController {
 		
 		String filename = user.getUsername() + file.getOriginalFilename();
 		//Validate the file type
-		if(filename.endsWith(".mp4")){
-			String path = SpringWebConfig.LOCATION + File.separator + filename;
-			File f = new File(path); 
+		String path = SpringWebConfig.LOCATION + File.separator + filename;
+		File f = new File(path); 
+		if(Files.probeContentType(f.toPath()).equals("video/mp4")){
 			try {
 				file.transferTo(f);
-				String name = request.getParameter("name");
-				String description = request.getParameter("description");
-				if(name.isEmpty()) {
-					name = filename.replaceAll(".mp4", "");
-				}
-				if(description.isEmpty()) {
-					description = filename.replaceAll(".mp4", "");
-				}
-				VideoDao.getInstance().uploadVideo(user, name, description, filename);
 			} catch (Exception e) {
 				throw new Exception("Invalid file saving: " + e.getMessage());
 			}
 			
 			//get The frame form video
-			 VideoFrameExtracter videoFrameExtracter = new VideoFrameExtracter();
+			VideoFrameExtracter videoFrameExtracter = new VideoFrameExtracter();
 			 
-			 //get the video to extract from
-		     File videoFile = Paths.get(path).toFile();
-		     try {
+			//get the video to extract from
+		    File videoFile = Paths.get(path).toFile();
+		    try {
 		    	 //Extract the frame from video
 		         File imageFrame = videoFrameExtracter.createThumbnailFromVideo(videoFile, 500);
 		         imageFrame.createNewFile();
@@ -101,6 +92,17 @@ public class VideoController {
 		         
 		         //Copy the img from temp to the right dir
 		         Files.copy(imageFrame.toPath(), nameFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		         
+		         //Save the video in the data base
+		         String name = request.getParameter("name");
+		 		 String description = request.getParameter("description");
+		 		 if(name.isEmpty()) {
+		 		 	name = filename.replaceAll(".mp4", "");
+		 		 }
+		 		 if(description.isEmpty()) {
+		 			description = filename.replaceAll(".mp4", "");
+		 		} 
+		 		VideoDao.getInstance().uploadVideo(user, name, description, filename);
 		     } catch (IOException | JCodecException e) {
 		         System.out.println("error occurred while extracting image : " + e.getMessage());
 		     }
@@ -244,7 +246,5 @@ public class VideoController {
 		Video v = VideoDao.getInstance().getVideoByName(videoName);
 		return "redirect:/view/" + v.getId();
 	}
-	
-	
 	
 }
