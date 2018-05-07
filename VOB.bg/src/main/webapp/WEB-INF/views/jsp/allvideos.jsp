@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -62,7 +63,7 @@ div.desc {
 <div id="menu">  
 		<%@ include file="menu.jsp" %>
 	</div>
-
+<div style="position:relative; left:500px">
 	<!-- ALL VIDEOS -->
 	<!-- ORDER BY -->
 	<form action="videos" method="post" id="type">
@@ -79,7 +80,7 @@ div.desc {
     <!-- SHOW VIDEOS -->
 	<h2 class="text">Most recent</h2>
 	<br><br><br>
-	<div style="width: 900px">
+	<div style="width: 900px; position: relative;right: 250px;">
 	<c:forEach var="video" items= "${ allVideos }">
 			<div class="gallery" style="position: relative;bottom:35px;left: 20px;">
 			<a target="_blank" href="/VOB.bg/view/${video.id}">
@@ -95,6 +96,9 @@ div.desc {
 	<c:forEach var="type" items="${usersVideos}">
 	<br>
 		<h4 style="position:relative; left:180px;"> ${type.key}:</h4>
+		<c:if test="${fn:length(type.value) < 1}">
+		 <h5 style="position:relative; left:130px; color:#2e6da4;"> That user doesn't have videos</h5>
+	</c:if>
 		<div style="width:900px;">
 		<c:forEach var="video" items= "${ type.value }">
 			<div class="gallery" style="position: relative;top: 20px;left: 20px;">
@@ -106,9 +110,6 @@ div.desc {
 		</div>
 	</c:forEach>
 	</div>
-	
-	
-
-			 
+	</div>		 
 </body>
 </html>
