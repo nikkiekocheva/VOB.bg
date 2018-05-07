@@ -57,7 +57,7 @@ public class UserController {
 			}
 			return "main";
 		} catch (InvalidUserDataException e) {
-			return "InvalidLogin";
+			throw new Exception("Invalid username or password!");
 		}
 	}
 

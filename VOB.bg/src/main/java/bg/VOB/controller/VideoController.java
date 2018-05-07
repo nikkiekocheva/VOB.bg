@@ -244,5 +244,7 @@ public class VideoController {
 		Video v = VideoDao.getInstance().getVideoByName(videoName);
 		return "redirect:/view/" + v.getId();
 	}
-
+	
+	
+	
 }

@@ -10,7 +10,7 @@ public class InvalidUserDataException extends Exception {
 	
 	@Override
 	public String getMessage() {
-		return "Invalid credentials: " + reason;
+		return reason;
 	}
 	
 }
