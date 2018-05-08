@@ -20,27 +20,31 @@ color:#2e6da4;
 	<!-- SHOW ALL VIDEOS IN PLAYLIST -->
 	
 	<div style="position: relative;left: 500px;">
-	<h2 class="text">Videos in ${ playlist.name } playlist:</h2>
+		<h2 class="text">Videos in ${ playlist.name } playlist:</h2>
 	</div>
 	<div style="position: relative;left: 250px;">
-	<c:forEach var="video" items= "${ videos }">
-		<c:if test="${ videos =! null }">
-		<div style="display: inline-block; border:medium;">
-			<div style="position: relative;left: 50px;">
-				<h3>
-					${video.name}
-				</h3>	
+		<c:forEach var="video" items= "${ videos }">
+			<c:if test="${ videos =! null }">
+			<div style="display: inline-block; border:medium;">
+				<div style="position: relative;left: 50px;">
+					<h3>
+						${video.name}
+					</h3>	
+				</div>
+				<div style="position: relative;left: 50px;">
+					<a href = "/VOB.bg/view/${video.id}"><img alt="videoImg" src="/VOB.bg/img/${ video.imagePath } " width="200" height="150" border="2"></a>
+				</div>
+				<li class="list-group-item text-muted" style="font-size: 14px; color: #2e6da4; text-align: center;">
+		         	<form action="/VOB.bg/removevideoplaylist" method="post">
+						<input type="hidden" name="videoid" value="${ video.id }"/>
+						<input type="hidden" name="playlist" value="${ playlist.name }"/>
+						<input type="submit" class="btn btn-primary" value="Remove from playlist" name="addvideo" style="position: relative;height: 25px;padding-top: 1px;text-align: center;">
+					</form>
+          		</li>
 			</div>
-			<div style="position: relative;left: 50px;">
-				<a href = "/VOB.bg/view/${video.id}"><img alt="videoImg" src="/VOB.bg/img/${ video.imagePath } " width="200" height="150" border="2"></a>
-			</div>
-		</div>
-		</c:if>
-	</c:forEach>
+			</c:if>
+		</c:forEach>
 	</div>
-	
-	
-	
 	
 </body>
 </html>

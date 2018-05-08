@@ -86,6 +86,20 @@ public class PlaylistDao implements IPlaylistDao {
 		} 
 		return null;
 	}
+	
+	@Override
+	public ArrayList<Playlist> getAllPLaylistOfUser(User u) throws SQLException{
+		ArrayList<Playlist> allPlaylists = new ArrayList<>();
+		String sql = "SELECT id,name FROM playlist WHERE user_id = ?";
+		try (PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setInt(1, u.getId());
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				allPlaylists.add(new Playlist(rs.getInt("id"), rs.getString("name")));
+			}
+		} 
+		return allPlaylists;
+	}
 
 	@Override
 	public void saveVideoInPlaylistInDB(Playlist p, int videoId) throws SQLException{

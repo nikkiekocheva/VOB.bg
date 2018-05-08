@@ -31,4 +31,5 @@ public interface IPlaylistDao {
 	
 	Playlist getPLaylistByName(String name) throws SQLException;
 
+	ArrayList<Playlist> getAllPLaylistOfUser(User u) throws SQLException;
 }

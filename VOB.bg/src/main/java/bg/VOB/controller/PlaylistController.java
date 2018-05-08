@@ -64,14 +64,27 @@ public class PlaylistController {
 	}
 	
 	@RequestMapping(value = "/videotoplaylist", method = RequestMethod.POST)
-	public String addVideoToPlaylist(Model model,HttpServletRequest request,HttpSession session) throws SQLException{
+	public String getAllThePlaylist(Model model,HttpServletRequest request,HttpSession session) throws SQLException{
 		int videoId = Integer.parseInt(request.getParameter("videoid"));
-		
 		User u = (User) session.getAttribute("user");
-		Playlist p = PlaylistDao.getInstance().getPLaylistByUser(u);
+		session.setAttribute("videoidtoadd", videoId);
 		
+		//get the playlis of the user and add them to the model
+		ArrayList<Playlist> allUserPlaylists = PlaylistDao.getInstance().getAllPLaylistOfUser(u);
+		model.addAttribute("allplaylists", allUserPlaylists);
+	
+		return "addtoplaylist";
+	}
+	
+	@RequestMapping(value = "/addtoplaylist", method = RequestMethod.POST)
+	public String addVideoToPlaylist(Model model,HttpServletRequest request,HttpSession session) throws SQLException{
+		//get the playlist chosen
+		String playlistName = request.getParameter("list");
+		Playlist p = PlaylistDao.getInstance().getPLaylistByName(playlistName);
+		int videoId = (Integer) session.getAttribute("videoidtoadd");
+		//if playlist is found and if the video is not in the playlist, add it
 		if(p != null) {
-			if(!PlaylistDao.getInstance().checkIfVideoIsInPlaylist(p, videoId)) {
+			if(!PlaylistDao.getInstance().checkIfVideoIsInPlaylist(p,videoId )) {
 				PlaylistDao.getInstance().saveVideoInPlaylistInDB(p, videoId);
 			}else {
 				System.out.println("Video is allready in playlist!!");
@@ -83,9 +96,10 @@ public class PlaylistController {
 	@RequestMapping(value = "/removevideoplaylist", method = RequestMethod.POST)
 	public String removeVideoFromPlaylist(Model model,HttpServletRequest request,HttpSession session) throws SQLException{
 		int videoId = Integer.parseInt(request.getParameter("videoid"));
+		String playListName = request.getParameter("playlist");
 		
 		User u = (User) session.getAttribute("user");
-		Playlist p = PlaylistDao.getInstance().getPLaylistByUser(u);
+		Playlist p = PlaylistDao.getInstance().getPLaylistByName(playListName);
 		
 		if(p != null) {
 			PlaylistDao.getInstance().removeVideoFromPlaylistInDB(p, videoId);
