@@ -89,10 +89,10 @@ div.desc {
 			</div>
 	</c:forEach>
 	</div>
-	<br><br><br><br><br><br>
+	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 	<div style="width:600px">
 	<!-- ALL VIDEOS OF FOLLOWING USERS -->
-	<h2 class="text">Videos of users you follow:</h2>
+	<h2 class="text" >Videos of users you follow:</h2>
 	<c:forEach var="type" items="${usersVideos}">
 	<br>
 		<h4 style="position:relative; left:180px;"> ${type.key}:</h4>

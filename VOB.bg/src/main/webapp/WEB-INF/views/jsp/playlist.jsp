@@ -20,16 +20,16 @@ color:#2e6da4;
 	<form action="/VOB.bg/profile" method="post">
 	<ul class="list-group" style="width:350px; position:relative; left:750px;">
             <li class="list-group-item text-muted" style="font-size: 18px; color: #2e6da4; text-align: center;">Your playlists:</li>
-            <c:forEach var="playlist" items= "${ playlists }">
+            <c:forEach var="playlist" items= "${playlists}">
             <li class="list-group-item text-muted" style="font-size: 12px; text-align: center;">
-			<a style="color: #333;" href="/VOB.bg/playlist/${ playlist.name }">${ playlist.name }</a></li>
+			<a href="/VOB.bg/playlist/${playlist.name}" style="color: #333;">${playlist.name}</a></li>
          </c:forEach>
           </ul> 
           </form>
       
 	<br>
 	<!-- MAKE NEW PLAYLIST -->
-	<div style="position: relative;bottom: 335px;left: 250px;">
+	<div style="position: relative;bottom: 235px;left: 250px;width: 600px;">
 	<c:if test="${ username == sessionScope.user.username }">
 	<br>
 		<h2 class="text">Make new playlist:</h2>
@@ -37,7 +37,7 @@ color:#2e6da4;
 		<form action="playlist" method="post">
 		<div class="form-group" style="    position: relative;top: 20px; right: 80px;">
             <label class="col-md-3 control-label" style="top:10px">Playlist name:</label>
-            <div class="col-md-8" style=" position:  relative; right: 250px;">
+            <div class="col-md-8" style=" position:  relative; right: 50px;">
               <input class="form-control" type="text" name="name" required="">
               <div class="col-md-8" style="bottom: 48px; left: 200px;">
               <br>
