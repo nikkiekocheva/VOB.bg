@@ -55,7 +55,11 @@ import util.validation.VideoFrameExtracter;
 public class VideoController {
 	
 	@RequestMapping(value = "/uploadVideo", method = RequestMethod.GET)
-	public String uploadVideo() {
+	public String uploadVideo(HttpSession session) {
+		//if the user has logout return him to login
+		if(session.getAttribute("user") == null) {
+			return "index";	
+		}
 		return "uploadVideo";
 	}
 
@@ -116,6 +120,7 @@ public class VideoController {
 
 	@RequestMapping(value = "/videos", method = RequestMethod.GET)
 	public String showVideosPage(Model model, HttpServletResponse response,HttpSession session) throws SQLException {
+		
 		// get all the videos in the data base
 		ArrayList<Video> allVideosList = VideoDao.getInstance().getAllVideos();
 		
@@ -132,12 +137,22 @@ public class VideoController {
 	}
 	
 	@RequestMapping(value = "/videos", method = RequestMethod.POST)
-	public String orderVideosInPage(Model model, HttpServletRequest request) throws SQLException {
+	public String orderVideosInPage(Model model, HttpServletRequest request,HttpSession session) throws SQLException {
 		//get what to order the videos by
 		String orderType = request.getParameter("type");
+		
 		//get all the videos ordered
 		ArrayList<Video> allVideosList = VideoDao.getInstance().getAllVideosOrdered(orderType);
 		
+		//get the videos of following users
+		User user = (User) session.getAttribute("user");
+		ArrayList<User> followingUsers = UserDao.getInstance().getAllFollowingUsers(user);
+		HashMap<String, ArrayList<Video>> usersVideos = new HashMap<>();
+		for(User u : followingUsers) {
+			usersVideos.put(u.getUsername(), VideoDao.getInstance().getAllVideosByUser(u));
+		}
+		
+		model.addAttribute("usersVideos",usersVideos);
 		model.addAttribute("allVideos", allVideosList);
 		return "allvideos";
 	}
@@ -159,6 +174,10 @@ public class VideoController {
 
 	@RequestMapping(value = "/view/{video.id}", method = RequestMethod.GET)
 	public String view(Model model, @PathVariable("video.id") int id, HttpServletResponse response,HttpSession session) throws Exception {
+		//if the user has logout return him to login
+		if(session.getAttribute("user") == null) {
+			return "index";	
+		}
 		//get the video that will be viewed
 		Video v = UserManager.getInstance().getVideo(id);
 		//get the user watching the video
@@ -201,7 +220,11 @@ public class VideoController {
 	}
 
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	public String searchFor(HttpServletRequest request, Model model) throws SQLException {
+	public String searchFor(HttpServletRequest request, Model model,HttpSession session) throws SQLException {
+		//if the user has logout return him to login
+		if(session.getAttribute("user") == null) {
+			return "index";	
+		}
 		String searchText = request.getParameter("text");
 		String searchType = request.getParameter("type");
 		ArrayList found = new ArrayList<>();

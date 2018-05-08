@@ -120,6 +120,10 @@ public class UserController {
 
 	@RequestMapping(value = "/profile/{username}", method = RequestMethod.GET)
 	public String showUserProfile(@PathVariable("username") String username, Model model, HttpSession session) throws Exception {
+		//if the user has logout return him to login
+		if(session.getAttribute("user") == null) {
+			return "index";	
+		}
 		//GEt the profile user and his videos
 		User profileUser = UserDao.getInstance().generateUser(username);
 		ArrayList<Video> userVideos = VideoDao.getInstance().getAllVideosByUser(profileUser);

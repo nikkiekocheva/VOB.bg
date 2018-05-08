@@ -69,9 +69,16 @@ width: 400px;
             <label class="col-md-3 control-label"></label>
             <div class="col-md-8">
               <input type="submit" class="btn btn-primary" value="Save Changes">
-              <input type="reset" class="btn btn-default" value="Cancel">
             </div>
           </div>
+        </form>
+        <form action="main" method="get" align="center" class="form-horizontal" role="form">
+        	<div class="form-group">
+           	<label class="col-md-3 control-label"></label>
+            	<div class="col-md-8">
+             		<input type="submit" class="btn btn-primary" value="Cancel">
+            	</div>
+           </div>
         </form>
       </div>
   </div>

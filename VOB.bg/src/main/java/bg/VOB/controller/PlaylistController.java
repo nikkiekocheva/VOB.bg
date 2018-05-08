@@ -27,6 +27,11 @@ public class PlaylistController {
 
 	@RequestMapping(value = "/playlist", method = RequestMethod.GET)
 	public String showPlaylist(Model model,HttpSession session) throws SQLException{
+		//if the user has logout return him to login
+		if(session.getAttribute("user") == null) {
+			return "index";	
+		}
+		
 		User user = (User) session.getAttribute("user");
 		//Get the all the playlists of user
 		ArrayList<Playlist> playlists = PlaylistDao.getInstance().getUserPlaylists(user);
@@ -38,6 +43,10 @@ public class PlaylistController {
 	
 	@RequestMapping(value = "/playlist/{playlist.name}", method = RequestMethod.GET)
 	public String showPlaylistOfUser(@PathVariable("playlist.name") String name, Model model, HttpSession session) throws Exception{
+		//if the user has logout return him to login
+		if(session.getAttribute("user") == null) {
+			return "index";	
+		}
 		//Get the playlist and the user it belongs to
 		Playlist playlist = PlaylistDao.getInstance().getPLaylistByName(name);
 		User user = UserDao.getInstance().generateUserById(playlist.getUserId());

@@ -158,6 +158,11 @@ box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.33);
         		<button type="submit">Register</button>
       		</div>
    		 </form>
+   		 <form class="email-signup" action="index" method="get">
+   		 	<div class="u-form-group">
+        		<button type="submit">Back</button>
+      		</div>
+      	 </form>
 	</div>	
 
 </body>
