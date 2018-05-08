@@ -28,8 +28,8 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/css/**").addResourceLocations("/static/css/");
-		registry.addResourceHandler("/img/**").addResourceLocations("file:\\\\\\" + SpringWebConfig.LOCATION);
-//        registry.addResourceHandler("/img/**").addResourceLocations("file:///" + SpringWebConfig.LOCATION);
+//		registry.addResourceHandler("/img/**").addResourceLocations("file:\\\\\\" + SpringWebConfig.LOCATION);
+        registry.addResourceHandler("/img/**").addResourceLocations("file:///" + SpringWebConfig.LOCATION);
         registry.addResourceHandler("/images/**").addResourceLocations("static/img/");
         registry.addResourceHandler("/pdfs/**").addResourceLocations("/static/pdf/");
         registry.addResourceHandler("/html/**").addResourceLocations("/static/html/");
@@ -76,7 +76,7 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 	    return resolver;
 	   }
 	
-//	  public static final String LOCATION =  "/home/nikikocheva/Desktop/videos/";
-	  public static final String LOCATION =  "C:\\Users\\Asus\\Desktop\\videos\\";
+	  public static final String LOCATION =  "/home/nikikocheva/Desktop/videos/";
+//	  public static final String LOCATION =  "C:\\Users\\Asus\\Desktop\\videos\\";
 	  public static final long MAX_FILE_SIZE = 52_428_800; //50 MB - max file size
 }
