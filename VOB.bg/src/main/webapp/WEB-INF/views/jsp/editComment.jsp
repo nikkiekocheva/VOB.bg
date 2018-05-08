@@ -20,7 +20,7 @@ color:#2e6da4;
 	<form action="/VOB.bg/editCommentForm/${comment.id}">
 	<label class="col-md-3 control-label">Description:</label>
             <div class="col-md-8" style=" position:  relative; right: 250px;">
-              <textarea class="form-control" type="text" name="content" required="">
+              <textarea class="form-control" type="text" name="content" required pattern="[A-Za-z0-9]{1,20}">
               </textarea>
 		<input type="submit" class="btn btn-primary" value="Save Changes" style="position: relative;height: 25px;bottom: 52px;padding-top: 1px;left: 225px;text-align: center;">
 	</form>

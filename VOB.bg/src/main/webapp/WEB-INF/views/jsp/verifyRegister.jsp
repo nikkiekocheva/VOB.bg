@@ -5,7 +5,7 @@
 <head>
 <style>
 	body{
-  background-color: #1cbb9b;
+  background-color: #99bbff;
 }
 .login-box{
   position:relative;
@@ -109,7 +109,7 @@ box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.33);
 }
 .u-form-group button{
   width:50%;
-  background-color: #1CB94E;
+  background-color: #2e6da4;
   border: none;
   outline: none;
   color: #fff;
@@ -133,9 +133,9 @@ box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.33);
 </head>
 <body>
 
-	<div class="login-box">
+	<div class="login-box" style="height: 300px;position: relative;top: 100px;">
 	    <div class="lb-header">
-	      <a class="active" id="login-box-link">Registration</a>
+	      <a class="active" id="login-box-link" style="color:#2e6da4">Registration</a>
 	    </div>
 	   
 	    <form class="email-login" action="register" method="post">

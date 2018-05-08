@@ -85,7 +85,7 @@
 </head>
   <body>
 
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="background-color:#99bbff">
       <div class="container-fluid">
         <div class="navbar-header">
           <a style= "border-color: white;border-style: solid;position:relative;" class="navbar-brand" href="index.html"><h1>
