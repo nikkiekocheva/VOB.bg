@@ -168,7 +168,7 @@ color:#2e6da4;
 	    </form>
 	</div>	
 	<div>
-	<img class="logo" src="images/biglogo.png"/>
+		<img class="logo" src="images/biglogo.png"/>
 	</div>
 	
 

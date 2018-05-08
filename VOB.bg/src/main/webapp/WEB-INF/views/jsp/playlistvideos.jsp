@@ -25,11 +25,11 @@ color:#2e6da4;
 	<div style="position: relative;left: 250px;">
 		<c:forEach var="video" items= "${ videos }">
 			<c:if test="${ videos =! null }">
-			<div style="display: inline-block; border:medium;">
+			<div style="display: inline-block; border: 1px solid #ccc;margin: 5px;width: 20%;">
 				<div style="position: relative;left: 50px;">
-					<h3>
+					<div style="padding: 15px;display: inline-block;">
 						${video.name}
-					</h3>	
+					</div>	
 				</div>
 				<div style="position: relative;left: 50px;">
 					<a href = "/VOB.bg/view/${video.id}"><img alt="videoImg" src="/VOB.bg/img/${ video.imagePath } " width="200" height="150" border="2"></a>

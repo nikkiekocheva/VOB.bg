@@ -35,6 +35,7 @@
 color:#2e6da4;
 position: relative;
     left: 40px;
+    clear: left;
     }
 	div.gallery {
     margin: 5px;
@@ -60,56 +61,58 @@ div.desc {
 </style>
 </head>
 <body>
-<div id="menu">  
+	<div id="menu">  
 		<%@ include file="menu.jsp" %>
 	</div>
-<div style="position:relative; left:500px">
-	<!-- ALL VIDEOS -->
-	<!-- ORDER BY -->
-	<form action="videos" method="post" id="type">
-      <div >
- 			<select id="soflow" name="type" >
- 			<option value="date">Order by date</option>
- 			<option value="views">Order by views</option>
- 			<option value="like">Order by likes</option>
-		</select>
-		</div>
-    	<input type="submit" class="btn btn-primary" value="Order" style="position: relative;height: 25px;bottom: 46px;padding-top: 1px;left: 325px;text-align: center;">
-    </form>
-    
-    <!-- SHOW VIDEOS -->
-	<h2 class="text">Most recent</h2>
-	<br><br><br>
-	<div style="width: 900px; position: relative;right: 250px;">
-	<c:forEach var="video" items= "${ allVideos }">
-			<div class="gallery" style="position: relative;bottom:35px;left: 20px;">
-			<a target="_blank" href="/VOB.bg/view/${video.id}">
-			<img src="/VOB.bg/img/${ video.imagePath }" alt="videoImg" width="200" height="150"></a>
-			<div class="desc"> ${video.name}</div>
+	<div style="position:relative; left:500px; ">
+		<!-- ALL VIDEOS -->
+		<!-- ORDER BY -->
+		<form action="videos" method="post" id="type">
+	    	<div >
+	 			<select id="soflow" name="type" >
+	 				<option value="date">Order by date</option>
+	 				<option value="views">Order by views</option>
+	 				<option value="like">Order by likes</option>
+				</select>
 			</div>
-	</c:forEach>
-	</div>
-	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-	<div style="width:600px">
-	<!-- ALL VIDEOS OF FOLLOWING USERS -->
-	<h2 class="text" >Videos of users you follow:</h2>
-	<c:forEach var="type" items="${usersVideos}">
-	<br>
-		<h4 style="position:relative; left:180px;"> ${type.key}:</h4>
-		<c:if test="${fn:length(type.value) < 1}">
-		 <h5 style="position:relative; left:130px; color:#2e6da4;"> That user doesn't have videos</h5>
-	</c:if>
-		<div style="width:900px;">
-		<c:forEach var="video" items= "${ type.value }">
-			<div class="gallery" style="position: relative;top: 20px;left: 20px;">
-			<a target="_blank" href="/VOB.bg/view/${video.id}">
-			<img src="/VOB.bg/img/${ video.imagePath }" alt="videoImg" width="200" height="150"></a>
-			<div class="desc"> ${video.name}</div>
+	    	<input type="submit" class="btn btn-primary" value="Order" style="position: relative;height: 25px;bottom: 46px;padding-top: 1px;left: 325px;text-align: center;">
+	    </form>
+	    
+	    <!-- SHOW VIDEOS -->
+		<h2 class="text">Most recent</h2>
+		<br><br><br>
+		<div style="width: 900px; position: relative;right: 250px;">
+			<c:forEach var="video" items= "${ allVideos }">
+				<div class="gallery" style="position: relative;bottom:35px;left: 20px;">
+					<a target="_blank" href="/VOB.bg/view/${video.id}">
+					<img src="/VOB.bg/img/${ video.imagePath }" alt="videoImg" width="200" height="150"></a>
+					<div class="desc"> ${video.name}</div>
 				</div>
-		</c:forEach>
+			</c:forEach>
 		</div>
-	</c:forEach>
-	</div>
+		<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+		
+		<!-- ALL VIDEOS OF FOLLOWING USERS -->
+		<h2 class="text" >Videos of users you follow:</h2>
+		<c:forEach var="type" items="${usersVideos}">
+			<div style="width:600px; clear: left;">
+				<br>
+				<h4 style="position:relative; left:180px; clear: left;"> ${type.key}:</h4>
+				<c:if test="${fn:length(type.value) < 1}">
+					<h5 style="position:relative; left:130px; color:#2e6da4;"> That user doesn't have videos</h5>
+				</c:if>
+				<c:forEach var="video" items= "${ type.value }">
+					<div style="width:900px;">
+						<div class="gallery" style="position: relative;top: 20px;left: 20px; ">
+							<a target="_blank" href="/VOB.bg/view/${video.id}">
+							<img src="/VOB.bg/img/${ video.imagePath }" alt="videoImg" width="200" height="150"></a>
+							<div class="desc"> ${video.name}</div>
+						</div>
+					</div>
+				</c:forEach>
+			</div>
+		</c:forEach>
+		
 	</div>		 
 </body>
 </html>

@@ -19,32 +19,29 @@ color:#2e6da4;
 	</div>
 	
 	<div style="position: relative;left: 600px;">
-	<h1 class="text"> Upload video</h1>
-	<form action="uploadVideo" method="post" enctype="multipart/form-data">
-	<div class="form-group" style="position: relative;">
-            <label class="col-md-3 control-label">File name:</label>
-            <div class="col-md-8" style=" position:  relative; right: 250px;">
-              <input class="form-control" type="text" name="name" required="">
-             
+		<h1 class="text"> Upload video</h1>
+		<form action="uploadVideo" method="post" enctype="multipart/form-data">
+			<div class="form-group" style="position: relative;">
+           		<label class="col-md-3 control-label">File name:</label>
+            	<div class="col-md-8" style=" position:  relative; right: 250px;">
+            		<input class="form-control" type="text" name="name" required="">
+           		</div>
+            	<label class="col-md-3 control-label">Description:</label>
+            	
+            	<div class="col-md-8" style=" position:  relative; right: 250px;">
+             		<textarea class="form-control" type="text" name="description" required=""></textarea>
+              		<label class="col-md-3 control-label" style="right: 105px;">File:</label>
+            	</div>
+            	
+        		<div class="col-lg-6 col-sm-6 col-12">
+            		<label class="btn btn-primary" style="height: 25px;width: 80px;position: relative;padding-top: 1px;bottom: 20px;left: 93px;">
+               			Browse&hellip; <input type="file" style="display: none;" name="videoFile" >
+           			</label>
+           			<br>
+             		<input style="height: 25px;width: 80px;padding-top: 1px;" type="submit" class="btn btn-primary" value="Upload">
+        		</div>
             </div>
-            <label class="col-md-3 control-label">Description:</label>
-            <div class="col-md-8" style=" position:  relative; right: 250px;">
-              <textarea class="form-control" type="text" name="description" required="">
-              </textarea>
-              <label class="col-md-3 control-label" style="right: 105px;">File:</label>
-            </div>
-            
-        <div class="col-lg-6 col-sm-6 col-12">
-        
-            <label class="btn btn-primary" style="height: 25px;width: 80px;position: relative;padding-top: 1px;bottom: 20px;left: 93px;">
-                Browse&hellip; <input type="file" style="display: none;" name="videoFile" >
-            </label>
-            <br>
-             <input style="height: 25px;width: 80px;padding-top: 1px;" type="submit" class="btn btn-primary" value="Upload">
-          
-        </div>
-            </div>
-           </form>
+       </form>
 	</div>
 
   <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>

@@ -5,8 +5,8 @@
 <html>
 <head>
 <title>VOB.bg</title>
-  <body>
-</div><div id="menu">  
+<body>
+	<div id="menu">  
 		<%@ include file="menu.jsp" %>
 	</div>
 	

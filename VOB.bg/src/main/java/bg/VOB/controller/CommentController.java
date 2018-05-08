@@ -29,7 +29,10 @@ public class CommentController {
 	public String addComment(HttpSession session, @PathVariable("video.id") int id, HttpServletRequest request) throws Exception {
 		User user = (User)session.getAttribute("user");
 		String text = request.getParameter("comment");
-		UserManager.getInstance().comment(user, id, text);
+		System.out.println("a" + text + "a");
+		if(!text.isEmpty()) {
+			UserManager.getInstance().comment(user, id, text);
+		}
 		
 		return "redirect:/view/{video.id}";
 	}

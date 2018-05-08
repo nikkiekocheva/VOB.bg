@@ -109,8 +109,7 @@
             
             	<div class="col-md-8" style=" position:  relative; right: 250px;">
             		<form action="/VOB.bg/addComment/${video.id}">
-             			<textarea class="form-control" type="text" name="comment" required="">
-              			</textarea>
+             			<textarea class="form-control" type="text" name="comment" required=""></textarea>
              			<input style="height: 25px;width: 80px;padding-top: 1px;" type="submit" class="btn btn-primary" value="Upload">
             		</form>
            		</div>

@@ -28,7 +28,7 @@ public class UserController {
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public String showHomePage(HttpSession session) {
 		if(session.getAttribute("user") != null) {
-			return "main";	
+			return "redirect:/videos";	
 		}
 		return "index";
 	}
@@ -38,7 +38,7 @@ public class UserController {
 		if(session.getAttribute("user") == null) {
 			return "index";	
 		}
-		return "main";
+		return "redirect:/videos";
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)

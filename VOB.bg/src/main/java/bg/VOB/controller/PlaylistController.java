@@ -91,12 +91,11 @@ public class PlaylistController {
 		String playlistName = request.getParameter("list");
 		Playlist p = PlaylistDao.getInstance().getPLaylistByName(playlistName);
 		int videoId = (Integer) session.getAttribute("videoidtoadd");
+		
 		//if playlist is found and if the video is not in the playlist, add it
 		if(p != null) {
 			if(!PlaylistDao.getInstance().checkIfVideoIsInPlaylist(p,videoId )) {
 				PlaylistDao.getInstance().saveVideoInPlaylistInDB(p, videoId);
-			}else {
-				System.out.println("Video is allready in playlist!!");
 			}
 		}
 		return "redirect:/playlist";

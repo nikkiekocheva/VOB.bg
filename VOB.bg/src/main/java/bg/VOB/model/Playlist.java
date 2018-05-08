@@ -13,7 +13,12 @@ public class Playlist {
 	private int userId;
 	
 	public Playlist(String name) {
-		this.name = name;
+		if(name.length() <= 45) {
+			this.name = name;
+		}else {
+			this.name = "NameTooLong";
+		}
+		
 	}
 
 	public Playlist(int id, String name) {
