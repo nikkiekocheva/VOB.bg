@@ -80,7 +80,7 @@ div.desc {
 	<div>
 	<h2 class="text">Uploaded videos by the user</h2>
 	<c:if test="${fn:length(userVideos) < 1}">
-				 <h4 style="position: relative;bottom: 220px;left: 150px;}"> The user still has no videos.</h4>
+				 <h4 style="position: relative;bottom: 220px;left: 150px;"> The user still has no videos.</h4>
 			</c:if>
 	<c:forEach var="video" items= "${ userVideos }">
 	<div style="width: 650px;">

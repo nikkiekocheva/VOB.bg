@@ -29,7 +29,7 @@ color:#2e6da4;
             </div>
             <label class="col-md-3 control-label">Description:</label>
             <div class="col-md-8" style=" position:  relative; right: 250px;">
-              <textarea class="form-control" type="text" name="name" required="">
+              <textarea class="form-control" type="text" name="description" required="">
               </textarea>
               <label class="col-md-3 control-label" style="right: 105px;">File:</label>
             </div>
@@ -37,7 +37,7 @@ color:#2e6da4;
         <div class="col-lg-6 col-sm-6 col-12">
         
             <label class="btn btn-primary" style="height: 25px;width: 80px;position: relative;padding-top: 1px;bottom: 20px;left: 93px;">
-                Browse&hellip; <input type="file" style="display: none;">
+                Browse&hellip; <input type="file" style="display: none;" name="videoFile" >
             </label>
             <br>
              <input style="height: 25px;width: 80px;padding-top: 1px;" type="submit" class="btn btn-primary" value="Upload">
